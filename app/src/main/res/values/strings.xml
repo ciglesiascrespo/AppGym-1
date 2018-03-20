@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">AppGym</string>
+    <string name="cedula">Digite su numero de identificación</string>
+    <string name="bienvenido">Bienvenido</string>
+    <string name="str_7">7</string>
+    <string name="str_8">8</string>
+    <string name="str_9">9</string>
+    <string name="str_4">4</string>
+    <string name="str_5">5</string>
+    <string name="str_6">6</string>
+    <string name="str_1">1</string>
+    <string name="str_2">2</string>
+    <string name="str_3">3</string>
+    <string name="str_0">0</string>
+    <string name="str_x">x</string>
+    <string name="str_ir"><![CDATA[>]]></string>
 </resources>
