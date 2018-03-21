@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="100"
-    tools:context="com.iglesias.c.appgym.LoginActivity">
+    tools:context="com.iglesias.c.appgym.Activity.LoginActivity">
 
     <ImageView
         android:id="@+id/imagen"
@@ -42,6 +42,9 @@
         android:gravity="center_horizontal"
         android:hint="@string/cedula"
         android:inputType="none"
+        android:textColor="@color/colorPrimary"
+        android:focusable="false"
+        android:enabled="false"
         android:maxLines="1"
         android:textColorLink="@color/colorAccent"
         android:textSize="25sp" />
@@ -66,6 +69,7 @@
             android:linksClickable="true"
             android:text="@string/str_7"
             android:theme="@style/Buttton_Login"
+            android:onClick="pressNumber"
             android:visibility="visible" />
 
         <Button
@@ -78,6 +82,7 @@
             android:layout_row="0"
             android:layout_rowWeight="1"
             android:linksClickable="true"
+            android:onClick="pressNumber"
             android:text="@string/str_8"
             android:theme="@style/Buttton_Login" />
 
@@ -92,6 +97,7 @@
             android:layout_rowWeight="1"
             android:linksClickable="true"
             android:text="@string/str_9"
+            android:onClick="pressNumber"
             android:theme="@style/Buttton_Login" />
 
         <Button
@@ -105,6 +111,7 @@
             android:layout_rowWeight="1"
             android:linksClickable="true"
             android:text="@string/str_4"
+            android:onClick="pressNumber"
             android:theme="@style/Buttton_Login" />
 
         <Button
@@ -118,6 +125,7 @@
             android:layout_rowWeight="1"
             android:linksClickable="true"
             android:text="@string/str_5"
+            android:onClick="pressNumber"
             android:theme="@style/Buttton_Login" />
 
         <Button
@@ -131,6 +139,7 @@
             android:layout_rowWeight="1"
             android:linksClickable="true"
             android:text="@string/str_6"
+            android:onClick="pressNumber"
             android:theme="@style/Buttton_Login" />
 
         <Button
@@ -144,6 +153,7 @@
             android:layout_rowWeight="1"
             android:linksClickable="true"
             android:text="@string/str_1"
+            android:onClick="pressNumber"
             android:theme="@style/Buttton_Login" />
 
         <Button
@@ -157,6 +167,7 @@
             android:layout_rowWeight="1"
             android:linksClickable="true"
             android:text="@string/str_2"
+            android:onClick="pressNumber"
             android:theme="@style/Buttton_Login" />
 
 
@@ -171,6 +182,7 @@
             android:layout_rowWeight="1"
             android:linksClickable="true"
             android:text="@string/str_3"
+            android:onClick="pressNumber"
             android:theme="@style/Buttton_Login" />
         />
 
@@ -185,11 +197,12 @@
             android:layout_rowWeight="1"
             android:linksClickable="true"
             android:text="@string/str_0"
+            android:onClick="pressNumber"
             android:theme="@style/Buttton_Login" />
         />
 
         <Button
-            android:id="@+id/sing_in"
+            android:id="@+id/sign_in"
             style="@style/AppTheme"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -198,6 +211,7 @@
             android:layout_row="3"
             android:layout_rowWeight="1"
             android:linksClickable="true"
+            android:onClick="onClickValidateUser"
             android:text="@string/str_ir"
             android:theme="@style/Buttton_Login" />
         />
@@ -213,6 +227,7 @@
             android:layout_rowWeight="1"
             android:linksClickable="true"
             android:text="@string/str_x"
+            android:onClick="deleteChar"
             android:theme="@style/Buttton_Login" />
         />
 

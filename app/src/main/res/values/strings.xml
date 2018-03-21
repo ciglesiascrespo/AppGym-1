@@ -14,4 +14,7 @@
     <string name="str_0">0</string>
     <string name="str_x">x</string>
     <string name="str_ir"><![CDATA[>]]></string>
+    <string name="str_loading_login">Validando usuario...</string>
+    <string name="str_title_alert_error_login">Login</string>
+    <string name="ok">Ok</string>
 </resources>
