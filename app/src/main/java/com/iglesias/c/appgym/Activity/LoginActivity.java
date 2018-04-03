@@ -3,6 +3,7 @@ package com.iglesias.c.appgym.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,9 +13,14 @@ import android.widget.EditText;
 
 import com.iglesias.c.appgym.Presenter.LoginPresenterImpl;
 import com.iglesias.c.appgym.R;
+import com.iglesias.c.appgym.RestApi.Model.InfoLogin;
 import com.iglesias.c.appgym.View.LoginView;
 
 public class LoginActivity extends AppCompatActivity implements LoginView {
+    public static final String EXTRA_NOMBRE = "NOMBRE";
+    public static final String EXTRA_DOCUMENTO = "DOCUMENTO";
+    public static final String EXTRA_DIAS = "DIAS";
+    public static final String EXTRA_URL_IMAGEN = "URL";
 
     Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btnx, btnIr;
     EditText edtNro;
@@ -84,7 +90,14 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     }
 
     @Override
-    public void goToMainActivity() {
+    public void goToMainActivity(InfoLogin infoLogin) {
+        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+        i.putExtra(EXTRA_NOMBRE, infoLogin.getNombre());
+        i.putExtra(EXTRA_DIAS, infoLogin.getDias());
+        i.putExtra(EXTRA_DOCUMENTO, infoLogin.getNroDocumento());
+        i.putExtra(EXTRA_URL_IMAGEN, infoLogin.getUrlImg());
+
+        startActivity(i);
 
     }
 

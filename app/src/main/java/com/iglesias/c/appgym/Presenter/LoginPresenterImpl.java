@@ -1,6 +1,7 @@
 package com.iglesias.c.appgym.Presenter;
 
 import com.iglesias.c.appgym.Iterator.LoginIterator;
+import com.iglesias.c.appgym.RestApi.Model.InfoLogin;
 import com.iglesias.c.appgym.View.LoginView;
 
 /**
@@ -20,14 +21,15 @@ public class LoginPresenterImpl implements LoginPresenter {
         if (nro.length() == 0) {
             view.showErrorLoginDialog("Digite un numero de identificación");
         } else {
+            view.showLoading();
             iterator.validateUser(nro);
         }
     }
 
     @Override
-    public void onSuccesLogin() {
+    public void onSuccesLogin(InfoLogin infoLogin) {
         view.hideLoading();
-        view.goToMainActivity();
+        view.goToMainActivity(infoLogin);
     }
 
     @Override
