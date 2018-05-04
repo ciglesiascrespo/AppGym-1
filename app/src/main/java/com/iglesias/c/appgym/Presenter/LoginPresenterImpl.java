@@ -33,7 +33,6 @@ public class LoginPresenterImpl implements LoginPresenter {
             view.goToMainActivity(infoLogin);
         }else{
             view.showErrorLoginDialog("Su membresía ha caducado, por favor contacte a su administrador.");
-
         }
 
     }
