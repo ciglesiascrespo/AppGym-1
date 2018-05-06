@@ -12,6 +12,8 @@ import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -150,8 +152,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     }
 
     @Override
-        public void showErrorLoginDialog(String msj) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this,R.style.myDialog);
+    public void showErrorLoginDialog(String msj) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this, R.style.myDialog);
 
         builder.setTitle(getResources().getString(R.string.str_title_alert_error_login));
         builder.setMessage(msj);
@@ -217,5 +219,25 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         filter.addAction(UsbService.ACTION_USB_PERMISSION_NOT_GRANTED);
         registerReceiver(mUsbReceiver, filter);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.id_menu_registrar:
+                Intent i = new Intent(this,RegistraActivity.class);
+                startActivity(i);
+                break;
+            case R.id.id_menu_sincronizar:
+                break;
+
+        }
+        return true;
     }
 }

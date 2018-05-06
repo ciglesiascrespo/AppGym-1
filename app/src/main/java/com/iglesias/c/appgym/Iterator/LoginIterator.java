@@ -1,5 +1,8 @@
 package com.iglesias.c.appgym.Iterator;
 
+import android.content.Context;
+
+import com.iglesias.c.appgym.Db.DbHandler;
 import com.iglesias.c.appgym.Presenter.LoginPresenter;
 import com.iglesias.c.appgym.RestApi.Adapter.RestApiAdapter;
 import com.iglesias.c.appgym.RestApi.ConstantesRestApi;
@@ -7,7 +10,9 @@ import com.iglesias.c.appgym.RestApi.EndPoints;
 import com.iglesias.c.appgym.RestApi.Model.ResultLogin;
 
 import retrofit2.Retrofit;
+import rx.Observable;
 import rx.Observer;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -17,9 +22,11 @@ import rx.schedulers.Schedulers;
 
 public class LoginIterator {
     LoginPresenter presenter;
+    DbHandler dbHandler;
 
-    public LoginIterator(LoginPresenter presenter) {
+    public LoginIterator(LoginPresenter presenter, Context context) {
         this.presenter = presenter;
+        dbHandler = DbHandler.getInstance(context);
     }
 
     public void validateUser(String nro) {
@@ -46,9 +53,9 @@ public class LoginIterator {
                                @Override
                                public void onNext(ResultLogin response) {
 
-                                   if(response.getErrorCode() == ConstantesRestApi.CODE_ERROR){
+                                   if (response.getErrorCode() == ConstantesRestApi.CODE_ERROR) {
                                        presenter.onUserNotValid();
-                                   }else{
+                                   } else {
                                        presenter.onSuccesLogin(response.getInfo());
                                    }
 
@@ -57,4 +64,41 @@ public class LoginIterator {
                 );
 
     }
+
+    public void validateUserDb(final String nro) {
+        Observable.create(new Observable.OnSubscribe<ResultLogin>() {
+            @Override
+            public void call(Subscriber<? super ResultLogin> subscriber) {
+                subscriber.onNext(dbHandler.verificaUsuarioDb(nro));
+                subscriber.onCompleted();
+            }
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<ResultLogin>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        presenter.onErrorLogin();
+                    }
+
+                    @Override
+                    public void onNext(ResultLogin response) {
+                        if (response.getErrorCode() == ConstantesRestApi.CODE_ERROR) {
+                            presenter.onUserNotValid();
+                        } else {
+                            presenter.onSuccesLogin(response.getInfo());
+                        }
+
+                    }
+                });
+
+
+    }
+
 }

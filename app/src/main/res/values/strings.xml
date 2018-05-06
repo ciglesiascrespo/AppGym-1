@@ -22,4 +22,7 @@
     <string name="str_nro_documento">Nro Documento:</string>
     <string name="str_dias">Dias restantes:</string>
     <string name="entrar">Entrar</string>
+    <string name="str_menu_registrar">Registrar usuario</string>
+    <string name="str_menu_sincronizar">Sincronizar base de datos</string>
+    <string name="str_loading_registrar">Registrando usuario</string>
 </resources>

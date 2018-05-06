@@ -14,7 +14,7 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     public LoginPresenterImpl(LoginView view) {
         this.view = view;
-        iterator = new LoginIterator(this);
+        iterator = new LoginIterator(this, view.getContext());
     }
 
     public void validateUser(String nro) {
@@ -22,16 +22,16 @@ public class LoginPresenterImpl implements LoginPresenter {
             view.showErrorLoginDialog("Digite un numero de identificación");
         } else {
             view.showLoading();
-            iterator.validateUser(nro);
+            iterator.validateUserDb(nro);
         }
     }
 
     @Override
     public void onSuccesLogin(InfoLogin infoLogin) {
         view.hideLoading();
-        if(infoLogin.getDias() > 0){
+        if (infoLogin.getDias() > 0) {
             view.goToMainActivity(infoLogin);
-        }else{
+        } else {
             view.showErrorLoginDialog("Su membresía ha caducado, por favor contacte a su administrador.");
         }
 
