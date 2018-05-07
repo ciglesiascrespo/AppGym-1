@@ -13,4 +13,5 @@ public interface RegistrarView {
     void hideLoading();
     void showErrorLoginDialog(String msj, boolean finish);
     Context getContextApp();
+    void setId(String id);
 }

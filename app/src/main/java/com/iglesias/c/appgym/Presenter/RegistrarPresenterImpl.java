@@ -52,6 +52,8 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
     public void receiveMsj(String msj) {
         if (!msj.contains("id:")) {
             view.showErrorLoginDialog(msj, false);
+        } else {
+            view.setId(msj.split(":")[1]);
         }
     }
 }

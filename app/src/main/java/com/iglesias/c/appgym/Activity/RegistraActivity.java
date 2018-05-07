@@ -8,6 +8,7 @@ import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +28,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
     RegistrarPresenterImpl presenter;
     MyHandler myHandler;
     ImageButton imgBtnHuella;
+    String id="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +86,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
 
         builder.setTitle(getResources().getString(R.string.str_menu_registrar));
         builder.setMessage(msj);
+        builder.setCancelable(false);
         builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -101,6 +104,11 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
         return getApplicationContext();
     }
 
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
     private class MyHandler extends Handler {
         private final WeakReference<RegistraActivity> mActivity;
 
@@ -110,6 +118,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
 
         @Override
         public void handleMessage(Message msg) {
+            Log.e("registra","msj: " + msg.obj.toString());
             switch (msg.what) {
                 case UsbService.MESSAGE_FROM_SERIAL_PORT:
                     String data = (String) msg.obj;
