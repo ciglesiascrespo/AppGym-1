@@ -8,7 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,6 +27,7 @@ import com.iglesias.c.appgym.RestApi.Model.InfoLogin;
 import com.iglesias.c.appgym.Service.UsbService;
 import com.iglesias.c.appgym.View.LoginView;
 
+import java.lang.ref.WeakReference;
 import java.util.Set;
 
 public class LoginActivity extends AppCompatActivity implements LoginView {
@@ -239,5 +242,22 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
         }
         return true;
+    }
+    private static class MyHandler extends Handler {
+        private final WeakReference<LoginActivity> mActivity;
+
+        public MyHandler(LoginActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case UsbService.MESSAGE_FROM_SERIAL_PORT:
+                    String data = (String) msg.obj;
+
+                    break;
+            }
+        }
     }
 }

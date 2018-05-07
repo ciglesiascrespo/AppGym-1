@@ -13,7 +13,7 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
 
     public RegistrarPresenterImpl(RegistrarView view) {
         this.view = view;
-        iterator = new RegistraIterator(this,view.getContextApp());
+        iterator = new RegistraIterator(this, view.getContextApp());
     }
 
     public void registrarUsuario(String nro) {
@@ -22,7 +22,7 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
 
     public void registrarUsuario(String nro, String id) {
         if (nro.isEmpty()) {
-            view.showErrorLoginDialog("Diligencia un número de documento");
+            view.showErrorLoginDialog("Diligencia un número de documento", false);
         } else {
             view.showLoading();
             iterator.registrarUsuario(nro, id);
@@ -33,19 +33,25 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
     @Override
     public void onUserExist() {
         view.hideLoading();
-        view.showErrorLoginDialog("El usuario ya se encuentra registrado.");
+        view.showErrorLoginDialog("El usuario ya se encuentra registrado.", true);
     }
 
     @Override
     public void onError() {
         view.hideLoading();
-        view.showErrorLoginDialog("Error registrando usuario.");
+        view.showErrorLoginDialog("Error registrando usuario.", true);
     }
 
     @Override
     public void onSuccess() {
         view.hideLoading();
-        view.showErrorLoginDialog("Usuario registrado con éxito.");
+        view.showErrorLoginDialog("Usuario registrado con éxito.", true);
 
+    }
+
+    public void receiveMsj(String msj) {
+        if (!msj.contains("id:")) {
+            view.showErrorLoginDialog(msj, false);
+        }
     }
 }

@@ -3,6 +3,8 @@ package com.iglesias.c.appgym.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,13 +14,17 @@ import android.widget.EditText;
 
 import com.iglesias.c.appgym.Presenter.RegistrarPresenterImpl;
 import com.iglesias.c.appgym.R;
+import com.iglesias.c.appgym.Service.UsbService;
 import com.iglesias.c.appgym.View.RegistrarView;
+
+import java.lang.ref.WeakReference;
 
 public class RegistraActivity extends AppCompatActivity implements RegistrarView {
     private ProgressDialog loading;
     private EditText edtUsr;
     private Button btnRegistrar;
     RegistrarPresenterImpl presenter;
+    MyHandler myHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +33,8 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
         setupViews();
         setupLoading();
         presenter = new RegistrarPresenterImpl(this);
+        myHandler = new MyHandler(this);
+        LoginActivity.usbService.setHandler(myHandler);
     }
 
     private void setupLoading() {
@@ -59,7 +67,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
     }
 
     @Override
-    public void showErrorLoginDialog(String msj) {
+    public void showErrorLoginDialog(String msj, final boolean finish) {
         AlertDialog.Builder builder = new AlertDialog.Builder(RegistraActivity.this, R.style.myDialog);
 
         builder.setTitle(getResources().getString(R.string.str_menu_registrar));
@@ -67,7 +75,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
         builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                finish();
+                if (finish) finish();
             }
         });
 
@@ -79,5 +87,23 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
     @Override
     public Context getContextApp() {
         return getApplicationContext();
+    }
+
+    private class MyHandler extends Handler {
+        private final WeakReference<RegistraActivity> mActivity;
+
+        public MyHandler(RegistraActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case UsbService.MESSAGE_FROM_SERIAL_PORT:
+                    String data = (String) msg.obj;
+                    presenter.receiveMsj(data);
+                    break;
+            }
+        }
     }
 }
