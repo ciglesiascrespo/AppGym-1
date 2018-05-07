@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.iglesias.c.appgym.Presenter.RegistrarPresenterImpl;
 import com.iglesias.c.appgym.R;
@@ -25,6 +26,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
     private Button btnRegistrar;
     RegistrarPresenterImpl presenter;
     MyHandler myHandler;
+    ImageButton imgBtnHuella;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,16 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
             @Override
             public void onClick(View v) {
                 presenter.registrarUsuario(edtUsr.getText().toString());
+            }
+        });
+
+        imgBtnHuella = findViewById(R.id.id_btn_huella);
+
+        imgBtnHuella.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String dato = "1";
+                LoginActivity.usbService.write(dato.getBytes());
             }
         });
     }
