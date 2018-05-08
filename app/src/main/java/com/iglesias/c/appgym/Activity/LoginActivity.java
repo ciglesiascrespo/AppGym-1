@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     public static final String EXTRA_NOMBRE = "NOMBRE";
     public static final String EXTRA_DOCUMENTO = "DOCUMENTO";
     public static final String EXTRA_DIAS = "DIAS";
+    public static final String EXTRA_ID_HUELLA = "ID_HUELLA";
     public static final String EXTRA_URL_IMAGEN = "URL";
 
     Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btnx, btnIr;
@@ -149,6 +150,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         i.putExtra(EXTRA_DIAS, infoLogin.getDias());
         i.putExtra(EXTRA_DOCUMENTO, infoLogin.getNroDocumento());
         i.putExtra(EXTRA_URL_IMAGEN, infoLogin.getUrlImg());
+        i.putExtra(EXTRA_ID_HUELLA,infoLogin.getIdHuella());
+
 
         startActivity(i);
 

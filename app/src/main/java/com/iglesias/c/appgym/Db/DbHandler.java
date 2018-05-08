@@ -82,13 +82,14 @@ public class DbHandler {
 
     public ResultLogin verificaUsuarioDb(String nro) {
         int cnt = 0;
+        String id="";
         Cursor c = null;
         ResultLogin result = new ResultLogin();
         result.setErrorCode(ConstantesRestApi.CODE_ERROR);
 
         try {
 
-            String query = "Select " + UserDb.KEY_DIAS + "   as cnt From " + UserDb.TABLE +
+            String query = "Select " + UserDb.KEY_DIAS + "   as cnt, " + UserDb.KEY_ID + " From " + UserDb.TABLE +
                     " where " + UserDb.KEY_NRO_DOCUMENTO + " = '" + nro + "';";
             c = dbHelper.execSql(query);
 
@@ -96,6 +97,11 @@ public class DbHandler {
                 if (!c.isNull(c.getColumnIndex("cnt"))) {
                     cnt = c.getInt(c.getColumnIndex("cnt"));
                 }
+
+                if (!c.isNull(c.getColumnIndex(UserDb.KEY_ID))) {
+                    id = c.getString(c.getColumnIndex(UserDb.KEY_ID));
+                }
+
                 result.setErrorCode(0);
             }
 
@@ -104,6 +110,7 @@ public class DbHandler {
             infoLogin.setNombre("No registra");
             infoLogin.setDias(cnt);
             infoLogin.setNroDocumento(nro);
+            infoLogin.setIdHuella(id);
 
             result.setInfo(infoLogin);
         } catch (Exception e) {

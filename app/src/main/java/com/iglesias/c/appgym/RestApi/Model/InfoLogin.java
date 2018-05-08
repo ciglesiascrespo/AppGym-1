@@ -21,6 +21,16 @@ public class InfoLogin {
     @Expose
     private String urlImg;
 
+    private String idHuella;
+
+    public void setIdHuella(String idHuella) {
+        this.idHuella = idHuella;
+    }
+
+    public String getIdHuella() {
+        return idHuella;
+    }
+
     public String getNroDocumento() {
         return nroDocumento;
     }
