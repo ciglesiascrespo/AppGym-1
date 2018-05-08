@@ -28,7 +28,8 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
     RegistrarPresenterImpl presenter;
     MyHandler myHandler;
     ImageButton imgBtnHuella;
-    String id="";
+    String id = "";
+    Boolean flagHuella = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
         btnRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.registrarUsuario(edtUsr.getText().toString());
+                presenter.registrarUsuario(edtUsr.getText().toString(), id, flagHuella);
             }
         });
 
@@ -109,6 +110,11 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
         this.id = id;
     }
 
+    @Override
+    public void setFlagHuella(Boolean flag) {
+        this.flagHuella = flag;
+    }
+
     private class MyHandler extends Handler {
         private final WeakReference<RegistraActivity> mActivity;
 
@@ -118,7 +124,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
 
         @Override
         public void handleMessage(Message msg) {
-            Log.e("registra","msj: " + msg.obj.toString());
+            Log.e("registra", "msj: " + msg.obj.toString());
             switch (msg.what) {
                 case UsbService.MESSAGE_FROM_SERIAL_PORT:
                     String data = (String) msg.obj;

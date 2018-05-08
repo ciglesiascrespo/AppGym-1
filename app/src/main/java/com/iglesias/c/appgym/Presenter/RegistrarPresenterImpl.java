@@ -16,17 +16,16 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
         iterator = new RegistraIterator(this, view.getContextApp());
     }
 
-    public void registrarUsuario(String nro) {
-        registrarUsuario(nro, "");
-    }
-
-    public void registrarUsuario(String nro, String id) {
+    public void registrarUsuario(String nro, String id, Boolean flag) {
         if (nro.isEmpty()) {
             view.showErrorLoginDialog("Diligencia un número de documento", false);
+        } else if (!flag) {
+            view.showErrorLoginDialog("Debe registrar una huella", false);
         } else {
             view.showLoading();
             iterator.registrarUsuario(nro, id);
         }
+
 
     }
 
@@ -50,10 +49,14 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
     }
 
     public void receiveMsj(String msj) {
-        if (!msj.contains("id:")) {
-            view.showErrorLoginDialog(msj, false);
-        } else {
+        if (!msj.toLowerCase().contains("id:") && !msj.toLowerCase().contains("j")) {
+            String msjResult = iterator.getMsj(msj);
+            if (!msjResult.isEmpty())
+                view.showErrorLoginDialog(msjResult, false);
+        } else if (msj.toLowerCase().contains("id:")) {
             view.setId(msj.split(":")[1]);
+        } else {
+            view.setFlagHuella(true);
         }
     }
 }

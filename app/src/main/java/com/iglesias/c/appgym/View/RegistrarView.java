@@ -10,8 +10,14 @@ import com.iglesias.c.appgym.RestApi.Model.InfoLogin;
 
 public interface RegistrarView {
     void showLoading();
+
     void hideLoading();
+
     void showErrorLoginDialog(String msj, boolean finish);
+
     Context getContextApp();
+
     void setId(String id);
+
+    void setFlagHuella(Boolean flag);
 }
