@@ -97,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     private void btnClick() {
+        String dato = "3";
+        LoginActivity.usbService.write(dato.getBytes());
         Subscription subscription = Single.create(new Single.OnSubscribe<Boolean>() {
             @Override
             public void call(SingleSubscriber<? super Boolean> singleSubscriber) {
@@ -107,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 .subscribe(new Action1<Boolean>() {
                     @Override
                     public void call(Boolean aBoolean) {
-                        String dato = "3";
+                        String dato = "0";
                         LoginActivity.usbService.write(dato.getBytes());
                         //btnEntrar.setEnabled(true);
                         finish();
