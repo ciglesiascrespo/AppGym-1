@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         txtDocumento = findViewById(R.id.id_txt_documento);
         txtNombre = findViewById(R.id.id_txt_nombre);
         imgUsr = findViewById(R.id.imagen_usr);
-        btnEntrar = findViewById(R.id.id_btn_entrar);
+        btnEntrar = findViewById(R.id.id_btn_huella_entrar);
 
         btnEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
