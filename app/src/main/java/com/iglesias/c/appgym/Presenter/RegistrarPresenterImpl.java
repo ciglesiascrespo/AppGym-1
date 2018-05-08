@@ -1,5 +1,7 @@
 package com.iglesias.c.appgym.Presenter;
 
+import android.widget.Toast;
+
 import com.iglesias.c.appgym.Iterator.RegistraIterator;
 import com.iglesias.c.appgym.View.RegistrarView;
 
@@ -49,6 +51,7 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
     }
 
     public void receiveMsj(String msj) {
+
         String msjResult = iterator.getMsj(msj);
         view.showErrorLoginDialog(msjResult, false);
         /*
