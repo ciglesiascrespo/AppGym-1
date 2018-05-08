@@ -24,6 +24,7 @@ import java.lang.ref.WeakReference;
 
 public class RegistraActivity extends AppCompatActivity implements RegistrarView {
     private ProgressDialog loading;
+    AlertDialog dialog;
     private EditText edtUsr;
     private Button btnRegistrar;
     RegistrarPresenterImpl presenter;
@@ -96,7 +97,11 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
             }
         });
 
-        AlertDialog dialog = builder.create();
+        dialog = builder.create();
+
+        if(dialog.isShowing()){
+            dialog.dismiss();
+        }
 
         dialog.show();
     }
