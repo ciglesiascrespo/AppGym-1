@@ -1,14 +1,18 @@
 package com.iglesias.c.appgym.Activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iglesias.c.appgym.R;
+import com.iglesias.c.appgym.Service.UsbService;
 import com.squareup.picasso.Picasso;
 
 import rx.Single;
@@ -27,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtNombre, txtDias, txtDocumento;
     ImageView imgUsr;
     ImageButton btnEntrar;
+    MyHandler myHandler;
 
 
     @Override
@@ -48,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         txtDias.setText(dias + " dias.");
 
         Picasso.with(this).load(urlImage).into(imgUsr);
+        myHandler = new MyHandler();
+        LoginActivity.usbService.setHandler(myHandler);
         //nombre =
     }
 
@@ -61,23 +68,11 @@ public class MainActivity extends AppCompatActivity {
         btnEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String dato = "1";
+                String dato = "3";
                 btnEntrar.setEnabled(false);
 
                 LoginActivity.usbService.write(dato.getBytes());
-                btnClick();
-/*
-                if (onoff == false) {
-                    String dato = "1";
-                    LoginActivity.usbService.write(dato.getBytes());
-                    btnEntrar.setText("APAGAR");
-                    onoff = true;
-                } else {
-                    String dato = "0";
-                    LoginActivity.usbService.write(dato.getBytes());
-                    btnEntrar.setText("PRENDER");
-                    onoff = false;
-                }*/
+                //btnClick();
             }
         });
     }
@@ -102,10 +97,10 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(new Action1<Boolean>() {
                     @Override
                     public void call(Boolean aBoolean) {
-                            String dato = "0";
-                            LoginActivity.usbService.write(dato.getBytes());
-                            btnEntrar.setEnabled(true);
-                            finish();
+                        String dato = "0";
+                        LoginActivity.usbService.write(dato.getBytes());
+                        btnEntrar.setEnabled(true);
+                        finish();
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -115,5 +110,24 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+
+    private class MyHandler extends Handler {
+
+        public MyHandler() {
+
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            Log.e("registra", "msj: " + msg.obj.toString());
+            switch (msg.what) {
+                case UsbService.MESSAGE_FROM_SERIAL_PORT:
+                    String data = (String) msg.obj;
+                    Toast.makeText(MainActivity.this, data, Toast.LENGTH_SHORT).show();
+
+                    break;
+            }
+        }
+    }
 
 }
