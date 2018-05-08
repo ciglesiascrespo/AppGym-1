@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.iglesias.c.appgym.Presenter.MainPresenterImpl;
 import com.iglesias.c.appgym.R;
 import com.iglesias.c.appgym.Service.UsbService;
 import com.iglesias.c.appgym.View.MainView;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     ImageButton btnEntrar;
     MyHandler myHandler;
     AlertDialog dialog;
+    MainPresenterImpl presenter;
 
 
     @Override
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         Picasso.with(this).load(urlImage).into(imgUsr);
         myHandler = new MyHandler();
         LoginActivity.usbService.setHandler(myHandler);
+        presenter = new MainPresenterImpl(this);
         //nombre =
     }
 
@@ -130,8 +133,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
             switch (msg.what) {
                 case UsbService.MESSAGE_FROM_SERIAL_PORT:
                     String data = (String) msg.obj;
-                    Toast.makeText(MainActivity.this, data, Toast.LENGTH_SHORT).show();
-
+                    //Toast.makeText(MainActivity.this, data, Toast.LENGTH_SHORT).show();
+                    presenter.receiveMsj(data);
                     break;
             }
         }
@@ -164,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         if (id.equals(this.id)) {
             btnClick();
         } else {
-          showErrorLoginDialog("La huella obtenida no coincide con el usuario.");
+            showErrorLoginDialog("La huella obtenida no coincide con el usuario.");
         }
     }
 }
