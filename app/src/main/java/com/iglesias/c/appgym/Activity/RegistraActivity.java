@@ -97,12 +97,11 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
             }
         });
 
-        dialog = builder.create();
 
-        if(dialog.isShowing()){
+        if(dialog != null && dialog.isShowing()){
             dialog.dismiss();
         }
-
+        dialog = builder.create();
         dialog.show();
     }
 
@@ -134,7 +133,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
             switch (msg.what) {
                 case UsbService.MESSAGE_FROM_SERIAL_PORT:
                     String data = (String) msg.obj;
-                    Toast.makeText(RegistraActivity.this, data, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(RegistraActivity.this, data, Toast.LENGTH_SHORT).show();
                     presenter.receiveMsj(data);
                     break;
             }

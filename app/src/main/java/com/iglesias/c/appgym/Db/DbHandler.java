@@ -37,7 +37,7 @@ public class DbHandler {
         return dbHelper.execSql(sql);
     }
 
-    public boolean verificaUsuario(String nro) {
+    public boolean verificaUsuario(String nro, String id) {
         int cnt = 0;
         Cursor c = null;
         boolean result = true;
@@ -45,7 +45,7 @@ public class DbHandler {
         try {
 
             String query = "Select count(*)  as cnt From " + UserDb.TABLE +
-                    " where " + UserDb.KEY_NRO_DOCUMENTO + " = '" + nro + "';";
+                    " where " + UserDb.KEY_NRO_DOCUMENTO + " = '" + nro + "' or " + UserDb.KEY_ID + " = '" + id + "' ;";
             c = dbHelper.execSql(query);
 
             if (c.moveToFirst()) {

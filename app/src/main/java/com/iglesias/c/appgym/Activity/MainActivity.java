@@ -1,27 +1,16 @@
 package com.iglesias.c.appgym.Activity;
 
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
-import android.os.IBinder;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.iglesias.c.appgym.R;
-import com.iglesias.c.appgym.Service.UsbService;
 import com.squareup.picasso.Picasso;
 
-import java.util.Set;
-
-import rx.Scheduler;
 import rx.Single;
 import rx.SingleSubscriber;
 import rx.Subscription;
@@ -37,7 +26,7 @@ import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_URL_IMAGEN;
 public class MainActivity extends AppCompatActivity {
     private TextView txtNombre, txtDias, txtDocumento;
     ImageView imgUsr;
-    Button btnEntrar;
+    ImageButton btnEntrar;
 
 
     @Override

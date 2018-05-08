@@ -52,13 +52,15 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
 
     public void receiveMsj(String msj) {
 
-        if (!msj.toLowerCase().contains("id:") && !msj.toLowerCase().contains("j")) {
-            String msjResult = iterator.getMsj(msj.substring(0,1));
+        if (!msj.toLowerCase().contains("id:")) {
+            String msjResult = iterator.getMsj(msj.substring(0, 1));
             if (!msjResult.isEmpty())
                 view.showErrorLoginDialog(msjResult, false);
         } else if (msj.toLowerCase().contains("id:")) {
             view.setId(msj.split(":")[1]);
-        } else {
+        }
+
+        if (msj.toLowerCase().contains("j")) {
             view.setFlagHuella(true);
         }
     }

@@ -1,7 +1,6 @@
 package com.iglesias.c.appgym.Iterator;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.iglesias.c.appgym.Db.DbHandler;
 import com.iglesias.c.appgym.Presenter.RegistrarPresenter;
@@ -38,6 +37,8 @@ public class RegistraIterator {
         mapMsj.put("F", "Imagen demasiado sucia.");
         mapMsj.put("G", "No se pudieron encontrar caracteristicas de huellas dactilares.");
         mapMsj.put("H", "Retirar el dedo.");
+        mapMsj.put("I", "Colque el mismo dedo nuevamente.");
+        mapMsj.put("J", "Huella almacenada.");
         mapMsj.put("K", "No se pudo almacenar en esta ubicación.");
         mapMsj.put("L", "Error de escritura.");
         mapMsj.put("M", "Esperando dedo válido para inscripción.");
@@ -58,7 +59,7 @@ public class RegistraIterator {
         Observable<Boolean> observable = Observable.create(new Observable.OnSubscribe<Boolean>() {
             @Override
             public void call(Subscriber<? super Boolean> subscriber) {
-                subscriber.onNext(dbHandler.verificaUsuario(nro));
+                subscriber.onNext(dbHandler.verificaUsuario(nro, id));
                 subscriber.onCompleted();
             }
         }).observeOn(AndroidSchedulers.mainThread())

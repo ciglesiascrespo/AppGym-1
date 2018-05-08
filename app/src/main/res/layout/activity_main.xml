@@ -107,14 +107,15 @@
             android:textSize="@dimen/text_size_label" />
     </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:id="@+id/id_btn_entrar"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+    <ImageButton
+        android:id="@+id/id_btn_huella_entrar"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
         android:layout_marginTop="@dimen/margin_btn"
-        android:text="@string/entrar"
-        android:textSize="@dimen/text_size_label" />
+        android:background="@drawable/background_btn"
+        android:scaleType="centerInside"
+        android:src="@drawable/icons8_huella_dactilar_100" />
 
     <ImageView
         android:id="@+id/imagen_usr"
