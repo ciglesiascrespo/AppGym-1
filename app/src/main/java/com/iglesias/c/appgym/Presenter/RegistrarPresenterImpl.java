@@ -49,6 +49,9 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
     }
 
     public void receiveMsj(String msj) {
+        String msjResult = iterator.getMsj(msj);
+        view.showErrorLoginDialog(msjResult, false);
+        /*
         if (!msj.toLowerCase().contains("id:") && !msj.toLowerCase().contains("j")) {
             String msjResult = iterator.getMsj(msj);
             if (!msjResult.isEmpty())
@@ -57,6 +60,6 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
             view.setId(msj.split(":")[1]);
         } else {
             view.setFlagHuella(true);
-        }
+        }*/
     }
 }
