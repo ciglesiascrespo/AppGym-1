@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
         btnEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String dato = "3";
-                btnEntrar.setEnabled(false);
+                String dato = "2";
+                //btnEntrar.setEnabled(false);
 
                 LoginActivity.usbService.write(dato.getBytes());
                 //btnClick();
@@ -104,9 +104,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 .subscribe(new Action1<Boolean>() {
                     @Override
                     public void call(Boolean aBoolean) {
-                        String dato = "0";
+                        String dato = "3";
                         LoginActivity.usbService.write(dato.getBytes());
-                        btnEntrar.setEnabled(true);
+                        //btnEntrar.setEnabled(true);
                         finish();
                     }
                 }, new Action1<Throwable>() {
