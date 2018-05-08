@@ -75,7 +75,7 @@ public class DbHandler {
         ContentValues cv = new ContentValues();
         cv.put(UserDb.KEY_ID, id);
         cv.put(UserDb.KEY_NRO_DOCUMENTO, nro);
-        cv.put(UserDb.KEY_DIAS, 0);
+        cv.put(UserDb.KEY_DIAS, 1);
 
         return dbHelper.insert(UserDb.TABLE, cv);
     }
