@@ -3,127 +3,156 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:weightSum="100"
     android:orientation="vertical"
     tools:context="com.iglesias.c.appgym.Activity.MainActivity">
-
-    <ImageView
-        android:id="@+id/imagen"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/header_spnning"
-        android:visibility="visible" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/margin_btn"
-        android:text="@string/str_usuario"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="@dimen/text_size_title" />
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_height="0dp"
+        android:layout_weight="30"
         android:orientation="horizontal">
-
-        <TextView
+        <Space
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:text="@string/str_nombre"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/text_size_label" />
-
-        <TextView
-            android:id="@+id/id_txt_nombre"
+            android:layout_height="match_parent"
+            android:layout_weight="20"/>
+        <ImageView
+            android:id="@+id/imagen"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:text="Carlos Iglesias"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/text_size_label" />
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:scaleType="centerCrop"
+            android:src="@drawable/header_fitnesspeople"
+            android:visibility="visible" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"/>
+
+
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_height="0dp"
+        android:layout_weight="70"
+        android:weightSum="100"
         android:orientation="horizontal">
-
-        <TextView
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:text="@string/str_nro_documento"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/text_size_label" />
+            android:layout_height="match_parent"
+            android:layout_weight="75"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/str_usuario"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/text_size_title" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/id_txt_documento"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="@string/str_nombre"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/text_size_label" />
+
+                <TextView
+                    android:id="@+id/id_txt_nombre"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="Carlos Iglesias"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/text_size_label" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="@string/str_nro_documento"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/text_size_label" />
+
+                <TextView
+                    android:id="@+id/id_txt_documento"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="Carlos Iglesias"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/text_size_label" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="@string/str_dias"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/text_size_label" />
+
+                <TextView
+                    android:id="@+id/id_txt_dias"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="Carlos Iglesias"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/text_size_label" />
+            </LinearLayout>
+            <ImageButton
+                android:id="@+id/id_btn_huella_entrar"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:background="@drawable/background_btn"
+                android:scaleType="centerInside"
+                android:src="@drawable/icons8_huella_dactilar_100" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imagen_usr"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="25"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:text="Carlos Iglesias"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/text_size_label" />
+            android:layout_marginTop="@dimen/margin_btn"
+            android:src="@drawable/header_fitnesspeople"
+            android:scaleType="centerCrop"
+
+            android:visibility="visible" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:text="@string/str_dias"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/text_size_label" />
-
-        <TextView
-            android:id="@+id/id_txt_dias"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:gravity="start"
-            android:text="Carlos Iglesias"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/text_size_label" />
-    </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/id_btn_huella_entrar"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/margin_btn"
-        android:background="@drawable/background_btn"
-        android:scaleType="centerInside"
-        android:src="@drawable/icons8_huella_dactilar_100" />
-
-    <ImageView
-        android:id="@+id/imagen_usr"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/margin_btn"
-        android:scaleType="centerCrop"
-        android:src="@drawable/header_spnning"
-        android:visibility="visible" />
 </LinearLayout>
