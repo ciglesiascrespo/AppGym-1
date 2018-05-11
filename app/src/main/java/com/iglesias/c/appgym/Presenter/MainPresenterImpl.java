@@ -25,7 +25,7 @@ public class MainPresenterImpl {
             view.sendId();
         } else {
             view.showErrorLoginDialog(msj);
-            view.compareId(msj.split(":")[1]);
+          //  view.compareId(msj.split(":")[1]);
         }
     }
 }
