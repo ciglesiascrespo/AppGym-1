@@ -131,14 +131,7 @@
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/text_size_label" />
             </LinearLayout>
-            <ImageButton
-                android:id="@+id/id_btn_huella_entrar"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_gravity="center"
-                android:background="@drawable/background_btn"
-                android:scaleType="centerInside"
-                android:src="@drawable/icons8_huella_dactilar_100" />
+
 
         </LinearLayout>
 

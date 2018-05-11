@@ -7,4 +7,5 @@ package com.iglesias.c.appgym.View;
 public interface MainView {
     void showErrorLoginDialog(String msj);
     void compareId(String id);
+    void sendId();
 }

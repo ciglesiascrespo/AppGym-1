@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private String documento, id;
     private TextView txtNombre, txtDias, txtDocumento;
     ImageView imgUsr;
-    ImageButton btnEntrar;
+
     MyHandler myHandler;
     AlertDialog dialog;
     MainPresenterImpl presenter;
@@ -65,6 +65,10 @@ public class MainActivity extends AppCompatActivity implements MainView {
         myHandler = new MyHandler();
         LoginActivity.usbService.setHandler(myHandler);
         presenter = new MainPresenterImpl(this);
+        String dato = "2";
+        //btnEntrar.setEnabled(false);
+
+        LoginActivity.usbService.write(dato.getBytes());
         //nombre =
     }
 
@@ -73,18 +77,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         txtDocumento = findViewById(R.id.id_txt_documento);
         txtNombre = findViewById(R.id.id_txt_nombre);
         imgUsr = findViewById(R.id.imagen_usr);
-        btnEntrar = findViewById(R.id.id_btn_huella_entrar);
 
-        btnEntrar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String dato = "2";
-                //btnEntrar.setEnabled(false);
-
-                LoginActivity.usbService.write(dato.getBytes());
-                //btnClick();
-            }
-        });
     }
 
     private boolean waitTime() {
@@ -166,10 +159,15 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void compareId(String id) {
-        if (id.equals(this.id)) {
+        if (id.equals("0")) {
             btnClick();
         } else {
             showErrorLoginDialog("La huella obtenida no coincide con el usuario.");
         }
+    }
+
+    @Override
+    public void sendId() {
+        LoginActivity.usbService.write(id.getBytes());
     }
 }

@@ -58,8 +58,6 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
             String msjResult = iterator.getMsj(msj.substring(0, 1));
             if (!msjResult.isEmpty())
                 view.showErrorLoginDialog(msjResult, false);
-        } else if (msj.toLowerCase().contains("id:")) {
-            view.setId(msj.split(":")[1]);
         }
 
         if (msj.toLowerCase().contains("q")) {
@@ -71,8 +69,8 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
         if (msj.toLowerCase().contains("}")) {
             matHuella += msj;
             view.setFlagHuella(true);
-            view.showErrorLoginDialog(matHuella, false);
-            matHuella="";
+            matHuella = "";
+            view.setId(matHuella.replace("Q{", "").replace("}", ""));
         }
     }
 }
