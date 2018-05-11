@@ -3,17 +3,15 @@ package com.iglesias.c.appgym.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.iglesias.c.appgym.Presenter.RegistrarPresenterImpl;
 import com.iglesias.c.appgym.R;
@@ -26,10 +24,10 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
     private ProgressDialog loading;
     AlertDialog dialog;
     private EditText edtUsr;
-    private Button btnRegistrar;
+    private Button btnRegistrar,imgBtnHuella;
     RegistrarPresenterImpl presenter;
     MyHandler myHandler;
-    ImageButton imgBtnHuella;
+
     String id = "";
     Boolean flagHuella = false;
 

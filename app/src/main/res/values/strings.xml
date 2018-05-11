@@ -25,4 +25,5 @@
     <string name="str_menu_registrar">Registrar usuario</string>
     <string name="str_menu_sincronizar">Sincronizar base de datos</string>
     <string name="str_loading_registrar">Registrando usuario</string>
+    <string name="str_menu_registrar_huella">Registrar huella</string>
 </resources>

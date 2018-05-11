@@ -12,6 +12,8 @@ import com.iglesias.c.appgym.View.RegistrarView;
 public class RegistrarPresenterImpl implements RegistrarPresenter {
     private RegistrarView view;
     private RegistraIterator iterator;
+    private String matHuella = "";
+    private boolean flagQ = false;
 
     public RegistrarPresenterImpl(RegistrarView view) {
         this.view = view;
@@ -60,8 +62,15 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
             view.setId(msj.split(":")[1]);
         }
 
-        if (msj.toLowerCase().contains("j")) {
+        if (msj.toLowerCase().contains("q")) {
+            flagQ = true;
+        }
+        if (flagQ) {
+            matHuella += msj.substring(0, 1);
+        }
+        if (msj.toLowerCase().contains("}")) {
             view.setFlagHuella(true);
+            view.showErrorLoginDialog(matHuella,false);
         }
     }
 }
