@@ -65,11 +65,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
         myHandler = new MyHandler();
         LoginActivity.usbService.setHandler(myHandler);
         presenter = new MainPresenterImpl(this);
-        String dato = "2";
-        //btnEntrar.setEnabled(false);
-
-        LoginActivity.usbService.write(dato.getBytes());
+activarSensor();
         //nombre =
+    }
+
+    public void activarSensor() {
+        String dato = "2";
+        LoginActivity.usbService.write(dato.getBytes());
     }
 
     private void setupViews() {
@@ -163,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             btnClick();
         } else {
             showErrorLoginDialog("La huella obtenida no coincide con el usuario.");
+            activarSensor();
         }
     }
 

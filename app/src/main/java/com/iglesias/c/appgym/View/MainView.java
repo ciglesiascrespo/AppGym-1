@@ -8,4 +8,5 @@ public interface MainView {
     void showErrorLoginDialog(String msj);
     void compareId(String id);
     void sendId();
+    void activarSensor();
 }
