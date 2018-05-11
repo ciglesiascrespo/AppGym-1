@@ -168,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void sendId() {
+        showErrorLoginDialog(id);
         LoginActivity.usbService.write(id.getBytes());
     }
 }
