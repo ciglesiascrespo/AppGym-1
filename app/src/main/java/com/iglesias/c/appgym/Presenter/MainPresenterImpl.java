@@ -18,9 +18,9 @@ public class MainPresenterImpl {
 
     public void receiveMsj(String msj) {
 
-        if (msj.toLowerCase().contains("r")) {
+       /* if (msj.toLowerCase().contains("r")) {
             view.sendId();
-        }/*
+        }*/
         if (!msj.toLowerCase().contains("id:")) {
             String msjR = iterator.getMsj(msj.substring(0, 1));
             if (!msjR.isEmpty())
@@ -30,6 +30,6 @@ public class MainPresenterImpl {
         } else {
            // view.showErrorLoginDialog(msj);
            view.compareId(msj.split(":")[1]);
-        }*/
+        }
     }
 }
