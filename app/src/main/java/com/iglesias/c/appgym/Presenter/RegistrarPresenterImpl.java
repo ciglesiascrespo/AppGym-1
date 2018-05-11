@@ -66,7 +66,7 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
             flagQ = true;
         }
         if (flagQ) {
-            matHuella += msj.substring(0, 1);
+            matHuella += msj;
         }
         if (msj.toLowerCase().contains("}")) {
             matHuella += msj;
