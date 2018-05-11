@@ -72,6 +72,7 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
             matHuella += msj;
             view.setFlagHuella(true);
             view.showErrorLoginDialog(matHuella, false);
+            matHuella="";
         }
     }
 }
