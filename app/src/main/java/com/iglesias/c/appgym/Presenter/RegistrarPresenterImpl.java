@@ -64,13 +64,13 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
             flagQ = true;
         }
         if (flagQ) {
-            matHuella += msj;
+           // matHuella += msj;
         }
         if (msj.toLowerCase().contains("}")) {
             matHuella += msj;
             view.setFlagHuella(true);
 
-            view.setId(matHuella.replace("Q{", "").replace("}", ""));
+            view.setId(matHuella.replace("Q", "").replace("}", "").replace("{",""));
             matHuella = "";
         }
     }

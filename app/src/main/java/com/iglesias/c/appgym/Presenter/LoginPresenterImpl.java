@@ -29,13 +29,13 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void onSuccesLogin(InfoLogin infoLogin) {
         view.hideLoading();
-        view.showErrorLoginDialog("h: " + infoLogin.getIdHuella());
-        /*
+
+
         if (infoLogin.getDias() > 0) {
             view.goToMainActivity(infoLogin);
         } else {
             view.showErrorLoginDialog("Su membresía ha caducado, por favor contacte a su administrador.");
-        }*/
+        }
 
     }
 
