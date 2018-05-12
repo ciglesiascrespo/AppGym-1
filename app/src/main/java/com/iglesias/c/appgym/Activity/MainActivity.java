@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         //showErrorLoginDialog(id);
         for (int i = 0; i < id.length(); i++) {
             String dato = String.valueOf(id.charAt(i));
-            Toast.makeText(this, dato, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, dato, Toast.LENGTH_SHORT).show();
             LoginActivity.usbService.write(dato.getBytes());
         }
 
