@@ -26,6 +26,7 @@ public class MainPresenterImpl {
             if (!msjR.isEmpty())
                 view.showErrorLoginDialog(msjR);
         } else if (msj.toLowerCase().contains("r")) {
+            view.showErrorLoginDialog(msj);
             view.sendId();
         } else {
            // view.showErrorLoginDialog(msj);
