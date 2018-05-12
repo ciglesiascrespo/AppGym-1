@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             }
         }
         activarSensor();
-        presenter.flag = true;
+       // presenter.flag = true;
 
     }
 }
