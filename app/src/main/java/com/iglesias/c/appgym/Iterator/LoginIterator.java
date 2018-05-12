@@ -33,7 +33,7 @@ public class LoginIterator {
 
         Retrofit retrofit = RestApiAdapter.provideRetrofit();
 
-        retrofit.create(EndPoints.class).login(nro)
+        retrofit.create(EndPoints.class).login(ConstantesRestApi.r,nro,ConstantesRestApi.idSucursal)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())

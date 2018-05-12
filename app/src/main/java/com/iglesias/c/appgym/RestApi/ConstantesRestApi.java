@@ -8,9 +8,14 @@ public class ConstantesRestApi {
 
 
     public static final String BASE_URL_TEST = "https://meserosnotifications.herokuapp.com/";
-    public static final String KEY_POST_LOGIN = "/login_gym";
+    public static final String KEY_POST_LOGIN = "getUser&id_sucursal=2";
 
+    public static final String BASE_URL = "http://app.clez.co/index.php/";
+
+   //&identificacion=1095795089 ?r=communication
     public static final int CODE_ERROR = 1;
+    public static final String r ="communication/getUser";
+    public static final int idSucursal = 2;
 
 }
 

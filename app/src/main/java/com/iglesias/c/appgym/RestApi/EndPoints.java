@@ -12,5 +12,5 @@ import rx.Observable;
 
 public interface EndPoints {
     @GET(ConstantesRestApi.KEY_POST_LOGIN)
-    Observable<ResultLogin> login(@Query("cedula") String cedula);
+    Observable<ResultLogin> login( @Query("r") String r, @Query("identificacion") String identificacion, @Query("id_sucursal") int idSucursal);
 }

@@ -18,7 +18,7 @@ public class RestApiAdapter {
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(ConstantesRestApi.BASE_URL_TEST)
+                .baseUrl(ConstantesRestApi.BASE_URL)
                 .build();
 
         return retrofit;
