@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private boolean waitTime() {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(3000);
         } catch (Exception e) {
             return false;
         }
