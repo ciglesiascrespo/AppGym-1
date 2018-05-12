@@ -165,18 +165,21 @@ public class MainActivity extends AppCompatActivity implements MainView {
             btnClick();
         } else {
             showErrorLoginDialog("La huella obtenida no coincide con el usuario.");
-            activarSensor();
+            //activarSensor();
         }
     }
 
     @Override
     public void sendId() {
         //showErrorLoginDialog(id);
+        Toast.makeText(this, "length: " + id.length(), Toast.LENGTH_SHORT).show();
         for (int i = 0; i < id.length(); i++) {
             String dato = String.valueOf(id.charAt(i));
             //Toast.makeText(this, dato, Toast.LENGTH_SHORT).show();
             LoginActivity.usbService.write(dato.getBytes());
         }
+        activarSensor();
+        presenter.flag = true;
 
     }
 }
