@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         myHandler = new MyHandler();
         LoginActivity.usbService.setHandler(myHandler);
         presenter = new MainPresenterImpl(this);
-activarSensor();
+        activarSensor();
         //nombre =
     }
 
@@ -172,6 +172,10 @@ activarSensor();
     @Override
     public void sendId() {
         //showErrorLoginDialog(id);
-        LoginActivity.usbService.write(id.getBytes());
+        for (int i = 0; i < id.length(); i++) {
+            String dato = String.valueOf(id.charAt(i));
+            LoginActivity.usbService.write(dato.getBytes());
+        }
+
     }
 }
