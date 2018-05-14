@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void sendId() {
-        //showErrorLoginDialog(id);
+        showErrorLoginDialog(id);
         //Toast.makeText(this, "length: " + id.length(), Toast.LENGTH_SHORT).show();
         for (int i = 0; i < id.length(); i++) {
             if (i < 512) {
