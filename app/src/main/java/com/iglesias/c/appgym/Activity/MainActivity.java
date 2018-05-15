@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         LoginActivity.usbService.setHandler(myHandler);
         presenter = new MainPresenterImpl(this);
         btnClick();
-        activarSensor();
+        //activarSensor();
         //nombre =
     }
 
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private boolean waitTime() {
         try {
-            Thread.sleep(3000);
+            Thread.sleep(5000);
         } catch (Exception e) {
             return false;
         }
