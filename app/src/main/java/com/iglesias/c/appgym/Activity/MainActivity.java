@@ -177,11 +177,10 @@ public class MainActivity extends AppCompatActivity implements MainView {
         String arrayId []= id.split("|");
         for (int i = 0; i < arrayId.length; i++) {
             if (i < 512) {
-
                 String dato = arrayId[i];
-
-                //Toast.makeText(this, dato, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, dato, Toast.LENGTH_SHORT).show();
                 LoginActivity.usbService.write(dato.getBytes());
+
             }
         }
         activarSensor();
