@@ -7,8 +7,6 @@ import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,8 +14,11 @@ import android.widget.Toast;
 import com.iglesias.c.appgym.Presenter.MainPresenterImpl;
 import com.iglesias.c.appgym.R;
 import com.iglesias.c.appgym.Service.UsbService;
+import com.iglesias.c.appgym.Utils.Util;
 import com.iglesias.c.appgym.View.MainView;
 import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
 
 import rx.Single;
 import rx.SingleSubscriber;
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         myHandler = new MyHandler();
         LoginActivity.usbService.setHandler(myHandler);
         presenter = new MainPresenterImpl(this);
-       //  btnClick();
+        //  btnClick();
         activarSensor();
         //nombre =
     }
@@ -140,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void showErrorLoginDialog(String msj) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.myDialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.myDialog);
 
         builder.setTitle(getResources().getString(R.string.str_menu_registrar));
         builder.setMessage(msj);
@@ -172,19 +173,24 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void sendId() {
-       // showErrorLoginDialog(id);
+        // showErrorLoginDialog(id);
         //Toast.makeText(this, "length: " + id.length(), Toast.LENGTH_SHORT).show();
-        String arrayId []= id.split("|");
+        String arrayId[] = id.split("|");
         for (int i = 0; i < arrayId.length; i++) {
             if (i < 512) {
                 String dato = arrayId[i];
+
                 Toast.makeText(this, dato, Toast.LENGTH_SHORT).show();
-                LoginActivity.usbService.write(dato.getBytes());
+                try {
+                    LoginActivity.usbService.write(Util.intToByteArray(Integer.valueOf(dato)));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
             }
         }
         activarSensor();
-       // presenter.flag = true;
+        // presenter.flag = true;
 
     }
 }
