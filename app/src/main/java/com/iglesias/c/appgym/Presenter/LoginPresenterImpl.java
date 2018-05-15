@@ -22,7 +22,7 @@ public class LoginPresenterImpl implements LoginPresenter {
             view.showErrorLoginDialog("Digite un numero de identificación");
         } else {
             view.showLoading();
-            iterator.validateUser(nro);
+            iterator.validateUserDb(nro);
         }
     }
 
