@@ -131,6 +131,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
             switch (msg.what) {
                 case UsbService.MESSAGE_FROM_SERIAL_PORT:
                     String data = (String) msg.obj;
+
                     //Toast.makeText(RegistraActivity.this, data, Toast.LENGTH_SHORT).show();
                     presenter.receiveMsj(data);
                     break;

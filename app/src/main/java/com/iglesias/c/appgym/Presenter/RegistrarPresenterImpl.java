@@ -1,7 +1,5 @@
 package com.iglesias.c.appgym.Presenter;
 
-import android.widget.Toast;
-
 import com.iglesias.c.appgym.Iterator.RegistraIterator;
 import com.iglesias.c.appgym.View.RegistrarView;
 
