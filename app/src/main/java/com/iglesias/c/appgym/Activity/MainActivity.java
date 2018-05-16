@@ -197,7 +197,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
             }
         }
-        grabar(datos);
+        showErrorLoginDialog(datos);
+        //grabar(datos);
         //activarSensor();
         // presenter.flag = true;
 
