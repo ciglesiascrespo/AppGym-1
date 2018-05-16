@@ -208,7 +208,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
         try {
             File f = new File(Environment.getExternalStorageDirectory(), "data.txt");
 
-            OutputStreamWriter archivo = new OutputStreamWriter(new FileOutputStream(f));
+            //OutputStreamWriter archivo = new OutputStreamWriter(new FileOutputStream(f));
+            OutputStreamWriter archivo = new OutputStreamWriter(openFileOutput("data.txt",MODE_PRIVATE));
             archivo.write(data);
 
             archivo.flush();
