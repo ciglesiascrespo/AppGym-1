@@ -1,12 +1,15 @@
 package com.iglesias.c.appgym.Activity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +21,10 @@ import com.iglesias.c.appgym.Utils.Util;
 import com.iglesias.c.appgym.View.MainView;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import rx.Single;
 import rx.SingleSubscriber;
@@ -176,21 +182,42 @@ public class MainActivity extends AppCompatActivity implements MainView {
         // showErrorLoginDialog(id);
         //Toast.makeText(this, "length: " + id.length(), Toast.LENGTH_SHORT).show();
         String arrayId[] = id.split("|");
+        String datos = "";
         for (int i = 0; i < arrayId.length; i++) {
             if (i < 512) {
                 String dato = arrayId[i];
+                datos += dato + ";";
 
-                Toast.makeText(this, dato, Toast.LENGTH_SHORT).show();
-                try {
+                //Toast.makeText(this, dato, Toast.LENGTH_SHORT).show();
+               /* try {
                     LoginActivity.usbService.write(Util.intToByteArray(Integer.valueOf(dato)));
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
+                }*/
 
             }
         }
-        activarSensor();
+        grabar(datos);
+        //activarSensor();
         // presenter.flag = true;
 
+    }
+
+    // TODO funcion de prueba, eliminar al terminar
+    public void grabar(String data) {
+        try {
+            File f = new File(Environment.getExternalStorageDirectory(), "data.txt");
+
+            OutputStreamWriter archivo = new OutputStreamWriter(new FileOutputStream(f));
+            archivo.write(data);
+
+            archivo.flush();
+            archivo.close();
+        } catch (IOException e) {
+        }
+        Toast t = Toast.makeText(this, "Los datos fueron grabados",
+                Toast.LENGTH_SHORT);
+        t.show();
+        finish();
     }
 }
