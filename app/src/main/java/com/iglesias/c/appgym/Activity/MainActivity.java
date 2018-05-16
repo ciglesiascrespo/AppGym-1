@@ -181,12 +181,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
     public void sendId() {
         // showErrorLoginDialog(id);
         //Toast.makeText(this, "length: " + id.length(), Toast.LENGTH_SHORT).show();
-        String arrayId[] = id.split("|");
+        String arrayId[] = id.split(";");
         String datos = "";
         for (int i = 0; i < arrayId.length; i++) {
             if (i < 512) {
                 String dato = arrayId[i];
-                datos += dato + ";";
+                datos += dato + "&";
 
                 //Toast.makeText(this, dato, Toast.LENGTH_SHORT).show();
                /* try {
