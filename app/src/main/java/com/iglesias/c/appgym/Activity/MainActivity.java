@@ -189,15 +189,15 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 datos += dato + "&";
 
                 //Toast.makeText(this, dato, Toast.LENGTH_SHORT).show();
-               /* try {
+                try {
                     LoginActivity.usbService.write(Util.intToByteArray(Integer.valueOf(dato)));
                 } catch (IOException e) {
                     e.printStackTrace();
-                }*/
+                }
 
             }
         }
-        showErrorLoginDialog(datos);
+        // showErrorLoginDialog(datos);
         //grabar(datos);
         //activarSensor();
         // presenter.flag = true;
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             File f = new File(Environment.getExternalStorageDirectory(), "data.txt");
 
             //OutputStreamWriter archivo = new OutputStreamWriter(new FileOutputStream(f));
-            OutputStreamWriter archivo = new OutputStreamWriter(openFileOutput("data.txt",MODE_PRIVATE));
+            OutputStreamWriter archivo = new OutputStreamWriter(openFileOutput("data.txt", MODE_PRIVATE));
             archivo.write(data);
 
             archivo.flush();
