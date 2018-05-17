@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
         myHandler = new MyHandler();
         LoginActivity.usbService.setHandler(myHandler);
         presenter = new MainPresenterImpl(this);
-        //  btnClick();
-        activarSensor();
+          btnClick();
+      //  activarSensor();
         //nombre =
     }
 

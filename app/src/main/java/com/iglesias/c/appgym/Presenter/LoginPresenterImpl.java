@@ -19,10 +19,10 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     public void validateUser(String nro) {
         if (nro.length() == 0) {
-            view.showErrorLoginDialog("Digite un numero de identificación");
+            view.showErrorLoginDialog("Digite un número de identificación");
         } else {
             view.showLoading();
-            iterator.validateUserDb(nro);
+            iterator.validateUser(nro);
         }
     }
 
