@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
         myHandler = new MyHandler();
         LoginActivity.usbService.setHandler(myHandler);
         presenter = new MainPresenterImpl(this);
-          btnClick();
-      //  activarSensor();
+        //  btnClick();
+        activarSensor();
         //nombre =
     }
 
@@ -186,10 +186,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
         for (int i = 0; i < arrayId.length; i++) {
             if (i < 512) {
                 String dato = arrayId[i];
-                datos += dato + "&";
+
 
                 //Toast.makeText(this, dato, Toast.LENGTH_SHORT).show();
                 try {
+                    datos += Util.intToByteArray(Integer.valueOf(dato)) + "&";
                     LoginActivity.usbService.write(Util.intToByteArray(Integer.valueOf(dato)));
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -197,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
             }
         }
-        // showErrorLoginDialog(datos);
+         showErrorLoginDialog(datos);
         //grabar(datos);
         //activarSensor();
         // presenter.flag = true;
