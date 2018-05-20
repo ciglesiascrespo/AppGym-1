@@ -190,15 +190,17 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
                 //Toast.makeText(this, dato, Toast.LENGTH_SHORT).show();
                 try {
-                    datos += Util.intToByteArray(Integer.valueOf(dato)) + "&";
-                    LoginActivity.usbService.write(Util.intToByteArray(Integer.valueOf(dato)));
-                } catch (IOException e) {
+                    datos +=
+                            Integer.valueOf(dato) + "&";
+                    LoginActivity.usbService.write(dato.getBytes());
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
             }
         }
-         showErrorLoginDialog(datos);
+        LoginActivity.usbService.write("}".getBytes());
+        //showErrorLoginDialog(datos);
         //grabar(datos);
         //activarSensor();
         // presenter.flag = true;
