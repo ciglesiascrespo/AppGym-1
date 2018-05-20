@@ -181,6 +181,14 @@ public class MainActivity extends AppCompatActivity implements MainView {
     public void sendId() {
         // showErrorLoginDialog(id);
         //Toast.makeText(this, "length: " + id.length(), Toast.LENGTH_SHORT).show();
+
+        String arrayId = id + "}";
+
+        for(int i = 0; i< arrayId.length();i++){
+            LoginActivity.usbService.write(String.valueOf(arrayId.charAt(i)).getBytes());
+        }
+
+        /*
         String arrayId[] = id.split(",");
         String datos = "";
         for (int i = 0; i < arrayId.length; i++) {
@@ -200,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             }
         }
         LoginActivity.usbService.write("}".getBytes());
+        */
         //showErrorLoginDialog(datos);
         //grabar(datos);
         //activarSensor();
