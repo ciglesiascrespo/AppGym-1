@@ -183,10 +183,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
         //Toast.makeText(this, "length: " + id.length(), Toast.LENGTH_SHORT).show();
 
         String arrayId = id + "}";
-
+        showErrorLoginDialog(arrayId);
+        LoginActivity.usbService.write(arrayId.getBytes());
+/*
         for(int i = 0; i< arrayId.length();i++){
             LoginActivity.usbService.write(String.valueOf(arrayId.charAt(i)).getBytes());
-        }
+        }*/
 
         /*
         String arrayId[] = id.split(",");
