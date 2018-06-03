@@ -432,11 +432,12 @@ public class Bluetooth {
                                 + " socket during connection failure", e3);
                     }
                     connectionFailed();
+                    return;
                 }
 
                 // Close the socket
 
-                return;
+
             }
 
             // Reset the ConnectThread because we're done

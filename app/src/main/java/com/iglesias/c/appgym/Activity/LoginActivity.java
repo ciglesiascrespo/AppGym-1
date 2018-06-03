@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iglesias.c.appgym.Pojo.DeviceInfo;
@@ -26,6 +27,8 @@ import com.iglesias.c.appgym.R;
 import com.iglesias.c.appgym.RestApi.Model.InfoLogin;
 import com.iglesias.c.appgym.Service.Bluetooth;
 import com.iglesias.c.appgym.View.LoginView;
+
+import org.w3c.dom.Text;
 
 public class LoginActivity extends AppCompatActivity implements LoginView {
 
@@ -44,6 +47,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     EditText edtNro;
     private ProgressDialog loading;
     LoginPresenterImpl presenter;
+    private TextView txtEstado;
 
     Bluetooth bt;
     BluetoothAdapter btAdapter;
@@ -72,15 +76,19 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
             Intent turnOnIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(turnOnIntent, REQUEST_ENABLE_BT);
         } else {
-            bt.start();
-
             if (!deviceInfo.getMac().contains(":")) {
                 showErrorLoginDialog("No se encuentra ningun dispositivo configurado.");
             } else {
-                bt.connectDevice(deviceInfo.getMac());
+                conectService();
             }
         }
 
+    }
+
+    private void conectService() {
+        txtEstado.setText("Estado: Conectando...");
+        bt.start();
+        bt.connectDevice(deviceInfo.getMac());
     }
 
     private void setupLoading() {
@@ -103,6 +111,11 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
         btnx = findViewById(R.id.borrar);
         btnIr = findViewById(R.id.sign_in);
+
+        txtEstado = findViewById(R.id.id_txt_estado_login);
+
+        txtEstado.setText("Estado: Desconectado");
+        btnIr.setEnabled(false);
 
         edtNro = findViewById(R.id.cedula);
     }
@@ -210,19 +223,19 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     @Override
     protected void onResume() {
         super.onResume();
-
+      //  conectService();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
+      //  bt.stop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        bt.stop();
     }
 
 
@@ -271,6 +284,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
             switch (msg.what) {
                 case Bluetooth.MESSAGE_STATE_CHANGE:
                     if (flagFirstConexion && msg.arg1 == Bluetooth.STATE_CONNECTED) {
+                        btnIr.setEnabled(true);
+                        txtEstado.setText("Estado: Conectado.");
                         Toast.makeText(getContext(), "Dispositivo conectado con éxito.", Toast.LENGTH_SHORT).show();
                     }
                     Log.d(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
@@ -286,8 +301,9 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
                     break;
                 case Bluetooth.MESSAGE_TOAST:
                     if (flagFirstConexion && msg.arg1 == -1) {
-                        flagFirstConexion = false;
-                        showErrorLoginDialog("Imposible conectar con dispositivo");
+                        btnIr.setEnabled(false);
+                        txtEstado.setText("Estado: Desconectado.");
+                        conectService();
                     }
                     Log.d(TAG, "MESSAGE_TOAST " + msg);
                     break;
