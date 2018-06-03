@@ -15,7 +15,6 @@ import android.widget.EditText;
 
 import com.iglesias.c.appgym.Presenter.RegistrarPresenterImpl;
 import com.iglesias.c.appgym.R;
-import com.iglesias.c.appgym.Service.UsbService;
 import com.iglesias.c.appgym.View.RegistrarView;
 
 import java.lang.ref.WeakReference;
@@ -39,7 +38,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
         setupLoading();
         presenter = new RegistrarPresenterImpl(this);
         myHandler = new MyHandler(this);
-        LoginActivity.usbService.setHandler(myHandler);
+      //  LoginActivity.usbService.setHandler(myHandler);
     }
 
     private void setupLoading() {
@@ -65,7 +64,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
             @Override
             public void onClick(View v) {
                 String dato = "1";
-                LoginActivity.usbService.write(dato.getBytes());
+               // LoginActivity.usbService.write(dato.getBytes());
             }
         });
     }
@@ -129,7 +128,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
         public void handleMessage(Message msg) {
             Log.e("registra", "msj: " + msg.obj.toString());
             switch (msg.what) {
-                case UsbService.MESSAGE_FROM_SERIAL_PORT:
+                case 1://UsbService.MESSAGE_FROM_SERIAL_PORT:
                     String data = (String) msg.obj;
 
                     //Toast.makeText(RegistraActivity.this, data, Toast.LENGTH_SHORT).show();

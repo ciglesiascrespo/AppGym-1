@@ -1,6 +1,9 @@
 package com.iglesias.c.appgym.Presenter;
 
+import android.content.SharedPreferences;
+
 import com.iglesias.c.appgym.Iterator.LoginIterator;
+import com.iglesias.c.appgym.Pojo.DeviceInfo;
 import com.iglesias.c.appgym.RestApi.Model.InfoLogin;
 import com.iglesias.c.appgym.View.LoginView;
 
@@ -24,6 +27,9 @@ public class LoginPresenterImpl implements LoginPresenter {
             view.showLoading();
             iterator.validateUserDb(nro);
         }
+    }
+    public DeviceInfo getDeviceInfo(){
+        return iterator.getInfoDeviceConexion();
     }
 
     @Override

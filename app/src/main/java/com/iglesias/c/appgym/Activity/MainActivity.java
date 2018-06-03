@@ -1,6 +1,5 @@
 package com.iglesias.c.appgym.Activity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
@@ -9,20 +8,16 @@ import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iglesias.c.appgym.Presenter.MainPresenterImpl;
 import com.iglesias.c.appgym.R;
-import com.iglesias.c.appgym.Service.UsbService;
-import com.iglesias.c.appgym.Utils.Util;
 import com.iglesias.c.appgym.View.MainView;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
@@ -44,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private TextView txtNombre, txtDias, txtDocumento;
     ImageView imgUsr;
 
-    MyHandler myHandler;
+
     AlertDialog dialog;
     MainPresenterImpl presenter;
 
@@ -69,8 +64,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         txtDias.setText(dias + " dias.");
 
         Picasso.with(this).load(urlImage).into(imgUsr);
-        myHandler = new MyHandler();
-        LoginActivity.usbService.setHandler(myHandler);
+
         presenter = new MainPresenterImpl(this);
         //  btnClick();
         activarSensor();
@@ -79,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     public void activarSensor() {
         String dato = "2";
-        LoginActivity.usbService.write(dato.getBytes());
+        // LoginActivity.usbService.write(dato.getBytes());
     }
 
     private void setupViews() {
@@ -101,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private void btnClick() {
         String dato = "3";
-        LoginActivity.usbService.write(dato.getBytes());
+        // LoginActivity.usbService.write(dato.getBytes());
         Subscription subscription = Single.create(new Single.OnSubscribe<Boolean>() {
             @Override
             public void call(SingleSubscriber<? super Boolean> singleSubscriber) {
@@ -113,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
                     @Override
                     public void call(Boolean aBoolean) {
                         String dato = "0";
-                        LoginActivity.usbService.write(dato.getBytes());
+                        // LoginActivity.usbService.write(dato.getBytes());
                         //btnEntrar.setEnabled(true);
                         finish();
                     }
@@ -136,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         public void handleMessage(Message msg) {
             Log.e("registra", "msj: " + msg.obj.toString());
             switch (msg.what) {
-                case UsbService.MESSAGE_FROM_SERIAL_PORT:
+                case 1:
                     String data = (String) msg.obj;
                     //Toast.makeText(MainActivity.this, data, Toast.LENGTH_SHORT).show();
                     presenter.receiveMsj(data);
@@ -184,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         String arrayId = id + "}";
         showErrorLoginDialog(arrayId);
-        LoginActivity.usbService.write(arrayId.getBytes());
+        //  LoginActivity.usbService.write(arrayId.getBytes());
 /*
         for(int i = 0; i< arrayId.length();i++){
             LoginActivity.usbService.write(String.valueOf(arrayId.charAt(i)).getBytes());
