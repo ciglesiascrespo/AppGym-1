@@ -148,6 +148,8 @@ public class SelectBtDActivity extends AppCompatActivity implements SelectBtView
                 } else {
                     hideListDisponibles();
                 }
+            }else if(BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
+                progressBusqueda.setVisibility(View.GONE);
             }
         }
     };
