@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     }
 
     private void conectService() {
-        txtEstado.setText("Estado: Conectando...");
+
         bt.start();
         bt.connectDevice(deviceInfo.getMac());
     }
@@ -283,10 +283,12 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case Bluetooth.MESSAGE_STATE_CHANGE:
-                    if (flagFirstConexion && msg.arg1 == Bluetooth.STATE_CONNECTED) {
+                    if ( msg.arg1 == Bluetooth.STATE_CONNECTED) {
                         btnIr.setEnabled(true);
                         txtEstado.setText("Estado: Conectado.");
                         Toast.makeText(getContext(), "Dispositivo conectado con éxito.", Toast.LENGTH_SHORT).show();
+                    }else{
+                        txtEstado.setText("Estado: Conectando...");
                     }
                     Log.d(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                     break;
@@ -300,7 +302,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
                     Log.d(TAG, "MESSAGE_DEVICE_NAME " + msg);
                     break;
                 case Bluetooth.MESSAGE_TOAST:
-                    if (flagFirstConexion && msg.arg1 == -1) {
+                    if ( msg.arg1 == -1) {
                         btnIr.setEnabled(false);
                         txtEstado.setText("Estado: Desconectado.");
                         conectService();
