@@ -26,8 +26,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Set;
 import java.util.UUID;
@@ -488,21 +490,25 @@ public class Bluetooth {
 
         public void run() {
             Log.i(TAG, "BEGIN mConnectedThread");
-            byte[] buffer = new byte[1024];
-            int bytes;
 
+            String msj;
             // Keep listening to the InputStream while connected
             while (true) {
                 try {
-                    // Read from the InputStream
-                    bytes = mmInStream.read(buffer);
-                    Log.d(TAG, "message bytes " + bytes);
-                    Log.d(TAG, "message string bytes " + String.valueOf(bytes));
-                    Log.d(TAG, "message buffer " + new String(buffer));
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(mmInStream));
+
+                    StringBuilder out = new StringBuilder();
+                    out.append(reader.readLine());
+
+                    msj = out.toString();
+
+                    Log.d(TAG, "message string  " + msj);
+
                     // Send the obtained bytes to the UI Activity
-                    mHandler.obtainMessage(MESSAGE_READ, bytes,
-                            -1, buffer).sendToTarget();
+                    mHandler.obtainMessage(MESSAGE_READ, -1,
+                            -1, msj).sendToTarget();
                 } catch (IOException e) {
+                    e.printStackTrace();
                     Log.e(TAG, "disconnected", e);
                     connectionLost();
                     // Start the service over to restart listening mode

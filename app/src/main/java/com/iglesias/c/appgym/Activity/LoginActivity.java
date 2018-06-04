@@ -51,7 +51,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     Bluetooth bt;
     BluetoothAdapter btAdapter;
-    private boolean flagFirstConexion = true;
+    private boolean flagEnvioPeticionSucursal = false;
+    private String idSucursal = "";
 
     private DeviceInfo deviceInfo = new DeviceInfo("", "");
 
@@ -115,7 +116,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         txtEstado = findViewById(R.id.id_txt_estado_login);
 
         txtEstado.setText("Estado: Desconectado");
-        btnIr.setEnabled(false);
 
         edtNro = findViewById(R.id.cedula);
     }
@@ -135,9 +135,13 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     }
 
     public void onClickValidateUser(View v) {
-        String nro = edtNro.getText().toString();
-        edtNro.setText("");
-        presenter.validateUser(nro);
+        if (idSucursal.isEmpty()) {
+            showErrorLoginDialog("No se encuentra vinculado a una sucursal");
+        } else {
+            String nro = edtNro.getText().toString();
+            edtNro.setText("");
+            presenter.validateUser(nro);
+        }
     }
 
     @Override
@@ -223,13 +227,13 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     @Override
     protected void onResume() {
         super.onResume();
-      //  conectService();
+        //  conectService();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-      //  bt.stop();
+        //  bt.stop();
     }
 
     @Override
@@ -270,7 +274,11 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         if (requestCode == REQUEST_ENABLE_BT) {
             if (btAdapter.isEnabled()) {
                 Toast.makeText(this, "Bluetooth encendido", Toast.LENGTH_SHORT).show();
-
+                if (!deviceInfo.getMac().contains(":")) {
+                    showErrorLoginDialog("No se encuentra ningun dispositivo configurado.");
+                } else {
+                    conectService();
+                }
             } else {
                 Toast.makeText(this, "Se requiere encender el bluetooth", Toast.LENGTH_SHORT).show();
 
@@ -283,27 +291,37 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case Bluetooth.MESSAGE_STATE_CHANGE:
-                    if ( msg.arg1 == Bluetooth.STATE_CONNECTED) {
-                        btnIr.setEnabled(true);
+                    if (msg.arg1 == Bluetooth.STATE_CONNECTED) {
                         txtEstado.setText("Estado: Conectado.");
+                        bt.sendMessage("p");
+                        flagEnvioPeticionSucursal = true;
                         Toast.makeText(getContext(), "Dispositivo conectado con éxito.", Toast.LENGTH_SHORT).show();
-                    }else{
+                    } else {
+                        idSucursal="";
                         txtEstado.setText("Estado: Conectando...");
                     }
-                    Log.d(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    Log.e(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                     break;
                 case Bluetooth.MESSAGE_WRITE:
-                    Log.d(TAG, "MESSAGE_WRITE ");
+                    Log.e(TAG, "MESSAGE_WRITE: " + String.valueOf(msg.arg1));
+
                     break;
                 case Bluetooth.MESSAGE_READ:
-                    Log.d(TAG, "MESSAGE_READ ");
+
+                    Log.e(TAG, "MESSAGE_READ: " + msg.obj);
+                    String msj = String.valueOf(msg.obj);
+                    if (flagEnvioPeticionSucursal && msj.contains(":")) {
+                        flagEnvioPeticionSucursal = false;
+                        idSucursal = msj.split(":")[1];
+
+                    }
                     break;
                 case Bluetooth.MESSAGE_DEVICE_NAME:
                     Log.d(TAG, "MESSAGE_DEVICE_NAME " + msg);
                     break;
                 case Bluetooth.MESSAGE_TOAST:
-                    if ( msg.arg1 == -1) {
-                        btnIr.setEnabled(false);
+                    if (msg.arg1 == -1) {
+                        idSucursal="";
                         txtEstado.setText("Estado: Desconectado.");
                         conectService();
                     }
