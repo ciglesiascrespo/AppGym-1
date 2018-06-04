@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     EditText edtNro;
     private ProgressDialog loading;
     LoginPresenterImpl presenter;
-    private TextView txtEstado;
+    private TextView txtEstado, txtSucursal;
 
     Bluetooth bt;
     BluetoothAdapter btAdapter;
@@ -114,8 +114,10 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         btnIr = findViewById(R.id.sign_in);
 
         txtEstado = findViewById(R.id.id_txt_estado_login);
+        txtSucursal = findViewById(R.id.id_txt_sucursal_login);
 
         txtEstado.setText("Estado: Desconectado");
+        txtSucursal.setText("Sucursal: " + idSucursal);
 
         edtNro = findViewById(R.id.cedula);
     }
@@ -328,6 +330,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
                     Log.d(TAG, "MESSAGE_TOAST " + msg);
                     break;
             }
+            txtSucursal.setText("Sucursal: " + idSucursal);
         }
     };
 }
