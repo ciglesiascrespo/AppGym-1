@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.iglesias.c.appgym.Presenter.MainPresenterImpl;
 import com.iglesias.c.appgym.R;
+import com.iglesias.c.appgym.Service.Bluetooth;
 import com.iglesias.c.appgym.View.MainView;
 import com.squareup.picasso.Picasso;
 
@@ -35,12 +36,15 @@ import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_NOMBRE;
 import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_URL_IMAGEN;
 
 public class MainActivity extends AppCompatActivity implements MainView {
+    private final String TAG = getClass().getName();
+
     private String documento, id;
     private TextView txtNombre, txtDias, txtDocumento;
     ImageView imgUsr;
 
 
     AlertDialog dialog;
+    Bluetooth bt;
     MainPresenterImpl presenter;
 
 
@@ -58,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         documento = getIntent().getStringExtra(EXTRA_DOCUMENTO);
         urlImage = getIntent().getStringExtra(EXTRA_URL_IMAGEN);
         id = getIntent().getStringExtra(EXTRA_ID_HUELLA);
-
+        setupBt();
         txtNombre.setText(nombre);
         txtDocumento.setText(documento);
         txtDias.setText(dias + " dias.");
@@ -70,9 +74,13 @@ public class MainActivity extends AppCompatActivity implements MainView {
         activarSensor();
         //nombre =
     }
+    private void setupBt() {
+        bt = Bluetooth.getInstance(this, mHandler);
+    }
 
     public void activarSensor() {
         String dato = "2";
+        bt.sendMessage(dato);
         // LoginActivity.usbService.write(dato.getBytes());
     }
 
@@ -95,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private void btnClick() {
         String dato = "3";
+        bt.sendMessage(dato);
         // LoginActivity.usbService.write(dato.getBytes());
         Subscription subscription = Single.create(new Single.OnSubscribe<Boolean>() {
             @Override
@@ -107,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
                     @Override
                     public void call(Boolean aBoolean) {
                         String dato = "0";
+                        bt.sendMessage(dato);
                         // LoginActivity.usbService.write(dato.getBytes());
                         //btnEntrar.setEnabled(true);
                         finish();
@@ -119,25 +129,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 });
     }
 
-
-    private class MyHandler extends Handler {
-
-        public MyHandler() {
-
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            Log.e("registra", "msj: " + msg.obj.toString());
-            switch (msg.what) {
-                case 1:
-                    String data = (String) msg.obj;
-                    //Toast.makeText(MainActivity.this, data, Toast.LENGTH_SHORT).show();
-                    presenter.receiveMsj(data);
-                    break;
-            }
-        }
-    }
 
     @Override
     public void showErrorLoginDialog(String msj) {
@@ -178,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         String arrayId = id + "}";
         showErrorLoginDialog(arrayId);
+        bt.sendMessage(arrayId);
         //  LoginActivity.usbService.write(arrayId.getBytes());
 /*
         for(int i = 0; i< arrayId.length();i++){
@@ -230,4 +222,34 @@ public class MainActivity extends AppCompatActivity implements MainView {
         t.show();
         finish();
     }
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Bluetooth.MESSAGE_STATE_CHANGE:
+
+                    Log.e(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    break;
+                case Bluetooth.MESSAGE_WRITE:
+                    Log.e(TAG, "MESSAGE_WRITE: " + String.valueOf(msg.arg1));
+
+                    break;
+                case Bluetooth.MESSAGE_READ:
+
+                    Log.e(TAG, "MESSAGE_READ: " + msg.obj);
+                    String msj = String.valueOf(msg.obj);
+                    presenter.receiveMsj(msj);
+                    break;
+                case Bluetooth.MESSAGE_DEVICE_NAME:
+                    Log.d(TAG, "MESSAGE_DEVICE_NAME " + msg);
+                    break;
+                case Bluetooth.MESSAGE_TOAST:
+
+                    Log.d(TAG, "MESSAGE_TOAST " + msg);
+                    break;
+            }
+
+        }
+    };
 }
