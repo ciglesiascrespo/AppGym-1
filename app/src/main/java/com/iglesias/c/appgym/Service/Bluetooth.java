@@ -63,7 +63,7 @@ public class Bluetooth {
 
     // Member fields
     private final BluetoothAdapter mAdapter;
-    private final Handler mHandler;
+    private  Handler mHandler;
     private AcceptThread mAcceptThread;
     private ConnectThread mConnectThread;
     private ConnectedThread mConnectedThread;
@@ -81,9 +81,27 @@ public class Bluetooth {
      * @param context The UI Activity Context
      * @param handler A Handler to send messages back to the UI Activity
      */
-    public Bluetooth(Context context, Handler handler) {
+
+    public static Bluetooth bluetooth;
+
+    private Bluetooth(Context context, Handler handler) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
+        mHandler = handler;
+    }
+
+    public static Bluetooth getInstance(Context context, Handler handler){
+
+        if(bluetooth!= null){
+            bluetooth.setmHandler(handler);
+            return bluetooth;
+        }else{
+            bluetooth = new Bluetooth(context,handler);
+            return  bluetooth;
+        }
+
+    }
+    public void setmHandler(Handler handler){
         mHandler = handler;
     }
 

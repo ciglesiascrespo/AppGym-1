@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     }
 
     private void setupBt() {
-        bt = new Bluetooth(this, mHandler);
+        bt = Bluetooth.getInstance(this, mHandler);
         btAdapter = bt.getBtAdapter();
         if (!btAdapter.isEnabled()) {
             Intent turnOnIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
