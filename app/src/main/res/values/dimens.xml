@@ -3,4 +3,10 @@
     <dimen name="text_size_label">18sp</dimen>
     <dimen name="margin_btn">30dp</dimen>
     <dimen name="text_size_title">35sp</dimen>
+    <dimen name="padding_horizontal_conf">35dp</dimen>
+    <dimen name="padding_vertical_conf">25dp</dimen>
+    <dimen name="margin_top_recycler">15dp</dimen>
+    <dimen name="cardview_radius">4dp</dimen>
+    <dimen name="cardview_elevation">4dp</dimen>
+    <dimen name="size_progress">25dp</dimen>
 </resources>

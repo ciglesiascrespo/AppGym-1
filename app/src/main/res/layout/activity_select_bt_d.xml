@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/padding_horizontal_conf"
+    android:paddingVertical="@dimen/padding_vertical_conf"
+    android:weightSum="100"
+    tools:context="com.iglesias.c.appgym.Activity.SelectBtDActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="50"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_title_vinculados"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_size_label" />
+
+        <TextView
+            android:id="@+id/id_txt_no_dispositivo_vinculado"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/margin_top_recycler"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_label"
+            android:text="@string/str_txt_no_vinculados" />
+
+        <android.support.v7.widget.RecyclerView
+            android:visibility="gone"
+            android:id="@+id/id_recycler_vinculados"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top_recycler" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="50">
+
+        <TextView
+            android:id="@+id/id_txt_title_disponibles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_title_nuevos"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_size_label" />
+
+        <TextView
+            android:id="@+id/id_txt_no_dispositivo_disponibles"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/id_txt_title_disponibles"
+            android:layout_marginTop="@dimen/margin_top_recycler"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_label"
+            android:text="@string/str_txt_no_disponibles" />
+
+        <ProgressBar
+            android:id="@+id/id_progress_disponibles"
+            android:layout_width="@dimen/size_progress"
+            android:layout_height="@dimen/size_progress"
+            android:layout_alignParentRight="true"
+            android:visibility="gone" />
+
+        <android.support.v7.widget.RecyclerView
+            android:visibility="gone"
+            android:id="@+id/id_recycler_disponibles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/id_txt_title_disponibles"
+            android:layout_marginTop="@dimen/margin_top_recycler" />
+
+    </RelativeLayout>
+</LinearLayout>

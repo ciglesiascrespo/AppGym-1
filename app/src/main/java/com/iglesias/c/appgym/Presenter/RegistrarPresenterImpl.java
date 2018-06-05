@@ -70,7 +70,7 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
 
             view.setId(matHuella.replace("Q", "").replace("}", "").replace("{",""));
 
-            view.showErrorLoginDialog(matHuella.replace("Q", "").replace("}", "").replace("{",""),false);
+            //view.showErrorLoginDialog(matHuella.replace("Q", "").replace("}", "").replace("{",""),false);
             matHuella = "";
         }
     }

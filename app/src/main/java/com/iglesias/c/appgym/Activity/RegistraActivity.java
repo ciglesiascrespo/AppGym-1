@@ -15,21 +15,25 @@ import android.widget.EditText;
 
 import com.iglesias.c.appgym.Presenter.RegistrarPresenterImpl;
 import com.iglesias.c.appgym.R;
-import com.iglesias.c.appgym.Service.UsbService;
+import com.iglesias.c.appgym.Service.Bluetooth;
 import com.iglesias.c.appgym.View.RegistrarView;
 
-import java.lang.ref.WeakReference;
-
 public class RegistraActivity extends AppCompatActivity implements RegistrarView {
+
+    private final String TAG = getClass().getName();
     private ProgressDialog loading;
     AlertDialog dialog;
     private EditText edtUsr;
-    private Button btnRegistrar,imgBtnHuella;
+    private Button btnRegistrar, imgBtnHuella;
     RegistrarPresenterImpl presenter;
-    MyHandler myHandler;
+
 
     String id = "";
     Boolean flagHuella = false;
+
+    Bluetooth bt;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +42,11 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
         setupViews();
         setupLoading();
         presenter = new RegistrarPresenterImpl(this);
-        myHandler = new MyHandler(this);
-        LoginActivity.usbService.setHandler(myHandler);
+        setupBt();
+    }
+
+    private void setupBt() {
+        bt = Bluetooth.getInstance(this, mHandler);
     }
 
     private void setupLoading() {
@@ -65,7 +72,8 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
             @Override
             public void onClick(View v) {
                 String dato = "1";
-                LoginActivity.usbService.write(dato.getBytes());
+                bt.sendMessage(dato);
+
             }
         });
     }
@@ -96,7 +104,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
         });
 
 
-        if(dialog != null && dialog.isShowing()){
+        if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
         dialog = builder.create();
@@ -118,24 +126,34 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
         this.flagHuella = flag;
     }
 
-    private class MyHandler extends Handler {
-        private final WeakReference<RegistraActivity> mActivity;
 
-        public MyHandler(RegistraActivity activity) {
-            mActivity = new WeakReference<>(activity);
-        }
-
+    private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            Log.e("registra", "msj: " + msg.obj.toString());
             switch (msg.what) {
-                case UsbService.MESSAGE_FROM_SERIAL_PORT:
-                    String data = (String) msg.obj;
+                case Bluetooth.MESSAGE_STATE_CHANGE:
 
-                    //Toast.makeText(RegistraActivity.this, data, Toast.LENGTH_SHORT).show();
-                    presenter.receiveMsj(data);
+                    Log.e(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    break;
+                case Bluetooth.MESSAGE_WRITE:
+                    Log.e(TAG, "MESSAGE_WRITE: " + String.valueOf(msg.arg1));
+
+                    break;
+                case Bluetooth.MESSAGE_READ:
+
+                    Log.e(TAG, "MESSAGE_READ: " + msg.obj);
+                    String msj = String.valueOf(msg.obj);
+                    presenter.receiveMsj(msj);
+                    break;
+                case Bluetooth.MESSAGE_DEVICE_NAME:
+                    Log.d(TAG, "MESSAGE_DEVICE_NAME " + msg);
+                    break;
+                case Bluetooth.MESSAGE_TOAST:
+
+                    Log.d(TAG, "MESSAGE_TOAST " + msg);
                     break;
             }
+
         }
-    }
+    };
 }

@@ -1,83 +1,60 @@
 package com.iglesias.c.appgym.Activity;
 
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.iglesias.c.appgym.Pojo.DeviceInfo;
 import com.iglesias.c.appgym.Presenter.LoginPresenterImpl;
 import com.iglesias.c.appgym.R;
 import com.iglesias.c.appgym.RestApi.Model.InfoLogin;
-import com.iglesias.c.appgym.Service.UsbService;
+import com.iglesias.c.appgym.Service.Bluetooth;
 import com.iglesias.c.appgym.View.LoginView;
 
-import java.lang.ref.WeakReference;
-import java.util.Set;
+import org.w3c.dom.Text;
 
 public class LoginActivity extends AppCompatActivity implements LoginView {
-    boolean onoff = false;
 
-    private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (intent.getAction()) {
-                case UsbService.ACTION_USB_PERMISSION_GRANTED:
-                    Toast.makeText(context, "USB Ready", Toast.LENGTH_SHORT).show();
-                    break;
-                case UsbService.ACTION_USB_PERMISSION_NOT_GRANTED:
-                    Toast.makeText(context, "USB Permission not granted", Toast.LENGTH_SHORT).show();
-                    break;
-                case UsbService.ACTION_NO_USB:
-                    Toast.makeText(context, "NO USB Connected", Toast.LENGTH_SHORT).show();
-                    break;
-                case UsbService.ACTION_USB_DISCONNECTED:
-                    Toast.makeText(context, "USB desconnected", Toast.LENGTH_SHORT).show();
-                    break;
-                case UsbService.ACTION_USB_NOT_SUPPORTED:
-                    Toast.makeText(context, "USB device not supported", Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    };
 
-    public static UsbService usbService;
-    private final ServiceConnection usbConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName arg0, IBinder arg1) {
-            usbService = ((UsbService.UsbBinder) arg1).getService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            usbService = null;
-        }
-    };
+    private final String TAG = getClass().getName();
     public static final String EXTRA_NOMBRE = "NOMBRE";
     public static final String EXTRA_DOCUMENTO = "DOCUMENTO";
     public static final String EXTRA_DIAS = "DIAS";
     public static final String EXTRA_ID_HUELLA = "ID_HUELLA";
     public static final String EXTRA_URL_IMAGEN = "URL";
+    private static final int REQUEST_ENABLE_BT = 1;
+    //public static final String PASS_ADMIN = "admin123";
+    public static final String PASS_ADMIN = "";
 
     Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btnx, btnIr;
     EditText edtNro;
     private ProgressDialog loading;
     LoginPresenterImpl presenter;
+    private TextView txtEstado, txtSucursal;
+
+    Bluetooth bt;
+    BluetoothAdapter btAdapter;
+    private boolean flagEnvioPeticionSucursal = false;
+    private String idSucursal = "";
+
+    private DeviceInfo deviceInfo = new DeviceInfo("", "");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +64,32 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         setupLoading();
 
         presenter = new LoginPresenterImpl(this);
+
+        deviceInfo = presenter.getDeviceInfo();
+
+        setupBt();
+    }
+
+    private void setupBt() {
+        bt = Bluetooth.getInstance(this, mHandler);
+        btAdapter = bt.getBtAdapter();
+        if (!btAdapter.isEnabled()) {
+            Intent turnOnIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(turnOnIntent, REQUEST_ENABLE_BT);
+        } else {
+            if (!deviceInfo.getMac().contains(":")) {
+                showErrorLoginDialog("No se encuentra ningun dispositivo configurado.");
+            } else {
+                conectService();
+            }
+        }
+
+    }
+
+    private void conectService() {
+
+        bt.start();
+        bt.connectDevice(deviceInfo.getMac());
     }
 
     private void setupLoading() {
@@ -110,6 +113,12 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         btnx = findViewById(R.id.borrar);
         btnIr = findViewById(R.id.sign_in);
 
+        txtEstado = findViewById(R.id.id_txt_estado_login);
+        txtSucursal = findViewById(R.id.id_txt_sucursal_login);
+
+        txtEstado.setText("Estado: Desconectado");
+        txtSucursal.setText("Sucursal: " + idSucursal);
+
         edtNro = findViewById(R.id.cedula);
     }
 
@@ -128,9 +137,15 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     }
 
     public void onClickValidateUser(View v) {
-        String nro = edtNro.getText().toString();
-        edtNro.setText("");
-        presenter.validateUser(nro);
+      //  bt.sendMessage("3,72,123,255,255,186,255,224,239,128,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,62,106,13,204,55,229,28,139,25,162,75,71,95,201,55,69,103,221,41,75,35,225,77,160,49,161,87,68,84,69,82,135,12,33,106,94,83,10,97,7,14,97,103,201,20,76,28,139,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,49,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,43,96,0,94,0,1,0,3,0,0,0,0,0,0,0,0,0,3,20,49,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44,44,44,44,44,44,44,44,44,44,44,44,44,52,52,44,52,52,44,52,52,44,52,52,44,52,52,44,52,52,44,52,233,0,0,50,0,232,0,0,0,2,41,8,0,0,15,64,39,66,0,255,255,0,0,3,1,255,255,0,0,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,0,0,255,255,4,4,0,0,111,203,175,61,117,19,43,255,91,117,236,248,186,223,91,142,223,225,95,182,121,203,239,189,247,92,95,14,92,234,127,183,31,60,210,191,53,247,166,143,235,142,119,140,44,239,255,99,205,217,254,91,199,197,11,248,205,185,86,94,108,165,83,237,95,250,59,123,105,93,230,151,186,175,190,239,222,87,94,255,179,178,91,219,}");
+
+        if (idSucursal.isEmpty()) {
+            showErrorLoginDialog("No se encuentra vinculado a una sucursal");
+        } else {
+            String nro = edtNro.getText().toString();
+            edtNro.setText("");
+            presenter.validateUser(nro);
+        }
     }
 
     @Override
@@ -150,7 +165,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         i.putExtra(EXTRA_DIAS, infoLogin.getDias());
         i.putExtra(EXTRA_DOCUMENTO, infoLogin.getNroDocumento());
         i.putExtra(EXTRA_URL_IMAGEN, infoLogin.getUrlImg());
-        i.putExtra(EXTRA_ID_HUELLA,infoLogin.getIdHuella());
+        i.putExtra(EXTRA_ID_HUELLA, infoLogin.getIdHuella());
 
 
         startActivity(i);
@@ -175,6 +190,39 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         dialog.show();
     }
 
+
+    private void showDialogAdmin() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this, R.style.myDialog);
+        final LayoutInflater inflater = getLayoutInflater();
+
+        final View view = inflater.inflate(R.layout.dialog_pass, null);
+        builder.setView(view);
+        builder.setTitle(getResources().getString(R.string.str_title_alert_pass));
+        builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                EditText edtPassAdmin = view.findViewById(R.id.id_edt_pass_admin);
+
+                if (edtPassAdmin.getText().toString().equals(PASS_ADMIN)) {
+                    Intent i = new Intent(LoginActivity.this, ConfiguracionActivity.class);
+                    startActivity(i);
+
+                } else {
+                    showErrorLoginDialog("Contraseña inválida.");
+                }
+            }
+        });
+        builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
     @Override
     public Context getContext() {
         return getApplicationContext();
@@ -183,49 +231,21 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     @Override
     protected void onResume() {
         super.onResume();
-        setFilters();  // Start listening notifications from UsbService
-        startService(UsbService.class, usbConnection, null); // Start UsbService(if it was not started before) and Bind it
+        //  conectService();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
+        //  bt.stop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(mUsbReceiver);
-        unbindService(usbConnection);
+        bt.stop();
     }
 
-    private void startService(Class<?> service, ServiceConnection serviceConnection, Bundle extras) {
-        if (!UsbService.SERVICE_CONNECTED) {
-            Intent startService = new Intent(this, service);
-            if (extras != null && !extras.isEmpty()) {
-                Set<String> keys = extras.keySet();
-                for (String key : keys) {
-                    String extra = extras.getString(key);
-                    startService.putExtra(key, extra);
-                }
-            }
-            startService(startService);
-        }
-        Intent bindingIntent = new Intent(this, service);
-        bindService(bindingIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    private void setFilters() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(UsbService.ACTION_USB_PERMISSION_GRANTED);
-        filter.addAction(UsbService.ACTION_NO_USB);
-        filter.addAction(UsbService.ACTION_USB_DISCONNECTED);
-        filter.addAction(UsbService.ACTION_USB_NOT_SUPPORTED);
-        filter.addAction(UsbService.ACTION_USB_PERMISSION_NOT_GRANTED);
-        registerReceiver(mUsbReceiver, filter);
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -239,30 +259,80 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.id_menu_registrar:
-                Intent i = new Intent(this,RegistraActivity.class);
+                Intent i = new Intent(this, RegistraActivity.class);
                 startActivity(i);
                 break;
             case R.id.id_menu_sincronizar:
+                break;
+            case R.id.id_menu_configuracion:
+                showDialogAdmin();
                 break;
 
         }
         return true;
     }
-    private static class MyHandler extends Handler {
-        private final WeakReference<LoginActivity> mActivity;
 
-        public MyHandler(LoginActivity activity) {
-            mActivity = new WeakReference<>(activity);
-        }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        if (requestCode == REQUEST_ENABLE_BT) {
+            if (btAdapter.isEnabled()) {
+                Toast.makeText(this, "Bluetooth encendido", Toast.LENGTH_SHORT).show();
+                if (!deviceInfo.getMac().contains(":")) {
+                    showErrorLoginDialog("No se encuentra ningun dispositivo configurado.");
+                } else {
+                    conectService();
+                }
+            } else {
+                Toast.makeText(this, "Se requiere encender el bluetooth", Toast.LENGTH_SHORT).show();
 
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case UsbService.MESSAGE_FROM_SERIAL_PORT:
-                    String data = (String) msg.obj;
-
-                    break;
             }
         }
     }
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Bluetooth.MESSAGE_STATE_CHANGE:
+                    if (msg.arg1 == Bluetooth.STATE_CONNECTED) {
+                        txtEstado.setText("Estado: Conectado.");
+                        bt.sendMessage("p");
+                        flagEnvioPeticionSucursal = true;
+                        Toast.makeText(getContext(), "Dispositivo conectado con éxito.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        idSucursal="";
+                        txtEstado.setText("Estado: Conectando...");
+                    }
+                    Log.e(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    break;
+                case Bluetooth.MESSAGE_WRITE:
+                    Log.e(TAG, "MESSAGE_WRITE: " + String.valueOf(msg.arg1));
+
+                    break;
+                case Bluetooth.MESSAGE_READ:
+
+                    Log.e(TAG, "MESSAGE_READ: " + msg.obj);
+                    String msj = String.valueOf(msg.obj);
+                    if (flagEnvioPeticionSucursal && msj.contains(":")) {
+                        flagEnvioPeticionSucursal = false;
+                        idSucursal = msj.split(":")[1];
+
+                    }
+                    break;
+                case Bluetooth.MESSAGE_DEVICE_NAME:
+                    Log.d(TAG, "MESSAGE_DEVICE_NAME " + msg);
+                    break;
+                case Bluetooth.MESSAGE_TOAST:
+                    if (msg.arg1 == -1) {
+                        idSucursal="";
+                        txtEstado.setText("Estado: Desconectado.");
+                        conectService();
+                    }
+                    Log.d(TAG, "MESSAGE_TOAST " + msg);
+                    break;
+            }
+            txtSucursal.setText("Sucursal: " + idSucursal);
+        }
+    };
 }

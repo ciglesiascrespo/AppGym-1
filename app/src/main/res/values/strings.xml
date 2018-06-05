@@ -26,4 +26,16 @@
     <string name="str_menu_sincronizar">Sincronizar base de datos</string>
     <string name="str_loading_registrar">Registrando usuario</string>
     <string name="str_menu_registrar_huella">Registrar huella</string>
+    <string name="str_menu_configuracion">Configuración</string>
+    <string name="str_title_alert_pass">Contraseña</string>
+    <string name="cancel">Cancelar</string>
+    <string name="str_hint_pass_admin">Digite contraseña de administrador</string>
+    <string name="str_title_vinculados">Dispositivos vinculados</string>
+    <string name="str_title_nuevos">Dispositivos disponibles</string>
+    <string name="str_title_dispositivo_conexion">Dispositivo de conexión</string>
+    <string name="str_txt_no_vinculados">No hay dispositivos vinculados</string>
+    <string name="str_txt_no_disponibles">No hay dispositivos disponibles</string>
+    <string name="str_seleccion_dispositivo">Selección de dispositivo</string>
+    <string name="str_menu_buscar">Buscar dispositivos</string>
+    <string name="str_menu_guardar">Guardar</string>
 </resources>

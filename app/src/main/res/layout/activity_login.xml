@@ -86,6 +86,23 @@
                 android:textColor="@color/colorPrimary"
                 android:textColorLink="@color/colorAccent"
                 android:textSize="25sp" />
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/margin_top_recycler"
+                android:layout_marginLeft="@dimen/margin_top_recycler"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="@dimen/text_size_label"
+                android:id="@+id/id_txt_estado_login"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_marginTop="@dimen/margin_top_recycler"
+                android:layout_marginLeft="@dimen/margin_top_recycler"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="@dimen/text_size_label"
+                android:id="@+id/id_txt_sucursal_login"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"

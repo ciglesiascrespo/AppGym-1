@@ -1,13 +1,16 @@
 package com.iglesias.c.appgym.Iterator;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.iglesias.c.appgym.Db.DbHandler;
+import com.iglesias.c.appgym.Pojo.DeviceInfo;
 import com.iglesias.c.appgym.Presenter.LoginPresenter;
 import com.iglesias.c.appgym.RestApi.Adapter.RestApiAdapter;
 import com.iglesias.c.appgym.RestApi.ConstantesRestApi;
 import com.iglesias.c.appgym.RestApi.EndPoints;
 import com.iglesias.c.appgym.RestApi.Model.ResultLogin;
+import com.iglesias.c.appgym.Utils.ConstantsPreferences;
 
 import retrofit2.Retrofit;
 import rx.Observable;
@@ -16,6 +19,9 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static com.iglesias.c.appgym.Utils.ConstantsPreferences.NAME_PREFERENCE_CONFIG_MAC;
+import static com.iglesias.c.appgym.Utils.ConstantsPreferences.NAME_PREFERENCE_CONFIG_NOMBRE;
+
 /**
  * Created by Ciglesias on 21/03/2018.
  */
@@ -23,12 +29,24 @@ import rx.schedulers.Schedulers;
 public class LoginIterator {
     LoginPresenter presenter;
     DbHandler dbHandler;
+    private SharedPreferences preferences;
 
     public LoginIterator(LoginPresenter presenter, Context context) {
         this.presenter = presenter;
         dbHandler = DbHandler.getInstance(context);
+        preferences = context.getSharedPreferences(ConstantsPreferences.NAME_PREFERENCE_CONFIG, Context.MODE_PRIVATE);
     }
 
+    public DeviceInfo getInfoDeviceConexion() {
+        String nombre = "No configurado", mac = "No configurado";
+
+        if (preferences != null) {
+            nombre = preferences.getString(NAME_PREFERENCE_CONFIG_NOMBRE, "No configurado");
+            mac = preferences.getString(NAME_PREFERENCE_CONFIG_MAC, "No configurado");
+        }
+
+        return new DeviceInfo(nombre, mac);
+    }
     public void validateUser(String nro) {
 
         Retrofit retrofit = RestApiAdapter.provideRetrofit();
