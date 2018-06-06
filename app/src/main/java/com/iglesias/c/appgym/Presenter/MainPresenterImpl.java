@@ -18,7 +18,7 @@ public class MainPresenterImpl {
 
     public void receiveMsj(String msj) {
 
-        if (!msj.toLowerCase().contains("template:1")) {
+        if (!msj.toLowerCase().contains("template:")) {
             if (msj.toLowerCase().contains("r")) {
                 view.sendId();
             } else if (msj.substring(0, 1).toLowerCase().equals("n")) {

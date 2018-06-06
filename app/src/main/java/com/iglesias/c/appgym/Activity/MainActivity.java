@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void sendId() {
         String arrayId = id + "}";
-        showErrorLoginDialog(arrayId);
+
         bt.sendMessage(arrayId);
     }
 
