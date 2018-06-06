@@ -1,14 +1,18 @@
 package com.iglesias.c.appgym.Activity;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -26,9 +30,8 @@ import com.iglesias.c.appgym.Presenter.LoginPresenterImpl;
 import com.iglesias.c.appgym.R;
 import com.iglesias.c.appgym.RestApi.Model.InfoLogin;
 import com.iglesias.c.appgym.Service.Bluetooth;
+import com.iglesias.c.appgym.Utils.ConstantsPreferences;
 import com.iglesias.c.appgym.View.LoginView;
-
-import org.w3c.dom.Text;
 
 public class LoginActivity extends AppCompatActivity implements LoginView {
 
@@ -40,8 +43,10 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     public static final String EXTRA_ID_HUELLA = "ID_HUELLA";
     public static final String EXTRA_URL_IMAGEN = "URL";
     private static final int REQUEST_ENABLE_BT = 1;
-    //public static final String PASS_ADMIN = "admin123";
-    public static final String PASS_ADMIN = "";
+    private static final int MY_PERMISSIONS_REQUEST = 2;
+    public static final String PASS_ADMIN = "admin123";
+    private int estadoConexionBt = Bluetooth.STATE_NONE;
+    //public static final String PASS_ADMIN = "";
 
     Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btnx, btnIr;
     EditText edtNro;
@@ -79,16 +84,21 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         } else {
             if (!deviceInfo.getMac().contains(":")) {
                 showErrorLoginDialog("No se encuentra ningun dispositivo configurado.");
-            } else {
-                conectService();
+            }else{
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    checkPermission();
+                }else{
+                    conectService();
+                }
             }
         }
 
     }
 
     private void conectService() {
-
         bt.start();
+        deviceInfo = presenter.getDeviceInfo();
         bt.connectDevice(deviceInfo.getMac());
     }
 
@@ -137,7 +147,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     }
 
     public void onClickValidateUser(View v) {
-      //  bt.sendMessage("3,72,123,255,255,186,255,224,239,128,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,62,106,13,204,55,229,28,139,25,162,75,71,95,201,55,69,103,221,41,75,35,225,77,160,49,161,87,68,84,69,82,135,12,33,106,94,83,10,97,7,14,97,103,201,20,76,28,139,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,49,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,43,96,0,94,0,1,0,3,0,0,0,0,0,0,0,0,0,3,20,49,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44,44,44,44,44,44,44,44,44,44,44,44,44,52,52,44,52,52,44,52,52,44,52,52,44,52,52,44,52,52,44,52,233,0,0,50,0,232,0,0,0,2,41,8,0,0,15,64,39,66,0,255,255,0,0,3,1,255,255,0,0,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,0,0,255,255,4,4,0,0,111,203,175,61,117,19,43,255,91,117,236,248,186,223,91,142,223,225,95,182,121,203,239,189,247,92,95,14,92,234,127,183,31,60,210,191,53,247,166,143,235,142,119,140,44,239,255,99,205,217,254,91,199,197,11,248,205,185,86,94,108,165,83,237,95,250,59,123,105,93,230,151,186,175,190,239,222,87,94,255,179,178,91,219,}");
+        //  bt.sendMessage("3,72,123,255,255,186,255,224,239,128,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,62,106,13,204,55,229,28,139,25,162,75,71,95,201,55,69,103,221,41,75,35,225,77,160,49,161,87,68,84,69,82,135,12,33,106,94,83,10,97,7,14,97,103,201,20,76,28,139,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,49,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,43,96,0,94,0,1,0,3,0,0,0,0,0,0,0,0,0,3,20,49,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44,44,44,44,44,44,44,44,44,44,44,44,44,52,52,44,52,52,44,52,52,44,52,52,44,52,52,44,52,52,44,52,233,0,0,50,0,232,0,0,0,2,41,8,0,0,15,64,39,66,0,255,255,0,0,3,1,255,255,0,0,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,0,0,255,255,4,4,0,0,111,203,175,61,117,19,43,255,91,117,236,248,186,223,91,142,223,225,95,182,121,203,239,189,247,92,95,14,92,234,127,183,31,60,210,191,53,247,166,143,235,142,119,140,44,239,255,99,205,217,254,91,199,197,11,248,205,185,86,94,108,165,83,237,95,250,59,123,105,93,230,151,186,175,190,239,222,87,94,255,179,178,91,219,}");
 
         if (idSucursal.isEmpty()) {
             showErrorLoginDialog("No se encuentra vinculado a una sucursal");
@@ -290,6 +300,45 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST: {
+
+                if (grantResults.length > 0
+                        && (grantResults[0] == PackageManager.PERMISSION_GRANTED || grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
+                   conectService();
+
+                } else {
+
+                    showErrorLoginDialog("Es necesario habilitar los permisos para el funcionamiento del aplicativo.");
+                }
+                break;
+
+            }
+
+        }
+
+    }
+
+    public void checkPermission() {
+
+        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED)) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_PHONE_STATE},
+                    MY_PERMISSIONS_REQUEST);
+
+
+        } else {
+            conectService();
+
+        }
+    }
+
+
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -301,9 +350,12 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
                         flagEnvioPeticionSucursal = true;
                         Toast.makeText(getContext(), "Dispositivo conectado con éxito.", Toast.LENGTH_SHORT).show();
                     } else {
-                        idSucursal="";
+
+                        idSucursal = "";
                         txtEstado.setText("Estado: Conectando...");
                     }
+
+                    estadoConexionBt = msg.arg1;
                     Log.e(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                     break;
                 case Bluetooth.MESSAGE_WRITE:
@@ -325,9 +377,13 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
                     break;
                 case Bluetooth.MESSAGE_TOAST:
                     if (msg.arg1 == -1) {
-                        idSucursal="";
+                        idSucursal = "";
                         txtEstado.setText("Estado: Desconectado.");
-                        conectService();
+                        if(estadoConexionBt == Bluetooth.STATE_CONNECTED){
+                            conectService();
+                        }
+                     //   bt.stop();
+                       // conectService();
                     }
                     Log.d(TAG, "MESSAGE_TOAST " + msg);
                     break;

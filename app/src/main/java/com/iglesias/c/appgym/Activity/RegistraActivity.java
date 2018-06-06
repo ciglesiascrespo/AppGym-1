@@ -34,7 +34,6 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
     Bluetooth bt;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,13 +94,15 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
 
         builder.setTitle(getResources().getString(R.string.str_menu_registrar));
         builder.setMessage(msj);
-        builder.setCancelable(false);
-        builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (finish) finish();
-            }
-        });
+
+            if (finish) {
+            builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (finish) finish();
+                }
+            });
+        }
 
 
         if (dialog != null && dialog.isShowing()) {

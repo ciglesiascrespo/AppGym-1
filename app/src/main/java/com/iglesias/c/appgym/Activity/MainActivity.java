@@ -2,7 +2,6 @@ package com.iglesias.c.appgym.Activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
@@ -17,10 +16,6 @@ import com.iglesias.c.appgym.R;
 import com.iglesias.c.appgym.Service.Bluetooth;
 import com.iglesias.c.appgym.View.MainView;
 import com.squareup.picasso.Picasso;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 
 import rx.Single;
 import rx.SingleSubscriber;
@@ -46,7 +41,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     AlertDialog dialog;
     Bluetooth bt;
     MainPresenterImpl presenter;
-
+    String nombre, urlImage;
+    int dias;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +50,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
         setContentView(R.layout.activity_main);
         setupViews();
 
-        String nombre, urlImage;
-        int dias;
 
         nombre = getIntent().getStringExtra(EXTRA_NOMBRE);
         dias = getIntent().getIntExtra(EXTRA_DIAS, 0);
@@ -74,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         activarSensor();
         //nombre =
     }
+
     private void setupBt() {
         bt = Bluetooth.getInstance(this, mHandler);
     }
@@ -81,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     public void activarSensor() {
         String dato = "2";
         bt.sendMessage(dato);
-        // LoginActivity.usbService.write(dato.getBytes());
+
     }
 
     private void setupViews() {
@@ -94,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private boolean waitTime() {
         try {
-            Thread.sleep(5000);
+            Thread.sleep(3000);
         } catch (Exception e) {
             return false;
         }
@@ -104,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private void btnClick() {
         String dato = "3";
         bt.sendMessage(dato);
-        // LoginActivity.usbService.write(dato.getBytes());
+        showErrorLoginDialog("Bienvenido " + nombre);
         Subscription subscription = Single.create(new Single.OnSubscribe<Boolean>() {
             @Override
             public void call(SingleSubscriber<? super Boolean> singleSubscriber) {
@@ -117,8 +112,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
                     public void call(Boolean aBoolean) {
                         String dato = "0";
                         bt.sendMessage(dato);
-                        // LoginActivity.usbService.write(dato.getBytes());
-                        //btnEntrar.setEnabled(true);
                         finish();
                     }
                 }, new Action1<Throwable>() {
@@ -132,6 +125,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void showErrorLoginDialog(String msj) {
+
+        Toast.makeText(this, msj, Toast.LENGTH_SHORT).show();
+        /*
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.myDialog);
 
         builder.setTitle(getResources().getString(R.string.str_menu_registrar));
@@ -149,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             dialog.dismiss();
         }
         dialog = builder.create();
-        dialog.show();
+        dialog.show();*/
     }
 
     @Override
@@ -158,70 +154,17 @@ public class MainActivity extends AppCompatActivity implements MainView {
             btnClick();
         } else {
             showErrorLoginDialog("La huella obtenida no coincide con el usuario.");
-            //activarSensor();
+            activarSensor();
         }
     }
 
     @Override
     public void sendId() {
-        // showErrorLoginDialog(id);
-        //Toast.makeText(this, "length: " + id.length(), Toast.LENGTH_SHORT).show();
-
         String arrayId = id + "}";
-        showErrorLoginDialog(arrayId);
+
         bt.sendMessage(arrayId);
-        //  LoginActivity.usbService.write(arrayId.getBytes());
-/*
-        for(int i = 0; i< arrayId.length();i++){
-            LoginActivity.usbService.write(String.valueOf(arrayId.charAt(i)).getBytes());
-        }*/
-
-        /*
-        String arrayId[] = id.split(",");
-        String datos = "";
-        for (int i = 0; i < arrayId.length; i++) {
-            if (i < 512) {
-                String dato = arrayId[i];
-
-
-                //Toast.makeText(this, dato, Toast.LENGTH_SHORT).show();
-                try {
-                    datos +=
-                            Integer.valueOf(dato) + "&";
-                    LoginActivity.usbService.write(dato.getBytes());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }
-        LoginActivity.usbService.write("}".getBytes());
-        */
-        //showErrorLoginDialog(datos);
-        //grabar(datos);
-        //activarSensor();
-        // presenter.flag = true;
-
     }
 
-    // TODO funcion de prueba, eliminar al terminar
-    public void grabar(String data) {
-        try {
-            File f = new File(Environment.getExternalStorageDirectory(), "data.txt");
-
-            //OutputStreamWriter archivo = new OutputStreamWriter(new FileOutputStream(f));
-            OutputStreamWriter archivo = new OutputStreamWriter(openFileOutput("data.txt", MODE_PRIVATE));
-            archivo.write(data);
-
-            archivo.flush();
-            archivo.close();
-        } catch (IOException e) {
-        }
-        Toast t = Toast.makeText(this, "Los datos fueron grabados",
-                Toast.LENGTH_SHORT);
-        t.show();
-        finish();
-    }
 
     private final Handler mHandler = new Handler() {
         @Override
