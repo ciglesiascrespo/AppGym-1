@@ -6,6 +6,10 @@
         android:title="@string/str_menu_registrar"
         app:showAsAction="never"></item>
     <item
+        android:id="@+id/id_menu_actualizar"
+        android:title="@string/str_menu_actualizar_huella"
+        app:showAsAction="never"></item>
+    <item
         android:id="@+id/id_menu_configuracion"
         android:title="@string/str_menu_configuracion"
         app:showAsAction="never" />

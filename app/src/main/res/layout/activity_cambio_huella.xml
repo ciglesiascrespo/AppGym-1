@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:weightSum="100"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="0dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="30"
+        android:weightSum="100"
+        android:orientation="horizontal"
+        >
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"/>
+        <ImageView
+            android:id="@+id/imagen"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="60"
+            android:scaleType="centerCrop"
+            android:src="@drawable/header_fitnesspeople"
+            android:visibility="visible" />
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="70"
+        android:orientation="horizontal"
+        android:weightSum="100">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/digite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/bienvenido"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/text_size_title"
+                android:visibility="visible" />
+
+            <EditText
+                android:id="@+id/id_edt_nro_registrar"
+                style="@style/Widget.AppCompat.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                android:gravity="center_horizontal"
+                android:hint="@string/cedula"
+                android:inputType="number"
+                android:maxLines="1"
+                android:textColor="@color/colorPrimary"
+                android:textColorLink="@color/colorAccent"
+                android:textSize="23sp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/id_btn_huella"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="35dp"
+                android:text="@string/str_menu_actualizar_huella"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="25sp"
+                android:theme="@style/ThemeButtonLogin" />
+            <Button
+                android:id="@+id/id_btn_registrar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="35dp"
+                android:text="@string/str_menu_registrar"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="25sp"
+                android:theme="@style/ThemeButtonLogin" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+

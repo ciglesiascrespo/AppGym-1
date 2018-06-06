@@ -38,4 +38,6 @@
     <string name="str_seleccion_dispositivo">Selección de dispositivo</string>
     <string name="str_menu_buscar">Buscar dispositivos</string>
     <string name="str_menu_guardar">Guardar</string>
+    <string name="str_menu_actualizar_huella">Actualizar huella</string>
+    <string name="str_loading_actualizar">Actualizando información del usuario</string>
 </resources>

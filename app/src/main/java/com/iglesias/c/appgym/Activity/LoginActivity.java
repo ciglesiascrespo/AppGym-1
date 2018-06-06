@@ -272,6 +272,10 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
                 Intent i = new Intent(this, RegistraActivity.class);
                 startActivity(i);
                 break;
+            case R.id.id_menu_actualizar:
+                Intent iActualizar = new Intent(this, CambioHuellaActivity.class);
+                startActivity(iActualizar);
+                break;
             case R.id.id_menu_sincronizar:
                 break;
             case R.id.id_menu_configuracion:

@@ -72,16 +72,18 @@ public class DbHelper extends SQLiteOpenHelper {
         return c;
     }
 
-    public void update(String tableName, ContentValues cv, String condition) {
+    public int update(String tableName, ContentValues cv, String condition) {
+        int result = 0;
         SQLiteDatabase db = this.getWritableDatabase();
         try {
-            db.update(tableName, cv, condition, null);
+            result = db.update(tableName, cv, condition, null);
             //  db.close();
         } catch (Exception e) {
             // if (db.isOpen()) db.close();
             Log.e(TAG, "Error update: " + e.getMessage());
             e.printStackTrace();
         }
+        return result;
     }
 
     public void delete(String tableName, String condition) {

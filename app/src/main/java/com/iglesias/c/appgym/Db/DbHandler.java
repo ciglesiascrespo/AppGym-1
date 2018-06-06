@@ -37,6 +37,13 @@ public class DbHandler {
         return dbHelper.execSql(sql);
     }
 
+    public int actualizaUsuario(String nro, String id) {
+        ContentValues cv = new ContentValues();
+        cv.put(UserDb.KEY_ID, id);
+        return dbHelper.update(UserDb.TABLE, cv, UserDb.KEY_NRO_DOCUMENTO + " = " + nro);
+
+    }
+
     public boolean verificaUsuario(String nro, String id) {
         int cnt = 0;
         Cursor c = null;
@@ -82,7 +89,7 @@ public class DbHandler {
 
     public ResultLogin verificaUsuarioDb(String nro) {
         int cnt = 0;
-        String id="";
+        String id = "";
         Cursor c = null;
         ResultLogin result = new ResultLogin();
         result.setErrorCode(ConstantesRestApi.CODE_ERROR);
