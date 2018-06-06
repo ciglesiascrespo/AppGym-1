@@ -96,6 +96,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     private void conectService() {
         bt.start();
+        deviceInfo = presenter.getDeviceInfo();
         bt.connectDevice(deviceInfo.getMac());
     }
 
