@@ -17,7 +17,7 @@ public class MainPresenterImpl {
     }
 
     public void receiveMsj(String msj) {
-
+view.showErrorLoginDialog(msj);
         if (!msj.toLowerCase().contains("template:")) {
             if (msj.toLowerCase().contains("r")) {
                 view.sendId();
