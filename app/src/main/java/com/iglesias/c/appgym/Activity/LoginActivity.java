@@ -30,6 +30,7 @@ import com.iglesias.c.appgym.Presenter.LoginPresenterImpl;
 import com.iglesias.c.appgym.R;
 import com.iglesias.c.appgym.RestApi.Model.InfoLogin;
 import com.iglesias.c.appgym.Service.Bluetooth;
+import com.iglesias.c.appgym.Utils.ConstantsPreferences;
 import com.iglesias.c.appgym.View.LoginView;
 
 public class LoginActivity extends AppCompatActivity implements LoginView {
@@ -44,6 +45,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int MY_PERMISSIONS_REQUEST = 2;
     public static final String PASS_ADMIN = "admin123";
+    private int estadoConexionBt = Bluetooth.STATE_NONE;
     //public static final String PASS_ADMIN = "";
 
     Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btnx, btnIr;
@@ -348,9 +350,12 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
                         flagEnvioPeticionSucursal = true;
                         Toast.makeText(getContext(), "Dispositivo conectado con éxito.", Toast.LENGTH_SHORT).show();
                     } else {
+
                         idSucursal = "";
                         txtEstado.setText("Estado: Conectando...");
                     }
+
+                    estadoConexionBt = msg.arg1;
                     Log.e(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                     break;
                 case Bluetooth.MESSAGE_WRITE:
@@ -374,7 +379,11 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
                     if (msg.arg1 == -1) {
                         idSucursal = "";
                         txtEstado.setText("Estado: Desconectado.");
-                        conectService();
+                        if(estadoConexionBt == Bluetooth.STATE_CONNECTED){
+                            conectService();
+                        }
+                     //   bt.stop();
+                       // conectService();
                     }
                     Log.d(TAG, "MESSAGE_TOAST " + msg);
                     break;
