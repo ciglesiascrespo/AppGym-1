@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.iglesias.c.appgym.Presenter.MainPresenterImpl;
 import com.iglesias.c.appgym.R;
@@ -40,7 +41,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     AlertDialog dialog;
     Bluetooth bt;
     MainPresenterImpl presenter;
-
+    String nombre, urlImage;
+    int dias;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +50,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
         setContentView(R.layout.activity_main);
         setupViews();
 
-        String nombre, urlImage;
-        int dias;
 
         nombre = getIntent().getStringExtra(EXTRA_NOMBRE);
         dias = getIntent().getIntExtra(EXTRA_DIAS, 0);
@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         activarSensor();
         //nombre =
     }
+
     private void setupBt() {
         bt = Bluetooth.getInstance(this, mHandler);
     }
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private void btnClick() {
         String dato = "3";
         bt.sendMessage(dato);
-
+        showErrorLoginDialog("Bienvenido " + nombre);
         Subscription subscription = Single.create(new Single.OnSubscribe<Boolean>() {
             @Override
             public void call(SingleSubscriber<? super Boolean> singleSubscriber) {
@@ -124,6 +125,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void showErrorLoginDialog(String msj) {
+
+        Toast.makeText(this, msj, Toast.LENGTH_SHORT).show();
+        /*
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.myDialog);
 
         builder.setTitle(getResources().getString(R.string.str_menu_registrar));
@@ -141,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             dialog.dismiss();
         }
         dialog = builder.create();
-        dialog.show();
+        dialog.show();*/
     }
 
     @Override
