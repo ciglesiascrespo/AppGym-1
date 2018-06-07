@@ -182,7 +182,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
                     Log.e(TAG, "MESSAGE_READ: " + msg.obj);
                     String msj = String.valueOf(msg.obj);
+                    showErrorLoginDialog(msj);
                     presenter.receiveMsj(msj);
+
                     break;
                 case Bluetooth.MESSAGE_DEVICE_NAME:
                     Log.d(TAG, "MESSAGE_DEVICE_NAME " + msg);
