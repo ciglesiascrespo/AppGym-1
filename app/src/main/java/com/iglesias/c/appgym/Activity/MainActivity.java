@@ -96,23 +96,51 @@ public class MainActivity extends AppCompatActivity implements MainView {
         return true;
     }
 
+    private boolean waitTimeArduino() {
+        try {
+            Thread.sleep(300);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
     private void btnClick() {
-        String dato = "3";
-        bt.sendMessage(dato);
+
         showErrorLoginDialog("Bienvenido " + nombre);
-        Subscription subscription = Single.create(new Single.OnSubscribe<Boolean>() {
+
+        Single.create(new Single.OnSubscribe<Boolean>() {
             @Override
             public void call(SingleSubscriber<? super Boolean> singleSubscriber) {
-                singleSubscriber.onSuccess(waitTime());
+                singleSubscriber.onSuccess(waitTimeArduino());
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Boolean>() {
                     @Override
                     public void call(Boolean aBoolean) {
-                        String dato = "0";
+                        String dato = "3";
                         bt.sendMessage(dato);
-                        finish();
+                        Single.create(new Single.OnSubscribe<Boolean>() {
+                            @Override
+                            public void call(SingleSubscriber<? super Boolean> singleSubscriber) {
+                                singleSubscriber.onSuccess(waitTime());
+                            }
+                        }).subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(new Action1<Boolean>() {
+                                    @Override
+                                    public void call(Boolean aBoolean) {
+                                        String dato = "0";
+                                        bt.sendMessage(dato);
+                                        finish();
+                                    }
+                                }, new Action1<Throwable>() {
+                                    @Override
+                                    public void call(Throwable throwable) {
+
+                                    }
+                                });
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -120,6 +148,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
                     }
                 });
+
+
     }
 
 
