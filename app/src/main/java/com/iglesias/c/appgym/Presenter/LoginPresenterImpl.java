@@ -25,7 +25,7 @@ public class LoginPresenterImpl implements LoginPresenter {
             view.showErrorLoginDialog("Digite un número de identificación");
         } else {
             view.showLoading();
-            iterator.validateUserDb(nro);
+            iterator.validateUser(nro);
         }
     }
     public DeviceInfo getDeviceInfo(){

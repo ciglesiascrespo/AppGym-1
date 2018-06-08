@@ -65,7 +65,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         presenter = new MainPresenterImpl(this);
         //  btnClick();
-        activarSensor();
+        if(id.isEmpty()){
+            showErrorLoginDialog("El usuario no cuenta con una huella registrada.");
+        }else{
+            activarSensor();
+        }
+
         //nombre =
     }
 

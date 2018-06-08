@@ -9,6 +9,7 @@ import com.iglesias.c.appgym.Presenter.LoginPresenter;
 import com.iglesias.c.appgym.RestApi.Adapter.RestApiAdapter;
 import com.iglesias.c.appgym.RestApi.ConstantesRestApi;
 import com.iglesias.c.appgym.RestApi.EndPoints;
+import com.iglesias.c.appgym.RestApi.Model.InfoLogin;
 import com.iglesias.c.appgym.RestApi.Model.ResultLogin;
 import com.iglesias.c.appgym.Utils.ConstantsPreferences;
 
@@ -47,11 +48,12 @@ public class LoginIterator {
 
         return new DeviceInfo(nombre, mac);
     }
+
     public void validateUser(String nro) {
 
         Retrofit retrofit = RestApiAdapter.provideRetrofit();
 
-        retrofit.create(EndPoints.class).login(ConstantesRestApi.r,nro,ConstantesRestApi.idSucursal, ConstantesRestApi.idLicencia)
+        retrofit.create(EndPoints.class).login(ConstantesRestApi.r, nro, ConstantesRestApi.idSucursal, ConstantesRestApi.idLicencia)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -74,12 +76,47 @@ public class LoginIterator {
                                    if (response.getErrorCode() == ConstantesRestApi.CODE_ERROR) {
                                        presenter.onUserNotValid();
                                    } else {
-                                       presenter.onSuccesLogin(response.getInfo());
+                                       validateUserDb(response.getInfo().getNroDocumento(),response.getInfo());
+                                       //presenter.onSuccesLogin(response.getInfo());
                                    }
 
                                }
                            }
                 );
+
+    }
+
+    public void validateUserDb(final String nro, final InfoLogin infoLogin) {
+
+        Observable.create(new Observable.OnSubscribe<ResultLogin>() {
+            @Override
+            public void call(Subscriber<? super ResultLogin> subscriber) {
+                subscriber.onNext(dbHandler.verificaUsuarioDb(nro));
+                subscriber.onCompleted();
+            }
+        }).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<ResultLogin>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        presenter.onErrorLogin();
+                    }
+
+                    @Override
+                    public void onNext(ResultLogin response) {
+
+                            infoLogin.setIdHuella(response.getInfo().getIdHuella());
+                            presenter.onSuccesLogin(infoLogin);
+
+                    }
+                });
 
     }
 
