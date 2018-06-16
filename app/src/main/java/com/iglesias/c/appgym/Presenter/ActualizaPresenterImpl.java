@@ -53,21 +53,22 @@ public class ActualizaPresenterImpl implements ActualizaPresenter {
     }
 
     public void receiveMsj(String msj) {
+        if (msj != null && !msj.isEmpty()) {
+            if (!msj.toLowerCase().contains("id:")) {
+                String msjResult = iterator.getMsj(msj.substring(0, 1));
+                if (!msjResult.isEmpty())
+                    view.showErrorLoginDialog(msjResult, false);
+            }
 
-        if (!msj.toLowerCase().contains("id:")) {
-            String msjResult = iterator.getMsj(msj.substring(0, 1));
-            if (!msjResult.isEmpty())
-                view.showErrorLoginDialog(msjResult, false);
-        }
+            if (msj.toLowerCase().contains("}")) {
+                matHuella += msj;
+                view.setFlagHuella(true);
 
-        if (msj.toLowerCase().contains("}")) {
-            matHuella += msj;
-            view.setFlagHuella(true);
+                view.setId(matHuella.replace("Q", "").replace("}", "").replace("{", ""));
 
-            view.setId(matHuella.replace("Q", "").replace("}", "").replace("{",""));
-
-            //view.showErrorLoginDialog(matHuella.replace("Q", "").replace("}", "").replace("{",""),false);
-            matHuella = "";
+                //view.showErrorLoginDialog(matHuella.replace("Q", "").replace("}", "").replace("{",""),false);
+                matHuella = "";
+            }
         }
     }
 }
