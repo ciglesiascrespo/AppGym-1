@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">AppClezAC</string>
     <string name="cedula">Digite su numero de identificación</string>
-    <string name="bienvenido">Bienvenido</string>
+    <string name="bienvenido">BIENVENIDO</string>
     <string name="str_7">7</string>
     <string name="str_8">8</string>
     <string name="str_9">9</string>
@@ -12,8 +12,8 @@
     <string name="str_2">2</string>
     <string name="str_3">3</string>
     <string name="str_0">0</string>
-    <string name="str_x">x</string>
-    <string name="str_ir"><![CDATA[>]]></string>
+    <string name="str_x">Borrar</string>
+    <string name="str_ir">Entrar</string>//<![CDATA[>]]>
     <string name="str_loading_login">Validando usuario...</string>
     <string name="str_title_alert_error_login">Login</string>
     <string name="ok">Ok</string>

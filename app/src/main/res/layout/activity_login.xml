@@ -57,19 +57,21 @@
         android:orientation="horizontal"
         android:weightSum="100"
         >
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="50"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/digite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="@string/bienvenido"
-                android:textSize="@dimen/text_size_title"
                 android:textColor="@color/colorPrimaryDark"
+                android:textSize="55sp"
                 android:visibility="visible" />
 
             <EditText
@@ -85,24 +87,25 @@
                 android:maxLines="1"
                 android:textColor="@color/colorPrimary"
                 android:textColorLink="@color/colorAccent"
-                android:textSize="25sp" />
-            
+                android:textSize="45sp" />
+
             <TextView
+                android:id="@+id/id_txt_estado_login"
                 android:layout_width="wrap_content"
-                android:layout_marginTop="@dimen/margin_top_recycler"
-                android:layout_marginLeft="@dimen/margin_top_recycler"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_top_recycler"
+                android:layout_marginTop="@dimen/margin_top_recycler"
                 android:text=""
-                android:textSize="@dimen/text_size_label"
-                android:id="@+id/id_txt_estado_login"/>
+                android:textSize="@dimen/text_size_label" />
+
             <TextView
+                android:id="@+id/id_txt_sucursal_login"
                 android:layout_width="wrap_content"
-                android:layout_marginTop="@dimen/margin_top_recycler"
-                android:layout_marginLeft="@dimen/margin_top_recycler"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_top_recycler"
+                android:layout_marginTop="@dimen/margin_top_recycler"
                 android:text=""
-                android:textSize="@dimen/text_size_label"
-                android:id="@+id/id_txt_sucursal_login"/>
+                android:textSize="@dimen/text_size_label" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"
@@ -118,7 +121,7 @@
                 grid:rowCount="4">
 
                 <Button
-                    android:id="@+id/numero_7"
+                    android:id="@+id/numero_1"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:layout_column="0"
@@ -127,12 +130,12 @@
                     app:layout_rowWeight="1"
                     android:linksClickable="true"
                     android:onClick="pressNumber"
-                    android:text="@string/str_7"
+                    android:text="@string/str_1"
                     android:theme="@style/Buttton_Login"
                     android:visibility="visible" />
 
                 <Button
-                    android:id="@+id/numero_8"
+                    android:id="@+id/numero_2"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:layout_column="1"
@@ -141,23 +144,21 @@
                     app:layout_rowWeight="1"
                     android:linksClickable="true"
                     android:onClick="pressNumber"
-                    android:text="@string/str_8"
+                    android:text="@string/str_2"
                     android:theme="@style/Buttton_Login" />
 
                 <Button
-                    android:id="@+id/numero_9"
+                    android:id="@+id/numero_3"
 
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:layout_column="2"
                     app:layout_columnWeight="1"
                     app:layout_row="0"
-
                     app:layout_rowWeight="1"
-
                     android:linksClickable="true"
                     android:onClick="pressNumber"
-                    android:text="@string/str_9"
+                    android:text="@string/str_3"
                     android:theme="@style/Buttton_Login" />
 
                 <Button
@@ -209,41 +210,36 @@
                     android:theme="@style/Buttton_Login" />
 
                 <Button
-                    android:id="@+id/numero_1"
+                    android:id="@+id/numero_7"
 
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:layout_column="0"
                     app:layout_columnWeight="1"
                     app:layout_row="2"
-
                     app:layout_rowWeight="1"
-
                     android:linksClickable="true"
                     android:onClick="pressNumber"
-                    android:text="@string/str_1"
+                    android:text="@string/str_7"
                     android:theme="@style/Buttton_Login" />
 
                 <Button
-                    android:id="@+id/numero_2"
+                    android:id="@+id/numero_8"
 
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:layout_column="1"
                     app:layout_columnWeight="1"
                     app:layout_row="2"
-
                     app:layout_rowWeight="1"
-
                     android:linksClickable="true"
                     android:onClick="pressNumber"
-                    android:text="@string/str_2"
+                    android:text="@string/str_8"
                     android:theme="@style/Buttton_Login" />
 
 
                 <Button
-                    android:id="@+id/numero_3"
-
+                    android:id="@+id/numero_9"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:layout_column="2"
@@ -252,7 +248,7 @@
                     app:layout_rowWeight="1"
                     android:linksClickable="true"
                     android:onClick="pressNumber"
-                    android:text="@string/str_3"
+                    android:text="@string/str_9"
                     android:theme="@style/Buttton_Login" />
 
                 <Button
@@ -279,13 +275,12 @@
                     app:layout_column="2"
                     app:layout_columnWeight="1"
                     app:layout_row="3"
-
                     app:layout_rowWeight="1"
-
                     android:linksClickable="true"
                     android:onClick="onClickValidateUser"
                     android:text="@string/str_ir"
-                    android:theme="@style/Buttton_Login" />
+                    android:theme="@style/Buttton_Login"
+                    android:textSize="30sp"/>
 
 
                 <Button
@@ -299,7 +294,8 @@
                     android:linksClickable="true"
                     android:onClick="deleteChar"
                     android:text="@string/str_x"
-                    android:theme="@style/Buttton_Login" />
+                    android:theme="@style/Buttton_Login"
+                    android:textSize="30sp"/>
 
             </android.support.v7.widget.GridLayout>
 
