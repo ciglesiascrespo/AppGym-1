@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
         deviceInfo = presenter.getDeviceInfo();
 
-        setupBt();
+       // setupBt();
     }
 
     private void setupBt() {
@@ -253,6 +253,11 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     @Override
     protected void onResume() {
         super.onResume();
+
+        setupBt();
+        //bt = Bluetooth.getInstance(this, mHandler);
+
+       // Toast.makeText(this,"on resume",Toast.LENGTH_SHORT).show();
         //  conectService();
     }
 
@@ -370,7 +375,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
                         idSucursal = "";
                         txtEstado.setText("Estado: Conectando...");
 
-                        if (estadoConexionBt == Bluetooth.STATE_CONNECTED) {
+                        if (estadoConexionBt == Bluetooth.STATE_CONNECTED ) {
                             conectService();
                         }
                     }
