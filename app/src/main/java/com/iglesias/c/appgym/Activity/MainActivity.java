@@ -91,6 +91,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     }
 
+    @Override
+    public void goToLogin() {
+        showErrorLoginDialog("Alcanzó limite de intentos, vuelva a loguearse.");
+        finish();
+    }
+
     private void setupViews() {
         txtDias = findViewById(R.id.id_txt_dias);
         txtDocumento = findViewById(R.id.id_txt_documento);

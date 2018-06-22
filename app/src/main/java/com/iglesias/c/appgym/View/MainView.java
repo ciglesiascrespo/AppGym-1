@@ -9,4 +9,5 @@ public interface MainView {
     void compareId(String id);
     void sendId();
     void activarSensor();
+    void goToLogin();
 }

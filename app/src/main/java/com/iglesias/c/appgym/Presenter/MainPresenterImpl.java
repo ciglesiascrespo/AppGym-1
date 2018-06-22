@@ -22,6 +22,8 @@ public class MainPresenterImpl {
                 view.sendId();
             } else if (msj.substring(0, 1).toLowerCase().equals("n")) {
                 view.compareId("-1");
+            } else if (msj.substring(0, 1).toLowerCase().equals("s")) {
+                view.goToLogin();
             } else {
                 String msjR = iterator.getMsj(msj.substring(0, 1));
                 if (!msjR.isEmpty())
