@@ -1,10 +1,11 @@
 package com.iglesias.c.appgym.Presenter;
 
-import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.iglesias.c.appgym.Iterator.LoginIterator;
 import com.iglesias.c.appgym.Pojo.DeviceInfo;
 import com.iglesias.c.appgym.RestApi.Model.InfoLogin;
+import com.iglesias.c.appgym.RestApi.Model.ResultLogin;
 import com.iglesias.c.appgym.View.LoginView;
 
 /**
@@ -28,21 +29,25 @@ public class LoginPresenterImpl implements LoginPresenter {
             iterator.validateUser(nro);
         }
     }
-    public DeviceInfo getDeviceInfo(){
+
+    public DeviceInfo getDeviceInfo() {
         return iterator.getInfoDeviceConexion();
     }
 
+
     @Override
-    public void onSuccesLogin(InfoLogin infoLogin) {
+    public void onSuccesLogin(ResultLogin resultLogin) {
         view.hideLoading();
 
+        Log.e(getClass().getName(),"url: " + resultLogin.getInfo().getUrlImage());
+        Log.e(getClass().getName(),resultLogin.getInfo().toString());
 
-        if (infoLogin.getDias() > 0) {
-            view.goToMainActivity(infoLogin);
+        if (resultLogin.getInfo().getDias() > 0) {
+
+            view.goToMainActivity(resultLogin);
         } else {
             view.showErrorLoginDialog("Su membresía ha caducado, por favor contacte a su administrador.");
         }
-
     }
 
     @Override
@@ -52,8 +57,10 @@ public class LoginPresenterImpl implements LoginPresenter {
     }
 
     @Override
-    public void onUserNotValid() {
+    public void onUserNotValid(String msj) {
         view.hideLoading();
-        view.showErrorLoginDialog("Usuario no válido.");
+        view.showErrorLoginDialog(msj.isEmpty() ? "Usuario no válido." : msj);
     }
+
+
 }

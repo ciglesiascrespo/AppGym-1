@@ -1,12 +1,12 @@
 package com.iglesias.c.appgym.Activity;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,13 +19,13 @@ import com.squareup.picasso.Picasso;
 
 import rx.Single;
 import rx.SingleSubscriber;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_DIAS;
 import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_DOCUMENTO;
+import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_FLAG_SIN_HUELLA;
 import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_ID_HUELLA;
 import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_NOMBRE;
 import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_URL_IMAGEN;
@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     Bluetooth bt;
     MainPresenterImpl presenter;
     String nombre, urlImage;
+    boolean flagSinHuella = false;
     int dias;
 
     @Override
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         documento = getIntent().getStringExtra(EXTRA_DOCUMENTO);
         urlImage = getIntent().getStringExtra(EXTRA_URL_IMAGEN);
         id = getIntent().getStringExtra(EXTRA_ID_HUELLA);
+        flagSinHuella = getIntent().getBooleanExtra(EXTRA_FLAG_SIN_HUELLA, false);
         setupBt();
         txtNombre.setText(nombre);
         txtDocumento.setText(documento);
@@ -65,10 +67,15 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         presenter = new MainPresenterImpl(this);
         //  btnClick();
-        if(id.isEmpty()){
-            showErrorLoginDialog("El usuario no cuenta con una huella registrada.");
-        }else{
-            activarSensor();
+
+        if (!flagSinHuella) {
+            if (id.isEmpty()) {
+                showErrorLoginDialog("El usuario no cuenta con una huella registrada.");
+            } else {
+                activarSensor();
+            }
+        } else {
+            btnClick();
         }
 
         //nombre =
@@ -103,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private boolean waitTimeArduino() {
         try {
-            Thread.sleep(300);
+            Thread.sleep(flagSinHuella ? 1000 : 300);
         } catch (Exception e) {
             return false;
         }
@@ -160,8 +167,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void showErrorLoginDialog(String msj) {
-
-        Toast.makeText(this, msj, Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(this, msj, Toast.LENGTH_LONG);
+        ((TextView) ((ViewGroup) toast.getView()).getChildAt(0)).setTextSize(20);
+        toast.show();
         /*
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.myDialog);
 

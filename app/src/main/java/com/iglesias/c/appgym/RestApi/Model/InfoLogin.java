@@ -14,22 +14,14 @@ public class InfoLogin {
     @SerializedName("nombre")
     @Expose
     private String nombre;
+    @SerializedName("urlImage")
+    @Expose
+    private String urlImage;
     @SerializedName("dias")
     @Expose
     private Integer dias;
-    @SerializedName("urlImg")
-    @Expose
-    private String urlImg;
 
     private String idHuella;
-
-    public void setIdHuella(String idHuella) {
-        this.idHuella = idHuella;
-    }
-
-    public String getIdHuella() {
-        return idHuella;
-    }
 
     public String getNroDocumento() {
         return nroDocumento;
@@ -47,6 +39,14 @@ public class InfoLogin {
         this.nombre = nombre;
     }
 
+    public String getUrlImage() {
+        return urlImage;
+    }
+
+    public void setUrlImage(String urlImage) {
+        this.urlImage = urlImage;
+    }
+
     public Integer getDias() {
         return dias;
     }
@@ -55,11 +55,12 @@ public class InfoLogin {
         this.dias = dias;
     }
 
-    public String getUrlImg() {
-        return urlImg;
+    public void setIdHuella(String idHuella) {
+        this.idHuella = idHuella;
     }
 
-    public void setUrlImg(String urlImg) {
-        this.urlImg = urlImg;
+    public String getIdHuella() {
+        return idHuella;
     }
+
 }

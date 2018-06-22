@@ -2,6 +2,7 @@ package com.iglesias.c.appgym.Iterator;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.iglesias.c.appgym.Db.DbHandler;
 import com.iglesias.c.appgym.Pojo.DeviceInfo;
@@ -74,9 +75,9 @@ public class LoginIterator {
                                public void onNext(ResultLogin response) {
 
                                    if (response.getErrorCode() == ConstantesRestApi.CODE_ERROR) {
-                                       presenter.onUserNotValid();
+                                       presenter.onUserNotValid(response.getMensaje());
                                    } else {
-                                       validateUserDb(response.getInfo().getNroDocumento(),response.getInfo());
+                                       validateUserDb(response.getInfo().getNroDocumento(),response);
                                        //presenter.onSuccesLogin(response.getInfo());
                                    }
 
@@ -86,7 +87,7 @@ public class LoginIterator {
 
     }
 
-    public void validateUserDb(final String nro, final InfoLogin infoLogin) {
+    public void validateUserDb(final String nro, final ResultLogin resultLogin) {
 
         Observable.create(new Observable.OnSubscribe<ResultLogin>() {
             @Override
@@ -112,8 +113,8 @@ public class LoginIterator {
                     @Override
                     public void onNext(ResultLogin response) {
 
-                            infoLogin.setIdHuella(response.getInfo().getIdHuella());
-                            presenter.onSuccesLogin(infoLogin);
+                            resultLogin.getInfo().setIdHuella(response.getInfo().getIdHuella());
+                            presenter.onSuccesLogin(resultLogin);
 
                     }
                 });
@@ -144,10 +145,11 @@ public class LoginIterator {
 
                     @Override
                     public void onNext(ResultLogin response) {
+
                         if (response.getErrorCode() == ConstantesRestApi.CODE_ERROR) {
-                            presenter.onUserNotValid();
+                            presenter.onUserNotValid(response.getMensaje());
                         } else {
-                            presenter.onSuccesLogin(response.getInfo());
+                            presenter.onSuccesLogin(response);
                         }
 
                     }

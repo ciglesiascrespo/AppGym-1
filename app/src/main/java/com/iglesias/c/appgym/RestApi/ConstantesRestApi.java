@@ -14,6 +14,7 @@ public class ConstantesRestApi {
 
    //&identificacion=1095795089 ?r=communication
     public static final int CODE_ERROR = 1;
+    public static final int CODE_ERROR_SIN_HUELLA = 2;
     public static final String r ="communication/getUser";
     public static final int idSucursal = 2;
     public static final int idLicencia = 11;

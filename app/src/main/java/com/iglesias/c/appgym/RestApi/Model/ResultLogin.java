@@ -14,6 +14,9 @@ public class ResultLogin {
     @SerializedName("info")
     @Expose
     private InfoLogin info;
+    @SerializedName("mensaje")
+    @Expose
+    private String mensaje;
 
     public Integer getErrorCode() {
         return errorCode;
@@ -30,4 +33,13 @@ public class ResultLogin {
     public void setInfo(InfoLogin info) {
         this.info = info;
     }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
+
 }
