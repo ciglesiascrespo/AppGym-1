@@ -369,6 +369,10 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
                         idSucursal = "";
                         txtEstado.setText("Estado: Conectando...");
+
+                        if (estadoConexionBt == Bluetooth.STATE_CONNECTED) {
+                            conectService();
+                        }
                     }
 
                     estadoConexionBt = msg.arg1;
