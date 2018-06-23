@@ -67,10 +67,7 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
             }
             if (msj.toLowerCase().contains("}")) {
                 matHuella += msj;
-                view.setFlagHuella(true);
-
                 view.setId(matHuella.replace("Q", "").replace("}", "").replace("{", ""));
-
                 //view.showErrorLoginDialog(matHuella.replace("Q", "").replace("}", "").replace("{",""),false);
                 matHuella = "";
             }

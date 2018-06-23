@@ -29,6 +29,9 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
     private Button btnRegistrar, imgBtnHuella;
     RegistrarPresenterImpl presenter;
 
+    String arryId[] = {"", "", ""};
+    int indexId = 0;
+
 
     String id = "", mac;
     Boolean flagHuella = false;
@@ -73,13 +76,16 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
         imgBtnHuella.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String dato = "1";
-                bt.sendMessage(dato);
+                scanMode();
 
             }
         });
     }
 
+    private void scanMode() {
+        String dato = "1";
+        bt.sendMessage(dato);
+    }
 
     @Override
     public void showLoading() {
@@ -122,7 +128,31 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
 
     @Override
     public void setId(String id) {
-        this.id = id;
+        if (indexId < arryId.length) {
+            arryId[indexId] = id;
+            indexId++;
+        }
+        compareId();
+    }
+
+    private void compareId() {
+        String tempId = "", antId = "";
+        for (int i = 1; i < arryId.length; i++) {
+            tempId = arryId[i];
+            antId = arryId[i - 1];
+
+            if(!tempId.isEmpty() && !antId.isEmpty() && tempId.equals(antId)){
+                flagHuella = true;
+            }else {
+                flagHuella = false;
+            }
+        }
+
+        if(indexId == arryId.length){
+            showErrorLoginDialog("Número de intentos alcanzados",true);
+        }else{
+            scanMode();
+        }
     }
 
     @Override
@@ -154,7 +184,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
                     break;
                 case Bluetooth.MESSAGE_TOAST:
                     if (msg.arg1 == -1) {
-                          //  bt.connectDevice(mac);
+                        //  bt.connectDevice(mac);
                     }
                     Log.d(TAG, "MESSAGE_TOAST " + msg);
                     break;
