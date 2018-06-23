@@ -18,6 +18,8 @@ import com.iglesias.c.appgym.R;
 import com.iglesias.c.appgym.Service.Bluetooth;
 import com.iglesias.c.appgym.View.RegistrarView;
 
+import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_DEVICE_MAC;
+
 public class RegistraActivity extends AppCompatActivity implements RegistrarView {
 
     private final String TAG = getClass().getName();
@@ -28,7 +30,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
     RegistrarPresenterImpl presenter;
 
 
-    String id = "";
+    String id = "", mac;
     Boolean flagHuella = false;
 
     Bluetooth bt;
@@ -41,6 +43,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
         setupViews();
         setupLoading();
         presenter = new RegistrarPresenterImpl(this);
+        mac = getIntent().getStringExtra(EXTRA_DEVICE_MAC);
         setupBt();
     }
 
@@ -95,7 +98,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
         builder.setTitle(getResources().getString(R.string.str_menu_registrar));
         builder.setMessage(msj);
 
-            if (finish) {
+        if (finish) {
             builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -150,7 +153,9 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
                     Log.d(TAG, "MESSAGE_DEVICE_NAME " + msg);
                     break;
                 case Bluetooth.MESSAGE_TOAST:
-
+                    if (msg.arg1 == -1) {
+                          //  bt.connectDevice(mac);
+                    }
                     Log.d(TAG, "MESSAGE_TOAST " + msg);
                     break;
             }

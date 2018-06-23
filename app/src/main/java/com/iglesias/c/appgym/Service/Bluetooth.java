@@ -63,7 +63,7 @@ public class Bluetooth {
 
     // Member fields
     private final BluetoothAdapter mAdapter;
-    private  Handler mHandler;
+    private Handler mHandler;
     private AcceptThread mAcceptThread;
     private ConnectThread mConnectThread;
     private ConnectedThread mConnectedThread;
@@ -74,6 +74,8 @@ public class Bluetooth {
     public static final int STATE_LISTEN = 1; // now listening for incoming connections
     public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
     public static final int STATE_CONNECTED = 3; // now connected to a remote device
+
+    private String lastDeviceMac = "";
 
     /**
      * Constructor. Prepares a new BluetoothChat session.
@@ -90,19 +92,22 @@ public class Bluetooth {
         mHandler = handler;
     }
 
-    public static Bluetooth getInstance(Context context, Handler handler){
+    public static Bluetooth getInstance(Context context, Handler handler) {
 
-        if(bluetooth!= null){
+        if (bluetooth != null) {
             bluetooth.setmHandler(handler);
             return bluetooth;
-        }else{
-            bluetooth = new Bluetooth(context,handler);
-            return  bluetooth;
+        } else {
+            bluetooth = new Bluetooth(context, handler);
+            return bluetooth;
         }
 
     }
-    public void setmHandler(Handler handler){
+
+    public void setmHandler(Handler handler) {
         mHandler = handler;
+        setState(getState());
+
     }
 
     /**
@@ -295,6 +300,7 @@ public class Bluetooth {
 
         // Start the service over to restart listening mode
         Bluetooth.this.start();
+        connectDevice(lastDeviceMac);
     }
 
     /**
@@ -311,6 +317,7 @@ public class Bluetooth {
 
         // Start the service over to restart listening mode
         Bluetooth.this.start();
+        connectDevice(lastDeviceMac);
     }
 
     /**
@@ -403,7 +410,7 @@ public class Bluetooth {
      * fails.
      */
     private class ConnectThread extends Thread {
-        private  BluetoothSocket mmSocket;
+        private BluetoothSocket mmSocket;
         private final BluetoothDevice mmDevice;
         private String mSocketType;
 
@@ -593,6 +600,7 @@ public class Bluetooth {
     public void connectDevice(String address) {
 
         try {
+            lastDeviceMac = address;
             BluetoothDevice device = getBtAdapter().getRemoteDevice(address); // Get the BluetoothDevice object
             this.connect(device); // Attempt to connect to the device
         } catch (Exception e) {

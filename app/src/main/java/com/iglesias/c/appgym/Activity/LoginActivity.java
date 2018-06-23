@@ -44,6 +44,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     public static final String EXTRA_DIAS = "DIAS";
     public static final String EXTRA_ID_HUELLA = "ID_HUELLA";
     public static final String EXTRA_FLAG_SIN_HUELLA = "FLAG_HUELLA";
+    public static final String EXTRA_DEVICE_MAC = "DEVICE_MAC";
     public static final String EXTRA_URL_IMAGEN = "URL";
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int MY_PERMISSIONS_REQUEST = 2;
@@ -75,7 +76,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
         deviceInfo = presenter.getDeviceInfo();
 
-       // setupBt();
+         setupBt();
     }
 
     private void setupBt() {
@@ -93,6 +94,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
                     checkPermission();
                 } else {
                     conectService();
+                    conectDevice();
                 }
             }
         }
@@ -101,6 +103,9 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     private void conectService() {
         bt.start();
+    }
+
+    private void conectDevice() {
         deviceInfo = presenter.getDeviceInfo();
         bt.connectDevice(deviceInfo.getMac());
     }
@@ -181,6 +186,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         i.putExtra(EXTRA_DOCUMENTO, infoLogin.getNroDocumento());
         i.putExtra(EXTRA_URL_IMAGEN, infoLogin.getUrlImage());
         i.putExtra(EXTRA_ID_HUELLA, infoLogin.getIdHuella());
+        i.putExtra(EXTRA_DEVICE_MAC,deviceInfo.getMac());
         i.putExtra(EXTRA_FLAG_SIN_HUELLA, resultLogin.getErrorCode() == ConstantesRestApi.CODE_ERROR_SIN_HUELLA);
 
         if (infoLogin.getDias() < 7) {
@@ -254,11 +260,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     protected void onResume() {
         super.onResume();
 
-        setupBt();
-        //bt = Bluetooth.getInstance(this, mHandler);
+        bt = Bluetooth.getInstance(this, mHandler);
 
-       // Toast.makeText(this,"on resume",Toast.LENGTH_SHORT).show();
-        //  conectService();
     }
 
     @Override
@@ -305,7 +308,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
+
         if (requestCode == REQUEST_ENABLE_BT) {
             if (btAdapter.isEnabled()) {
                 Toast.makeText(this, "Bluetooth encendido", Toast.LENGTH_SHORT).show();
@@ -313,6 +316,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
                     showErrorLoginDialog("No se encuentra ningun dispositivo configurado.");
                 } else {
                     conectService();
+                    conectDevice();
                 }
             } else {
                 Toast.makeText(this, "Se requiere encender el bluetooth", Toast.LENGTH_SHORT).show();
@@ -329,6 +333,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
                 if (grantResults.length > 0
                         && (grantResults[0] == PackageManager.PERMISSION_GRANTED || grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
                     conectService();
+                    conectDevice();
 
                 } else {
 
@@ -355,6 +360,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
         } else {
             conectService();
+            conectDevice();
 
         }
     }
@@ -374,13 +380,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
                         idSucursal = "";
                         txtEstado.setText("Estado: Conectando...");
-
-                        if (estadoConexionBt == Bluetooth.STATE_CONNECTED ) {
-                            conectService();
-                        }
                     }
 
-                    estadoConexionBt = msg.arg1;
                     Log.e(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                     break;
                 case Bluetooth.MESSAGE_WRITE:
@@ -388,7 +389,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
                     break;
                 case Bluetooth.MESSAGE_READ:
-
                     Log.e(TAG, "MESSAGE_READ: " + msg.obj);
                     String msj = String.valueOf(msg.obj);
                     if (flagEnvioPeticionSucursal && msj.contains(":")) {
@@ -398,22 +398,16 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
                     }
                     break;
                 case Bluetooth.MESSAGE_DEVICE_NAME:
-                    Log.d(TAG, "MESSAGE_DEVICE_NAME " + msg);
+                    Log.e(TAG, "MESSAGE_DEVICE_NAME " + msg);
                     break;
                 case Bluetooth.MESSAGE_TOAST:
-                    if (msg.arg1 == -1) {
-                        idSucursal = "";
-                        txtEstado.setText("Estado: Desconectado.");
-                        if (estadoConexionBt == Bluetooth.STATE_CONNECTED) {
-                            conectService();
-                        }
-                        //   bt.stop();
-                        // conectService();
-                    }
-                    Log.d(TAG, "MESSAGE_TOAST " + msg);
+                    Log.e(TAG, "MESSAGE_TOAST " + msg.arg1);
+
                     break;
             }
             txtSucursal.setText("Sucursal: " + idSucursal);
         }
     };
+
+
 }

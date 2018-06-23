@@ -39,6 +39,7 @@ public class CambioHuellaActivity extends AppCompatActivity implements Registrar
         setupViews();
         setupLoading();
         presenter = new ActualizaPresenterImpl(this);
+
         setupBt();
     }
 
@@ -146,6 +147,7 @@ public class CambioHuellaActivity extends AppCompatActivity implements Registrar
                     Log.d(TAG, "MESSAGE_DEVICE_NAME " + msg);
                     break;
                 case Bluetooth.MESSAGE_TOAST:
+
 
                     Log.d(TAG, "MESSAGE_TOAST " + msg);
                     break;

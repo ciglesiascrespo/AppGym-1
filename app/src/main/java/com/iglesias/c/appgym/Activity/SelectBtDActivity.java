@@ -123,7 +123,7 @@ public class SelectBtDActivity extends AppCompatActivity implements SelectBtView
 
     @Override
     protected void onDestroy() {
-        // TODO Auto-generated method stub
+
         super.onDestroy();
        LocalBroadcastManager.getInstance(this).unregisterReceiver(bReceiver);
 
@@ -156,7 +156,7 @@ public class SelectBtDActivity extends AppCompatActivity implements SelectBtView
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
+
         if (requestCode == REQUEST_ENABLE_BT) {
             if (btAdapter.isEnabled()) {
                 Toast.makeText(this, "Bluetooth encendido", Toast.LENGTH_SHORT).show();

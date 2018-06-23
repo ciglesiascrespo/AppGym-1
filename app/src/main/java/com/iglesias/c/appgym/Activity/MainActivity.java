@@ -23,6 +23,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
+import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_DEVICE_MAC;
 import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_DIAS;
 import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_DOCUMENTO;
 import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_FLAG_SIN_HUELLA;
@@ -33,7 +34,7 @@ import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_URL_IMAGEN;
 public class MainActivity extends AppCompatActivity implements MainView {
     private final String TAG = getClass().getName();
 
-    private String documento, id;
+    private String documento, id,mac;
     private TextView txtNombre, txtDias, txtDocumento;
     ImageView imgUsr;
 
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         documento = getIntent().getStringExtra(EXTRA_DOCUMENTO);
         urlImage = getIntent().getStringExtra(EXTRA_URL_IMAGEN);
         id = getIntent().getStringExtra(EXTRA_ID_HUELLA);
+        mac = getIntent().getStringExtra(EXTRA_DEVICE_MAC);
         flagSinHuella = getIntent().getBooleanExtra(EXTRA_FLAG_SIN_HUELLA, false);
         setupBt();
         txtNombre.setText(nombre);
@@ -116,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private boolean waitTimeArduino() {
         try {
-            Thread.sleep(flagSinHuella ? 1000 : 300);
+            Thread.sleep(flagSinHuella ? 2000 : 300);
         } catch (Exception e) {
             return false;
         }
@@ -239,7 +241,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
                     Log.d(TAG, "MESSAGE_DEVICE_NAME " + msg);
                     break;
                 case Bluetooth.MESSAGE_TOAST:
-
+                            if(msg.arg1==-1){
+                               // bt.connectDevice(mac);
+                            }
                     Log.d(TAG, "MESSAGE_TOAST " + msg);
                     break;
             }
