@@ -190,7 +190,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         i.putExtra(EXTRA_FLAG_SIN_HUELLA, resultLogin.getErrorCode() == ConstantesRestApi.CODE_ERROR_SIN_HUELLA);
 
         if (infoLogin.getDias() < 7) {
-            Toast toast = Toast.makeText(this, "Su membresía esta próxima a caducar, contacte a su administrador.", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(this, "Recuerda que tu plan esta proximo a vencer,aprovecha las ofertas especiales y consultalos con tu asesor", Toast.LENGTH_LONG);
             ((TextView) ((ViewGroup) toast.getView()).getChildAt(0)).setTextSize(20);
             toast.show();
         }
