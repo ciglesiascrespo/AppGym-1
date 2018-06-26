@@ -128,11 +128,16 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
 
     @Override
     public void setId(String id) {
+        this.id = id;
+        setFlagHuella(true);
+        /*
         if (indexId < arryId.length) {
             arryId[indexId] = id;
             indexId++;
         }
         compareId();
+        */
+
     }
 
     private void compareId() {
