@@ -34,72 +34,76 @@
                 android:layout_weight="20"/>
 
         </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="70"
+        android:weightSum="100">
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="70"
-            android:orientation="horizontal"
-            android:weightSum="100">
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="50"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/digite"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:text="@string/bienvenido"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/text_size_title"
-                    android:visibility="visible" />
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/id_edt_nro_registrar"
-                    style="@style/Widget.AppCompat.EditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="35dp"
-                    android:gravity="center_horizontal"
-                    android:hint="@string/cedula"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:textColor="@color/colorPrimary"
-                    android:textColorLink="@color/colorAccent"
-                    android:textSize="23sp" />
+            <TextView
+                android:id="@+id/digite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/bienvenido"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/text_size_title"
+                android:visibility="visible" />
 
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="50"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/id_btn_huella"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="35dp"
-                    android:text="@string/str_menu_registrar_huella"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="25sp"
-                    android:theme="@style/ThemeButtonLogin" />
-                <Button
-                    android:id="@+id/id_btn_registrar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="35dp"
-                    android:text="@string/str_menu_registrar"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textSize="25sp"
-                    android:theme="@style/ThemeButtonLogin" />
-
-            </LinearLayout>
+            <EditText
+                android:id="@+id/id_edt_nro_registrar"
+                style="@style/Widget.AppCompat.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="center_horizontal"
+                android:hint="@string/ident"
+                android:inputType="numberDecimal"
+                android:maxLines="1"
+                android:textColor="@color/colorPrimary"
+                android:textColorLink="@color/colorAccent"
+                android:textSize="50sp" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/id_btn_huella"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="35dp"
+                android:text="@string/str_menu_registrar_huella"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="25sp"
+                android:theme="@style/ThemeButtonLogin" />
+
+            <Button
+                android:id="@+id/id_btn_registrar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="35dp"
+                android:text="@string/str_menu_registrar"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="25sp"
+                android:theme="@style/ThemeButtonLogin" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     </LinearLayout>
 

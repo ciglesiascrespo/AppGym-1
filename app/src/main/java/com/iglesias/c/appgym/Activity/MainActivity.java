@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private boolean waitTime() {
         try {
-            Thread.sleep(4000);
+            Thread.sleep(3000);
         } catch (Exception e) {
             return false;
         }
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void showErrorLoginDialog(String msj) {
-        Toast toast = Toast.makeText(this, msj, Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(this, msj, Toast.LENGTH_SHORT);
         ((TextView) ((ViewGroup) toast.getView()).getChildAt(0)).setTextSize(20);
         toast.show();
         /*

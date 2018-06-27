@@ -60,14 +60,14 @@
                 style="@style/Widget.AppCompat.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="40dp"
                 android:gravity="center_horizontal"
-                android:hint="@string/cedula"
-                android:inputType="number"
+                android:hint="@string/ident"
+                android:inputType="numberDecimal"
                 android:maxLines="1"
                 android:textColor="@color/colorPrimary"
                 android:textColorLink="@color/colorAccent"
-                android:textSize="23sp" />
+                android:textSize="50sp" />
 
         </LinearLayout>
         <LinearLayout

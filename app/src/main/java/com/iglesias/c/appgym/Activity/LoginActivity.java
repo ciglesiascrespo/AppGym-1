@@ -142,7 +142,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     public void pressNumber(View v) {
         String nro = edtNro.getText().toString();
-        if (nro.length() <= 9) {
+        if (nro.length() <= 10) {
             edtNro.setText(nro + ((Button) v).getText().toString().trim());
         }
     }

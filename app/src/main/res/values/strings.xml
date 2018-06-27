@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">AppClezAC</string>
     <string name="cedula">Digite su numero de identificación</string>
+    <string name="ident">Digite identificación</string>
     <string name="bienvenido">BIENVENIDO</string>
     <string name="str_7">7</string>
     <string name="str_8">8</string>
