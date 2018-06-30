@@ -1,8 +1,14 @@
 package com.iglesias.c.appgym.Activity;
 
+import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -51,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupViews();
-
 
         nombre = getIntent().getStringExtra(EXTRA_NOMBRE);
         dias = getIntent().getIntExtra(EXTRA_DIAS, 0);
@@ -216,8 +221,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
         bt.sendMessage(arrayId);
     }
 
-
     private final Handler mHandler = new Handler() {
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -250,4 +255,5 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         }
     };
+
 }
