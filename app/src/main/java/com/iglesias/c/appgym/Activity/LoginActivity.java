@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
@@ -34,6 +35,8 @@ import com.iglesias.c.appgym.RestApi.Model.InfoLogin;
 import com.iglesias.c.appgym.RestApi.Model.ResultLogin;
 import com.iglesias.c.appgym.Service.Bluetooth;
 import com.iglesias.c.appgym.View.LoginView;
+
+import java.io.File;
 
 public class LoginActivity extends AppCompatActivity implements LoginView {
 
@@ -72,11 +75,34 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         setupViews();
         setupLoading();
 
+        if(isExternalStorageWritable()){
+            Toast.makeText(this, "esta disponible la memoria", Toast.LENGTH_SHORT).show();
+            String nombreDirectorioPublico = "subdirectorio-gym-publico-pictures";
+            crearDirectorioPublico(nombreDirectorioPublico);
+        }else{
+            Toast.makeText(this, "no esta disponible la memoria", Toast.LENGTH_SHORT).show();
+        }
+
         presenter = new LoginPresenterImpl(this);
 
         deviceInfo = presenter.getDeviceInfo();
 
          setupBt();
+    }
+    //disponibilidad memoria externa
+    private boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
+    }
+    //creación del directorio de almacenamiento
+    public File crearDirectorioPublico(String nombreDirectorio) {
+        //Crear directorio público en la carpeta Pictures.
+        File directorio = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), nombreDirectorio);
+        //Muestro un mensaje en el logcat si no se creo la carpeta por algun motivo
+        if (!directorio.mkdirs())
+            Toast.makeText(this, "no se creo el directorio", Toast.LENGTH_SHORT).show();
+
+        return directorio;
     }
 
     private void setupBt() {
@@ -198,7 +224,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         startActivity(i);
 
     }
-
 
     @Override
     public void showErrorLoginDialog(String msj) {

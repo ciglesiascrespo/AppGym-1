@@ -125,6 +125,16 @@ public class CambioHuellaActivity extends AppCompatActivity implements Registrar
         this.flagHuella = flag;
     }
 
+    @Override
+    public void activarModoScaner() {
+
+    }
+
+    @Override
+    public void sendId() {
+
+    }
+
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
