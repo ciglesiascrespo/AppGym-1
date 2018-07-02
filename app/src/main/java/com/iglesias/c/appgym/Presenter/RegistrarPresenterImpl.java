@@ -54,20 +54,33 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
 
         if (msj != null && !msj.isEmpty()) {
             if (!msj.toLowerCase().contains("id:")) {
-                String msjResult = iterator.getMsj(msj.substring(0, 1));
-                if (!msjResult.isEmpty())
-                    view.showErrorLoginDialog(msjResult, false);
+
+                if (!msj.toLowerCase().contains("o")) {
+                    if (msj.toLowerCase().contains("r")) {
+                        view.sendId();
+                    } else if (msj.substring(0, 1).toLowerCase().equals("n")) {
+                        view.setFlagHuella(false);
+                    } else if (msj.substring(0, 1).toLowerCase().equals("s")) {
+                        view.showErrorLoginDialog("Superado limite de intentos",true);
+                    } else {
+                        String msjResult = iterator.getMsj(msj.substring(0, 1));
+                        if (!msjResult.isEmpty())
+                            view.showErrorLoginDialog(msjResult, false);
+                    }
+
+                } else {
+                    view.setFlagHuella(true);
+                }
+
+
             }
 
-            if (msj.toLowerCase().contains("q")) {
-                flagQ = true;
-            }
-            if (flagQ) {
-                // matHuella += msj;
-            }
+
+
             if (msj.toLowerCase().contains("}")) {
                 matHuella += msj;
                 view.setId(matHuella.replace("Q", "").replace("}", "").replace("{", ""));
+                view.activarModoScaner();
                 //view.showErrorLoginDialog(matHuella.replace("Q", "").replace("}", "").replace("{",""),false);
                 matHuella = "";
             }

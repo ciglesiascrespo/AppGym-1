@@ -1,8 +1,10 @@
 package com.iglesias.c.appgym.Activity;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -84,7 +86,11 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
 
     private void scanMode() {
         String dato = "1";
+        String dato_val ="2";
+
         bt.sendMessage(dato);
+        bt.sendMessage(dato_val);
+
     }
 
     @Override
@@ -129,7 +135,6 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
     @Override
     public void setId(String id) {
         this.id = id;
-        setFlagHuella(true);
         /*
         if (indexId < arryId.length) {
             arryId[indexId] = id;
@@ -163,6 +168,21 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
     @Override
     public void setFlagHuella(Boolean flag) {
         this.flagHuella = flag;
+    }
+
+    @Override
+    public void activarModoScaner() {
+        String dato = "2";
+        bt.sendMessage(dato);
+
+    }
+
+    @Override
+    public void sendId() {
+
+        String arrayId = id + "}";
+
+        bt.sendMessage(arrayId);
     }
 
 

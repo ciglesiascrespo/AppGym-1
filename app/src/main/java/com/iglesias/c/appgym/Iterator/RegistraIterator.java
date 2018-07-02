@@ -44,6 +44,7 @@ public class RegistraIterator {
         mapMsj.put("M", "Esperando dedo válido para inscripción.");
         mapMsj.put("X", "No se encontró sensor");
         mapMsj.put("Z", "Sensor encontrado");
+        mapMsj.put("W", "validación de registro");
     }
 
     public String getMsj(String msjR) {

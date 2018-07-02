@@ -20,4 +20,8 @@ public interface RegistrarView {
     void setId(String id);
 
     void setFlagHuella(Boolean flag);
+
+    void activarModoScaner();
+
+    void sendId();
 }
