@@ -76,9 +76,18 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         setupLoading();
 
         if(isExternalStorageWritable()){
+            String rutaDirectorioAlmExternoPublico = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + "subdirectorio-gym-publico-pictures";
+            File directorioAlmExternoPublico = new File(rutaDirectorioAlmExternoPublico);
+
             Toast.makeText(this, "esta disponible la memoria", Toast.LENGTH_SHORT).show();
-            String nombreDirectorioPublico = "subdirectorio-gym-publico-pictures";
-            crearDirectorioPublico(nombreDirectorioPublico);
+            if (directorioAlmExternoPublico.exists() && directorioAlmExternoPublico.isDirectory()) {
+                Toast.makeText(this, "La carpeta ya fue creada", Toast.LENGTH_SHORT).show();
+            }
+            else {//Se ejecuta si no existe el directorio
+                String nombreDirectorioPublico = "subdirectorio-gym-publico-pictures";
+                crearDirectorioPublico(nombreDirectorioPublico);
+            }
+
         }else{
             Toast.makeText(this, "no esta disponible la memoria", Toast.LENGTH_SHORT).show();
         }
