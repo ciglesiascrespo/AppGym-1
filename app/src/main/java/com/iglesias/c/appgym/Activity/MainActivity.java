@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private boolean waitTime() {
         try {
-            Thread.sleep(3000);
+            Thread.sleep(4000);
         } catch (Exception e) {
             return false;
         }
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private boolean waitTimeArduino() {
         try {
-            Thread.sleep(flagSinHuella ? 2000 : 300);
+            Thread.sleep(flagSinHuella ? 200 : 300);
         } catch (Exception e) {
             return false;
         }
@@ -133,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private void btnClick() {
 
         showErrorLoginDialog("Bienvenido " + nombre);
-
         Single.create(new Single.OnSubscribe<Boolean>() {
             @Override
             public void call(SingleSubscriber<? super Boolean> singleSubscriber) {
@@ -208,6 +207,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     public void compareId(String id) {
         if (id.equals("0")) {
             btnClick();
+
         } else {
             showErrorLoginDialog("La huella obtenida no coincide con el usuario.");
             activarSensor();
