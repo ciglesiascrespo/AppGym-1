@@ -86,11 +86,7 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
 
     private void scanMode() {
         String dato = "1";
-        String dato_val ="2";
-
         bt.sendMessage(dato);
-        bt.sendMessage(dato_val);
-
     }
 
     @Override
