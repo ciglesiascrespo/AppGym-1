@@ -6,7 +6,6 @@ package com.iglesias.c.appgym.Db;
 
 public class UserDb {
     public static final String TABLE = "usuarios";
-
     public static final String KEY_ID = "id_huella";
     public static final String KEY_NRO_DOCUMENTO = "nro_documento";
     public static final String KEY_DIAS = "dias";
