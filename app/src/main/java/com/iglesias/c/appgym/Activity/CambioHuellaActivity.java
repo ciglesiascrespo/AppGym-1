@@ -130,11 +130,6 @@ public class CambioHuellaActivity extends AppCompatActivity implements Registrar
 
     }
 
-    @Override
-    public void sendId() {
-
-    }
-
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
