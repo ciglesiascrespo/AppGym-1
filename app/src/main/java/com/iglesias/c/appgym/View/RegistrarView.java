@@ -22,5 +22,5 @@ public interface RegistrarView {
     void setFlagHuella(Boolean flag);
 
     void activarModoScaner();
-    
+
 }

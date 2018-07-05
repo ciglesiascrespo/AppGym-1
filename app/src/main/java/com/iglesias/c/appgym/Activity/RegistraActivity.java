@@ -173,14 +173,6 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
 
     }
 
-    @Override
-    public void sendId() {
-
-        String arrayId = id + "}";
-
-        bt.sendMessage(arrayId);
-    }
-
 
     private final Handler mHandler = new Handler() {
         @Override
