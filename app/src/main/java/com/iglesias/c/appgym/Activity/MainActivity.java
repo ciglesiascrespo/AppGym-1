@@ -40,7 +40,7 @@ import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_URL_IMAGEN;
 public class MainActivity extends AppCompatActivity implements MainView {
     private final String TAG = getClass().getName();
 
-    private String documento, id,mac;
+    private String documento, id, mac;
     private TextView txtNombre, txtDias, txtDocumento;
     ImageView imgUsr;
 
@@ -73,8 +73,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
         Picasso.with(this).load(urlImage).into(imgUsr);
 
         presenter = new MainPresenterImpl(this);
-        //  btnClick();
-
+        btnClick();
+/*
         if (!flagSinHuella) {
             if (id.isEmpty()) {
                 showErrorLoginDialog("El usuario no cuenta con una huella registrada.");
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         } else {
             btnClick();
         }
-
+*/
         //nombre =
     }
 
@@ -246,9 +246,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
                     Log.d(TAG, "MESSAGE_DEVICE_NAME " + msg);
                     break;
                 case Bluetooth.MESSAGE_TOAST:
-                            if(msg.arg1==-1){
-                               // bt.connectDevice(mac);
-                            }
+                    if (msg.arg1 == -1) {
+                        // bt.connectDevice(mac);
+                    }
                     Log.d(TAG, "MESSAGE_TOAST " + msg);
                     break;
             }
