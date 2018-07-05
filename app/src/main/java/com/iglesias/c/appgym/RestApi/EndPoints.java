@@ -13,4 +13,7 @@ import rx.Observable;
 public interface EndPoints {
     @GET(ConstantesRestApi.KEY_POST_LOGIN)
     Observable<ResultLogin> login( @Query("r") String r, @Query("identificacion") String identificacion, @Query("id_sucursal") int idSucursal, @Query("id_licencia")int idLicencia);
+
+    @GET(ConstantesRestApi.t)
+    Observable<ResultLogin> tiquet( @Query("r") String r, @Query("identificacion") String identificacion, @Query("id_sucursal") int idSucursal, @Query("id_licencia")int idLicencia);
 }

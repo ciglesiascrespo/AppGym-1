@@ -16,6 +16,7 @@ public class ConstantesRestApi {
     public static final String r ="communication/getUser";
     public static final int idSucursal = 11;
     public static final int idLicencia = 7;
+    public static final String t = "comunication/inTiquet";
 
 }
 
