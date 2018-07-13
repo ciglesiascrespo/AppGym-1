@@ -34,11 +34,15 @@ import com.iglesias.c.appgym.RestApi.ConstantesRestApi;
 import com.iglesias.c.appgym.RestApi.Model.InfoLogin;
 import com.iglesias.c.appgym.RestApi.Model.ResultLogin;
 import com.iglesias.c.appgym.Service.Bluetooth;
+import com.iglesias.c.appgym.Ui.BaseActivity;
+import com.iglesias.c.appgym.Ui.CollapseWindow;
+import com.iglesias.c.appgym.Ui.MySharedPreferences;
+import com.iglesias.c.appgym.Ui.Settings;
 import com.iglesias.c.appgym.View.LoginView;
 
 import java.io.File;
 
-public class LoginActivity extends AppCompatActivity implements LoginView {
+public class LoginActivity extends BaseActivity implements LoginView {
 
 
     private final String TAG = getClass().getName();
@@ -53,6 +57,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     private static final int MY_PERMISSIONS_REQUEST = 2;
     public static final String PASS_ADMIN = "admin123";
     private int estadoConexionBt = Bluetooth.STATE_NONE;
+    private Settings uiSettings;
+    private boolean currentFocus;
     //public static final String PASS_ADMIN = "";
 
     Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btnx, btnIr;
@@ -70,8 +76,11 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        uiSettings = new Settings();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setUpKioskMode();
+        uiSettings.goFullScreen(this);
         setupViews();
         setupLoading();
 
@@ -79,9 +88,9 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
             String rutaDirectorioAlmExternoPublico = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + "subdirectorio-gym-publico-pictures";
             File directorioAlmExternoPublico = new File(rutaDirectorioAlmExternoPublico);
 
-            Toast.makeText(this, "esta disponible la memoria", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "esta disponible la memoria", Toast.LENGTH_SHORT).show();
             if (directorioAlmExternoPublico.exists() && directorioAlmExternoPublico.isDirectory()) {
-                Toast.makeText(this, "La carpeta ya fue creada", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "La carpeta ya fue creada", Toast.LENGTH_SHORT).show();
             }
             else {//Se ejecuta si no existe el directorio
                 String nombreDirectorioPublico = "subdirectorio-gym-publico-pictures";
@@ -96,8 +105,46 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
         deviceInfo = presenter.getDeviceInfo();
 
-         setupBt();
+        setupBt();
     }
+
+
+    /**
+     * Block back button action
+     */
+    @Override
+    public void onBackPressed() {
+        if (!kioskMode.isLocked(this)) {
+            super.onBackPressed();
+        }
+    }
+
+    /**
+     * Return to current activity when user try to go anywhere else
+     */
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        currentFocus = hasFocus;
+        if (!hasFocus) {
+            CollapseWindow window = new CollapseWindow();
+            window.collapseNow(currentFocus, this);
+            uiSettings.goFullScreen(this);
+        }
+    }
+
+    //KioskMode Init
+    private void setUpKioskMode() {
+        if (!MySharedPreferences.isAppLaunched(this)) {
+            kioskMode.lockUnlock(this, true);
+            MySharedPreferences.saveAppLaunched(this, true);
+        } else {
+            //check if app was locked
+            if (MySharedPreferences.isAppInKioskMode(this)) {
+                kioskMode.lockUnlock(this, true);
+            }
+        }
+    }
+
     //disponibilidad memoria externa
     private boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
@@ -118,8 +165,9 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         bt = Bluetooth.getInstance(this, mHandler);
         btAdapter = bt.getBtAdapter();
         if (!btAdapter.isEnabled()) {
-            Intent turnOnIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(turnOnIntent, REQUEST_ENABLE_BT);
+            finish();
+            //Intent turnOnIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            //startActivityForResult(turnOnIntent, REQUEST_ENABLE_BT);
         } else {
             if (!deviceInfo.getMac().contains(":")) {
                 showErrorLoginDialog("No se encuentra ningun dispositivo configurado.");
@@ -291,9 +339,9 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
-
+        uiSettings.goFullScreen(this);
         bt = Bluetooth.getInstance(this, mHandler);
 
     }
@@ -406,7 +454,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case Bluetooth.MESSAGE_STATE_CHANGE:
-                    if (msg.arg1 == Bluetooth.STATE_CONNECTED) {
+                    if (msg.arg1 == Bluetooth.STATE_CONNECTED ) {
                         txtEstado.setText("Estado: Conectado.");
                         bt.sendMessage("p");
                         flagEnvioPeticionSucursal = true;
