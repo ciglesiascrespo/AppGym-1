@@ -22,8 +22,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +41,9 @@ import com.iglesias.c.appgym.Ui.CollapseWindow;
 import com.iglesias.c.appgym.Ui.MySharedPreferences;
 import com.iglesias.c.appgym.Ui.Settings;
 import com.iglesias.c.appgym.View.LoginView;
+import com.shehabic.droppy.DroppyClickCallbackInterface;
+import com.shehabic.droppy.DroppyMenuItem;
+import com.shehabic.droppy.DroppyMenuPopup;
 
 import java.io.File;
 
@@ -63,6 +68,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btnx, btnIr;
     EditText edtNro;
+    ImageButton  settingsButton;
     private ProgressDialog loading;
     LoginPresenterImpl presenter;
     private TextView txtEstado, txtSucursal;
@@ -221,6 +227,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
         txtSucursal.setText("Sucursal: " + idSucursal);
 
         edtNro = findViewById(R.id.cedula);
+
+        settingsButton = findViewById(R.id.settingsButton);
     }
 
     public void pressNumber(View v) {
@@ -228,6 +236,41 @@ public class LoginActivity extends BaseActivity implements LoginView {
         if (nro.length() <= 10) {
             edtNro.setText(nro + ((Button) v).getText().toString().trim());
         }
+    }
+
+    public void showOptionsMenu(View v){
+        DroppyMenuPopup.Builder droppyBuilder = new DroppyMenuPopup.Builder(this, v);
+
+        droppyBuilder.addMenuItem(new DroppyMenuItem("Registrar Usuario"))
+                .addMenuItem(new DroppyMenuItem("Actualizar huella"))
+                .addMenuItem(new DroppyMenuItem("Configuración"))
+                .addMenuItem(new DroppyMenuItem("Sincronizar base de datos"))
+                .addSeparator();
+
+        droppyBuilder.setOnClick(new DroppyClickCallbackInterface() {
+            @Override
+            public void call(View v, int id) {
+                switch (id) {
+                    case 0:
+                        Intent i = new Intent(getContext(), RegistraActivity.class);
+                        startActivity(i);
+                        break;
+                    case 1:
+                        Intent iActualizar = new Intent(getContext(), CambioHuellaActivity.class);
+                        startActivity(iActualizar);
+                        break;
+                    case 3:
+                        break;
+                    case 2:
+                        showDialogAdmin();
+                        break;
+
+                }
+            }
+        });
+
+        DroppyMenuPopup droppyMenu = droppyBuilder.build();
+        droppyMenu.show();
     }
 
     public void deleteChar(View v) {

@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.iglesias.c.appgym.Presenter.MainPresenterImpl;
 import com.iglesias.c.appgym.R;
 import com.iglesias.c.appgym.Service.Bluetooth;
+import com.iglesias.c.appgym.Ui.BaseActivity;
 import com.iglesias.c.appgym.View.MainView;
 import com.squareup.picasso.Picasso;
 
@@ -37,7 +38,7 @@ import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_ID_HUELLA;
 import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_NOMBRE;
 import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_URL_IMAGEN;
 
-public class MainActivity extends AppCompatActivity implements MainView {
+public class MainActivity extends BaseActivity implements MainView {
     private final String TAG = getClass().getName();
 
     private String documento, id, mac;
@@ -131,7 +132,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     private void btnClick() {
-
         showErrorLoginDialog("Bienvenido " + nombre);
         Single.create(new Single.OnSubscribe<Boolean>() {
             @Override

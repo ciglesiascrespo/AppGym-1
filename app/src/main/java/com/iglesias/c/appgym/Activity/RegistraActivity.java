@@ -18,11 +18,12 @@ import android.widget.EditText;
 import com.iglesias.c.appgym.Presenter.RegistrarPresenterImpl;
 import com.iglesias.c.appgym.R;
 import com.iglesias.c.appgym.Service.Bluetooth;
+import com.iglesias.c.appgym.Ui.BaseActivity;
 import com.iglesias.c.appgym.View.RegistrarView;
 
 import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_DEVICE_MAC;
 
-public class RegistraActivity extends AppCompatActivity implements RegistrarView {
+public class RegistraActivity extends BaseActivity implements RegistrarView {
 
     private final String TAG = getClass().getName();
     private ProgressDialog loading;
@@ -34,12 +35,10 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
     String arryId[] = {"", "", ""};
     int indexId = 0;
 
-
     String id = "", mac;
     Boolean flagHuella = false;
 
     Bluetooth bt;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

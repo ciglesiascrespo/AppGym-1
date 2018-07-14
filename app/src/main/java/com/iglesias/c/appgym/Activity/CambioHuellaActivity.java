@@ -16,9 +16,10 @@ import android.widget.EditText;
 import com.iglesias.c.appgym.Presenter.ActualizaPresenterImpl;
 import com.iglesias.c.appgym.R;
 import com.iglesias.c.appgym.Service.Bluetooth;
+import com.iglesias.c.appgym.Ui.BaseActivity;
 import com.iglesias.c.appgym.View.RegistrarView;
 
-public class CambioHuellaActivity extends AppCompatActivity implements RegistrarView{
+public class CambioHuellaActivity extends BaseActivity implements RegistrarView{
     private final String TAG = getClass().getName();
     private ProgressDialog loading;
     AlertDialog dialog;

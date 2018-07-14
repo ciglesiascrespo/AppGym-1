@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.iglesias.c.appgym"
-        minSdkVersion 16
+        minSdkVersion 20
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -36,4 +36,5 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
     compile 'com.android.support:gridlayout-v7:26.1.0'
     compile 'com.github.felHR85:UsbSerial:4.5.2'
+    compile 'com.shehabic.droppy:Droppy:0.6.0@aar'
 }

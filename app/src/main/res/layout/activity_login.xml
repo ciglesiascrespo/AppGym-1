@@ -48,6 +48,16 @@
                 android:layout_height="match_parent"
                 android:layout_weight="20"/>
 
+            <ImageButton
+                android:id="@+id/settingsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/background_btn"
+                android:onClick="showOptionsMenu"
+                android:tint="@color/colorPrimary"
+                app:srcCompat="@android:drawable/ic_dialog_dialer" />
+
         </LinearLayout>
 
     <LinearLayout

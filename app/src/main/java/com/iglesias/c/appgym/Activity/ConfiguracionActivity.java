@@ -14,9 +14,10 @@ import android.widget.Toast;
 import com.iglesias.c.appgym.Pojo.DeviceInfo;
 import com.iglesias.c.appgym.Presenter.ConfigPresenterImpl;
 import com.iglesias.c.appgym.R;
+import com.iglesias.c.appgym.Ui.BaseActivity;
 import com.iglesias.c.appgym.View.ConfigView;
 
-public class ConfiguracionActivity extends AppCompatActivity implements ConfigView {
+public class ConfiguracionActivity extends BaseActivity implements ConfigView {
 
     public static final String EXTRA_NOMBRE_DISPOSITIVO = "nombre";
     public static final String EXTRA_MAC_DISPOSITIVO = "mac";
