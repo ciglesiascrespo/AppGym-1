@@ -23,6 +23,7 @@ public class ConfiguracionActivity extends BaseActivity implements ConfigView {
     public static final String EXTRA_MAC_DISPOSITIVO = "mac";
     public static final int REQUEST_SELECCION_DISPOSITIVO = 1;
     private CardView cardViewDispositivo;
+    private CardView cardViewSettings;
     private TextView txtNombreDispositivo, txtMacDispositivo;
     private ConfigPresenterImpl presenter;
 
@@ -46,6 +47,14 @@ public class ConfiguracionActivity extends BaseActivity implements ConfigView {
         txtNombreDispositivo = findViewById(R.id.id_txt_nombre_dispositivo_conexion);
 
         cardViewDispositivo = findViewById(R.id.id_cardview_dispoditivo);
+        cardViewSettings = findViewById(R.id.id_cardview_settings);
+
+        cardViewSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+            }
+        });
 
         cardViewDispositivo.setOnClickListener(new View.OnClickListener() {
             @Override
