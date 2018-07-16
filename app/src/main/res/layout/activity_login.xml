@@ -23,10 +23,11 @@
             android:layout_height="0dp"
             android:layout_weight="30"
             android:orientation="horizontal">
+
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="20"/>
+                android:layout_weight="10" />
             <ImageView
                 android:id="@+id/imagen"
                 android:layout_width="0dp"
@@ -43,10 +44,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:visibility="gone" />
+
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="20"/>
+                android:layout_weight="10" />
 
             <ImageButton
                 android:id="@+id/settingsButton"
