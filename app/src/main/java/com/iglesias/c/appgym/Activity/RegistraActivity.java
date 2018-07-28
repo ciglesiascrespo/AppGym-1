@@ -130,13 +130,13 @@ public class RegistraActivity extends BaseActivity implements RegistrarView {
     @Override
     public void setId(String id) {
         this.id = id;
-        /*
+
         if (indexId < arryId.length) {
             arryId[indexId] = id;
             indexId++;
         }
         compareId();
-        */
+
 
     }
 

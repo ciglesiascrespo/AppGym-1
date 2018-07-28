@@ -3,6 +3,7 @@ package com.iglesias.c.appgym.Activity;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -74,8 +75,8 @@ public class MainActivity extends BaseActivity implements MainView {
         Picasso.with(this).load(urlImage).into(imgUsr);
 
         presenter = new MainPresenterImpl(this);
-        btnClick();
-/*
+        //btnClick();
+
         if (!flagSinHuella) {
             if (id.isEmpty()) {
                 showErrorLoginDialog("El usuario no cuenta con una huella registrada.");
@@ -85,7 +86,7 @@ public class MainActivity extends BaseActivity implements MainView {
         } else {
             btnClick();
         }
-*/
+
         //nombre =
     }
 
@@ -182,7 +183,7 @@ public class MainActivity extends BaseActivity implements MainView {
         Toast toast = Toast.makeText(this, msj, Toast.LENGTH_SHORT);
         ((TextView) ((ViewGroup) toast.getView()).getChildAt(0)).setTextSize(20);
         toast.show();
-        /*
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.myDialog);
 
         builder.setTitle(getResources().getString(R.string.str_menu_registrar));
@@ -200,7 +201,7 @@ public class MainActivity extends BaseActivity implements MainView {
             dialog.dismiss();
         }
         dialog = builder.create();
-        dialog.show();*/
+        dialog.show();
     }
 
     @Override
