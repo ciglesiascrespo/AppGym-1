@@ -53,7 +53,7 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void onErrorLogin() {
         view.hideLoading();
-        view.showErrorLoginDialog("Error validando usuario, verifique su conexión a internet");
+        view.showErrorLoginDialog("Usuario sin planes asociados");
     }
 
     @Override
@@ -61,6 +61,5 @@ public class LoginPresenterImpl implements LoginPresenter {
         view.hideLoading();
         view.showErrorLoginDialog(msj.isEmpty() ? "Usuario no válido." : msj);
     }
-
 
 }

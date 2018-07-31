@@ -66,7 +66,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     private boolean currentFocus;
     //public static final String PASS_ADMIN = "";
 
-    Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btnx, btnIr;
+    Button btnx, btnIr;
     EditText edtNro;
     ImageButton  settingsButton;
     private ProgressDialog loading;
@@ -76,7 +76,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     Bluetooth bt;
     BluetoothAdapter btAdapter;
     private boolean flagEnvioPeticionSucursal = false;
-    private String idSucursal = "";
+    private String idSucursal = "1";
 
     private DeviceInfo deviceInfo = new DeviceInfo("", "");
 
@@ -206,16 +206,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
     }
 
     void setupViews() {
-        btn0 = findViewById(R.id.numero_0);
-        btn1 = findViewById(R.id.numero_1);
-        btn2 = findViewById(R.id.numero_2);
-        btn3 = findViewById(R.id.numero_3);
-        btn4 = findViewById(R.id.numero_4);
-        btn5 = findViewById(R.id.numero_5);
-        btn6 = findViewById(R.id.numero_6);
-        btn7 = findViewById(R.id.numero_7);
-        btn8 = findViewById(R.id.numero_8);
-        btn9 = findViewById(R.id.numero_9);
 
         btnx = findViewById(R.id.borrar);
         btnIr = findViewById(R.id.sign_in);
@@ -504,7 +494,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                         Toast.makeText(getContext(), "Dispositivo conectado con éxito.", Toast.LENGTH_SHORT).show();
                     } else {
 
-                        idSucursal = "";
+                        //idSucursal = "";
                         txtEstado.setText("Estado: Conectando...");
                     }
 

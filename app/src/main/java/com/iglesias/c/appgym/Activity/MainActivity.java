@@ -87,7 +87,7 @@ public class MainActivity extends BaseActivity implements MainView {
             btnClick();
         }
 
-        //nombre =
+        //nombre
     }
 
     private void setupBt() {
