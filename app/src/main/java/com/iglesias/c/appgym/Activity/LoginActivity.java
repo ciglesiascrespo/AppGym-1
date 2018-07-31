@@ -76,7 +76,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     Bluetooth bt;
     BluetoothAdapter btAdapter;
     private boolean flagEnvioPeticionSucursal = false;
-    private String idSucursal = "1";
+    private String idSucursal = "";
 
     private DeviceInfo deviceInfo = new DeviceInfo("", "");
 
@@ -494,7 +494,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                         Toast.makeText(getContext(), "Dispositivo conectado con éxito.", Toast.LENGTH_SHORT).show();
                     } else {
 
-                        //idSucursal = "";
+                        idSucursal = "";
                         txtEstado.setText("Estado: Conectando...");
                     }
 
