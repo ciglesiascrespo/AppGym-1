@@ -1,6 +1,8 @@
 package com.iglesias.c.appgym.Activity;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
@@ -15,14 +17,12 @@ import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -46,6 +46,10 @@ import com.shehabic.droppy.DroppyMenuItem;
 import com.shehabic.droppy.DroppyMenuPopup;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class LoginActivity extends BaseActivity implements LoginView {
 
@@ -82,6 +86,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         uiSettings = new Settings();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -112,6 +117,36 @@ public class LoginActivity extends BaseActivity implements LoginView {
         deviceInfo = presenter.getDeviceInfo();
 
         setupBt();
+
+        final Handler handler = new Handler();
+
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                try {
+                    Calendar shutdownLimit = Calendar.getInstance();
+                    shutdownLimit.set(Calendar.HOUR, 22);
+                    shutdownLimit.set(Calendar.MINUTE, 0);
+                    shutdownLimit.set(Calendar.SECOND, 0);
+
+                    Date timeStamp = Calendar.getInstance().getTime();
+                    Date shutdownTimer = shutdownLimit.getTime();
+
+                    if(shutdownTimer.compareTo(timeStamp) < 0){
+                        startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+                    }
+
+                    if(timeStamp.getMinutes() == 59){
+                        Intent mStartActivity = new Intent(getContext(), LoginActivity.class);
+                        int mPendingIntentId = 123456;
+                        PendingIntent mPendingIntent = PendingIntent.getActivity(getContext(), mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                        AlarmManager mgr = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
+                        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+                        System.exit(0);
+                    }
+                } catch (Exception ignored){}
+                handler.postDelayed(this, 58000);
+            }
+        }, 58000);
     }
 
 
