@@ -2,6 +2,7 @@ package com.iglesias.c.appgym.Activity;
 
 import android.Manifest;
 import android.app.AlarmManager;
+import android.app.Application;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -21,6 +22,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -84,9 +86,19 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     private DeviceInfo deviceInfo = new DeviceInfo("", "");
 
+    private boolean needsReset = false;
+    private Date lastTouch;
+    private Date bootTime;
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent evt) {
+        lastTouch = Calendar.getInstance().getTime();
+        return super.dispatchTouchEvent(evt);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        bootTime = Calendar.getInstance().getTime();
         uiSettings = new Settings();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
@@ -136,6 +148,13 @@ public class LoginActivity extends BaseActivity implements LoginView {
                     }
 
                     if(timeStamp.getMinutes() == 59){
+                        needsReset = true;
+                    }
+                    if(timeStamp.getTime() - bootTime.getTime() > 600000){
+                        needsReset = true;
+                    }
+
+                    if(timeStamp.getTime() - lastTouch.getTime() > 60000 && needsReset){
                         Intent mStartActivity = new Intent(getContext(), LoginActivity.class);
                         int mPendingIntentId = 123456;
                         PendingIntent mPendingIntent = PendingIntent.getActivity(getContext(), mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -148,7 +167,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
             }
         }, 58000);
     }
-
 
     /**
      * Block back button action
