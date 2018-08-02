@@ -18,6 +18,8 @@ import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -265,6 +267,48 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
         txtEstado = findViewById(R.id.id_txt_estado_login);
         txtSucursal = findViewById(R.id.id_txt_sucursal_login);
+
+        txtSucursal.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                switch (charSequence.toString()){
+                    case "Sucursal: 1":
+                        txtSucursal.setText("Sucursal: Entorno de pruebas");
+                        break;
+                    case "Sucursal: 11":
+                        txtSucursal.setText("Sucursal: Ciudadela");
+                        break;
+                    case "Sucursal: 12":
+                        txtSucursal.setText("Sucursal: Cañaveral");
+                        break;
+                    case "Sucursal: 13":
+                        txtSucursal.setText("Sucursal: Piedecuesta");
+                        break;
+                    case "Sucursal: 14":
+                        txtSucursal.setText("Sucursal: Provenza");
+                        break;
+                    case "Sucursal: 15":
+                        txtSucursal.setText("Sucursal: San Francisco");
+                        break;
+                    case "Sucursal: 16":
+                        txtSucursal.setText("Sucursal: Las cuestas");
+                        break;
+                    case "Sucursal: ":
+                        txtSucursal.setText("Sucursal: Sin sucursal");
+                        break;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         txtEstado.setText("Estado: Desconectado");
         txtSucursal.setText("Sucursal: " + idSucursal);
