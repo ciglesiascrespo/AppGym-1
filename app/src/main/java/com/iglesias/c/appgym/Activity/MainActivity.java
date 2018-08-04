@@ -75,8 +75,11 @@ public class MainActivity extends BaseActivity implements MainView {
         Picasso.with(this).load(urlImage).into(imgUsr);
 
         presenter = new MainPresenterImpl(this);
-        //btnClick();
+        //HuellaTrigger - Comentar
+        btnClick();
 
+        //HuellaTrigger - Descomentar
+        /*
         if (!flagSinHuella) {
             if (id.isEmpty()) {
                 showErrorLoginDialog("El usuario no cuenta con una huella registrada.");
@@ -86,7 +89,7 @@ public class MainActivity extends BaseActivity implements MainView {
         } else {
             btnClick();
         }
-
+        */
         //nombre
     }
 
@@ -184,6 +187,8 @@ public class MainActivity extends BaseActivity implements MainView {
         ((TextView) ((ViewGroup) toast.getView()).getChildAt(0)).setTextSize(20);
         toast.show();
 
+        //HuellaTrigger - Descomentar
+        /*
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.myDialog);
 
         builder.setTitle(getResources().getString(R.string.str_menu_registrar));
@@ -201,7 +206,7 @@ public class MainActivity extends BaseActivity implements MainView {
             dialog.dismiss();
         }
         dialog = builder.create();
-        dialog.show();
+        dialog.show();*/
     }
 
     @Override

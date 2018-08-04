@@ -131,11 +131,14 @@ public class RegistraActivity extends BaseActivity implements RegistrarView {
     public void setId(String id) {
         this.id = id;
 
+        //HuellaTrigger - Descomentar
+        /*
         if (indexId < arryId.length) {
             arryId[indexId] = id;
             indexId++;
         }
         compareId();
+        */
 
 
     }

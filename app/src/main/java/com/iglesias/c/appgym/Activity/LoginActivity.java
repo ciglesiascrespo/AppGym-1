@@ -370,7 +370,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     public void onClickValidateUser(View v) {
         //  bt.sendMessage("3,72,123,255,255,186,255,224,239,128,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,62,106,13,204,55,229,28,139,25,162,75,71,95,201,55,69,103,221,41,75,35,225,77,160,49,161,87,68,84,69,82,135,12,33,106,94,83,10,97,7,14,97,103,201,20,76,28,139,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,49,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,43,96,0,94,0,1,0,3,0,0,0,0,0,0,0,0,0,3,20,49,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,44,44,44,44,44,44,44,44,44,44,44,44,44,52,52,44,52,52,44,52,52,44,52,52,44,52,52,44,52,52,44,52,233,0,0,50,0,232,0,0,0,2,41,8,0,0,15,64,39,66,0,255,255,0,0,3,1,255,255,0,0,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,0,0,255,255,4,4,0,0,111,203,175,61,117,19,43,255,91,117,236,248,186,223,91,142,223,225,95,182,121,203,239,189,247,92,95,14,92,234,127,183,31,60,210,191,53,247,166,143,235,142,119,140,44,239,255,99,205,217,254,91,199,197,11,248,205,185,86,94,108,165,83,237,95,250,59,123,105,93,230,151,186,175,190,239,222,87,94,255,179,178,91,219,}");
 
-        if (idSucursal.isEmpty()) { // TODO se niega para pruebas
+        if (!idSucursal.isEmpty()) { // TODO se niega para pruebas
             showErrorLoginDialog("No se encuentra vinculado a una sucursal");
         } else {
             String nro = edtNro.getText().toString();
@@ -402,8 +402,14 @@ public class LoginActivity extends BaseActivity implements LoginView {
         i.putExtra(EXTRA_DEVICE_MAC,deviceInfo.getMac());
         i.putExtra(EXTRA_FLAG_SIN_HUELLA, resultLogin.getErrorCode() == ConstantesRestApi.CODE_ERROR_SIN_HUELLA);
 
-        if (infoLogin.getDias() < 7) {
+        if (infoLogin.getDias() < 7 && infoLogin.getDias() != -1) {
             Toast toast = Toast.makeText(this, "Recuerda que tu plan esta proximo a vencer,aprovecha las ofertas especiales y consultalos con tu asesor", Toast.LENGTH_LONG);
+            ((TextView) ((ViewGroup) toast.getView()).getChildAt(0)).setTextSize(20);
+            toast.show();
+        }
+
+        if (infoLogin.getTickets() != -1) {
+            Toast toast = Toast.makeText(this, "Recuerda que a tu plan le quedan " + (infoLogin.getTickets() - 1) +" tickets,aprovecha las ofertas especiales y consultalos con tu asesor", Toast.LENGTH_LONG);
             ((TextView) ((ViewGroup) toast.getView()).getChildAt(0)).setTextSize(20);
             toast.show();
         }

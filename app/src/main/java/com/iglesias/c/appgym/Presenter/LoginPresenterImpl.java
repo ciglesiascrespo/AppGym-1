@@ -42,8 +42,7 @@ public class LoginPresenterImpl implements LoginPresenter {
         Log.e(getClass().getName(),"url: " + resultLogin.getInfo().getUrlImage());
         Log.e(getClass().getName(),resultLogin.getInfo().toString());
 
-        if (resultLogin.getInfo().getDias() > 0) {
-
+        if (resultLogin.getInfo().getDias() > 0 || resultLogin.getInfo().getTickets() > 0) {
             view.goToMainActivity(resultLogin);
         } else {
             view.showErrorLoginDialog("Su membresía ha caducado, por favor contacte a su administrador.");
