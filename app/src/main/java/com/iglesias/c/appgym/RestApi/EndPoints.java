@@ -15,5 +15,5 @@ public interface EndPoints {
     Observable<ResultLogin> login( @Query("r") String r, @Query("identificacion") String identificacion, @Query("id_sucursal") int idSucursal, @Query("id_licencia")int idLicencia);
 
     @GET(ConstantesRestApi.t)
-    Observable<ResultLogin> tiquet( @Query("r") String r, @Query("identificacion") String identificacion, @Query("id_sucursal") int idSucursal, @Query("id_licencia")int idLicencia);
+    Observable<ResultLogin> tiquet( @Query("r") String t, @Query("identificacion") String identificacion, @Query("id_sucursal") int idSucursal, @Query("id_licencia")int idLicencia);
 }
