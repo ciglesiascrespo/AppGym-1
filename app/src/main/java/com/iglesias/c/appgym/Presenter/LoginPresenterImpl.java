@@ -47,14 +47,14 @@ public class LoginPresenterImpl implements LoginPresenter {
             if(resultLogin.getInfo().getTickets() > 0)
                 iterator.tiquet(resultLogin.getInfo().getNroDocumento());
         } else {
-            view.showErrorLoginDialog("Su membresía ha caducado, por favor contacte a su administrador.");
+            view.showErrorLoginDialog("Su membresía ha vencido.");
         }
     }
 
     @Override
     public void onErrorLogin() {
         view.hideLoading();
-        view.showErrorLoginDialog("Usuario sin planes asociados");
+        view.showErrorLoginDialog("Usuario sin planes asociados.");
     }
 
     @Override

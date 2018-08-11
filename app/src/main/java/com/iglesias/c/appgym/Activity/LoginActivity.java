@@ -557,7 +557,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
                 } else {
 
-                    showErrorLoginDialog("Es necesario habilitar los permisos para el funcionamiento del aplicativo.");
+                    //showErrorLoginDialog("Es necesario habilitar los permisos para el funcionamiento del aplicativo.");
                 }
                 break;
 
