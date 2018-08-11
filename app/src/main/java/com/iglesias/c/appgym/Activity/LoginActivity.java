@@ -54,6 +54,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class LoginActivity extends BaseActivity implements LoginView {
 
@@ -138,7 +139,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
             public void run(){
                 try {
                     Calendar shutdownLimit = Calendar.getInstance();
-                    shutdownLimit.set(Calendar.HOUR, 22);
+                    shutdownLimit.set(Calendar.HOUR_OF_DAY, 22);
                     shutdownLimit.set(Calendar.MINUTE, 0);
                     shutdownLimit.set(Calendar.SECOND, 0);
 
