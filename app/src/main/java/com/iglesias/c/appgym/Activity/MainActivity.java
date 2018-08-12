@@ -76,11 +76,11 @@ public class MainActivity extends BaseActivity implements MainView {
 
         presenter = new MainPresenterImpl(this);
         //HuellaTrigger - Comentar
-        btnClick();
+        //btnClick();
 
         //HuellaTrigger - Descomentar
-        /*
-        if (!flagSinHuella) {
+
+        if (flagSinHuella) {
             if (id.isEmpty()) {
                 showErrorLoginDialog("El usuario no cuenta con una huella registrada.");
             } else {
@@ -89,7 +89,7 @@ public class MainActivity extends BaseActivity implements MainView {
         } else {
             btnClick();
         }
-        */
+
         //nombre
     }
 
@@ -119,7 +119,7 @@ public class MainActivity extends BaseActivity implements MainView {
 
     private boolean waitTime() {
         try {
-            Thread.sleep(4000);
+            Thread.sleep(5000);
         } catch (Exception e) {
             return false;
         }
@@ -128,7 +128,7 @@ public class MainActivity extends BaseActivity implements MainView {
 
     private boolean waitTimeArduino() {
         try {
-            Thread.sleep(flagSinHuella ? 200 : 300);
+            Thread.sleep(flagSinHuella ? 300 : 400);
         } catch (Exception e) {
             return false;
         }
@@ -188,7 +188,7 @@ public class MainActivity extends BaseActivity implements MainView {
         toast.show();
 
         //HuellaTrigger - Descomentar
-        /*
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.myDialog);
 
         builder.setTitle(getResources().getString(R.string.str_menu_registrar));
@@ -206,7 +206,7 @@ public class MainActivity extends BaseActivity implements MainView {
             dialog.dismiss();
         }
         dialog = builder.create();
-        dialog.show();*/
+        dialog.show();
     }
 
     @Override
