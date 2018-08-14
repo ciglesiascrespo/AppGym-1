@@ -3,6 +3,7 @@ package com.iglesias.c.appgym.Activity;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.iglesias.c.appgym.Presenter.MainPresenterImpl;
 import com.iglesias.c.appgym.R;
 import com.iglesias.c.appgym.Service.Bluetooth;
+import com.iglesias.c.appgym.Ui.BaseActivity;
 import com.iglesias.c.appgym.View.MainView;
 import com.squareup.picasso.Picasso;
 
@@ -37,7 +39,7 @@ import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_ID_HUELLA;
 import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_NOMBRE;
 import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_URL_IMAGEN;
 
-public class MainActivity extends AppCompatActivity implements MainView {
+public class MainActivity extends BaseActivity implements MainView {
     private final String TAG = getClass().getName();
 
     private String documento, id, mac;
@@ -73,9 +75,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
         Picasso.with(this).load(urlImage).into(imgUsr);
 
         presenter = new MainPresenterImpl(this);
-        btnClick();
-/*
-        if (!flagSinHuella) {
+        //HuellaTrigger - Comentar
+        //btnClick();
+
+        //HuellaTrigger - Descomentar
+
+        if (flagSinHuella) {
             if (id.isEmpty()) {
                 showErrorLoginDialog("El usuario no cuenta con una huella registrada.");
             } else {
@@ -84,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
         } else {
             btnClick();
         }
-*/
-        //nombre =
+
+        //nombre
     }
 
     private void setupBt() {
@@ -114,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private boolean waitTime() {
         try {
-            Thread.sleep(4000);
+            Thread.sleep(5000);
         } catch (Exception e) {
             return false;
         }
@@ -123,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private boolean waitTimeArduino() {
         try {
-            Thread.sleep(flagSinHuella ? 200 : 300);
+            Thread.sleep(flagSinHuella ? 300 : 400);
         } catch (Exception e) {
             return false;
         }
@@ -131,7 +136,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     private void btnClick() {
-
         showErrorLoginDialog("Bienvenido " + nombre);
         Single.create(new Single.OnSubscribe<Boolean>() {
             @Override
@@ -182,7 +186,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
         Toast toast = Toast.makeText(this, msj, Toast.LENGTH_SHORT);
         ((TextView) ((ViewGroup) toast.getView()).getChildAt(0)).setTextSize(20);
         toast.show();
-        /*
+
+        //HuellaTrigger - Descomentar
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.myDialog);
 
         builder.setTitle(getResources().getString(R.string.str_menu_registrar));
@@ -200,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             dialog.dismiss();
         }
         dialog = builder.create();
-        dialog.show();*/
+        dialog.show();
     }
 
     @Override

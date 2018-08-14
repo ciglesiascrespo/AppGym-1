@@ -25,13 +25,14 @@ import com.iglesias.c.appgym.Adapter.RecyclerDevicesAdapter;
 import com.iglesias.c.appgym.Pojo.DeviceInfo;
 import com.iglesias.c.appgym.R;
 import com.iglesias.c.appgym.Service.Bluetooth;
+import com.iglesias.c.appgym.Ui.BaseActivity;
 import com.iglesias.c.appgym.View.SelectBtView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class SelectBtDActivity extends AppCompatActivity implements SelectBtView{
+public class SelectBtDActivity extends BaseActivity implements SelectBtView{
     Bluetooth bt;
     BluetoothAdapter btAdapter;
     RecyclerView recyclerViewVinculados, recyclerViewDisponibles;

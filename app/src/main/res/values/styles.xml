@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="droppyMenuItemStyle">@style/customMenuItem</item>
     </style>
 
     <style name="Buttton_Login">
@@ -29,5 +30,10 @@
         <item name="android:textColorSecondary">@color/secondaryTextColor</item>
         <item name="android:textColorSecondaryInverse">#acd2d2d2</item>
         <item name="android:textColorTertiary">#3a3a3a</item>
+    </style>
+
+    <style name="customMenuItem" parent="Droppy.DroppyMenuItem">
+        <item name="android:layout_width">270dp</item>
+        <item name="android:layout_height">80dp</item>
     </style>
 </resources>

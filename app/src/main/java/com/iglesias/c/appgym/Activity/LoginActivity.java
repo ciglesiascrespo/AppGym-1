@@ -1,6 +1,9 @@
 package com.iglesias.c.appgym.Activity;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.Application;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
@@ -15,15 +18,18 @@ import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,11 +40,23 @@ import com.iglesias.c.appgym.RestApi.ConstantesRestApi;
 import com.iglesias.c.appgym.RestApi.Model.InfoLogin;
 import com.iglesias.c.appgym.RestApi.Model.ResultLogin;
 import com.iglesias.c.appgym.Service.Bluetooth;
+import com.iglesias.c.appgym.Ui.BaseActivity;
+import com.iglesias.c.appgym.Ui.CollapseWindow;
+import com.iglesias.c.appgym.Ui.MySharedPreferences;
+import com.iglesias.c.appgym.Ui.Settings;
 import com.iglesias.c.appgym.View.LoginView;
+import com.shehabic.droppy.DroppyClickCallbackInterface;
+import com.shehabic.droppy.DroppyMenuItem;
+import com.shehabic.droppy.DroppyMenuPopup;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
-public class LoginActivity extends AppCompatActivity implements LoginView {
+public class LoginActivity extends BaseActivity implements LoginView {
 
 
     private final String TAG = getClass().getName();
@@ -53,10 +71,13 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     private static final int MY_PERMISSIONS_REQUEST = 2;
     public static final String PASS_ADMIN = "admin123";
     private int estadoConexionBt = Bluetooth.STATE_NONE;
+    private Settings uiSettings;
+    private boolean currentFocus;
     //public static final String PASS_ADMIN = "";
 
-    Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btnx, btnIr;
+    Button btnx, btnIr;
     EditText edtNro;
+    ImageButton  settingsButton;
     private ProgressDialog loading;
     LoginPresenterImpl presenter;
     private TextView txtEstado, txtSucursal;
@@ -68,10 +89,24 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     private DeviceInfo deviceInfo = new DeviceInfo("", "");
 
+    private boolean needsReset = false;
+    private Date lastTouch;
+    private Date bootTime;
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent evt) {
+        lastTouch = Calendar.getInstance().getTime();
+        return super.dispatchTouchEvent(evt);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        bootTime = Calendar.getInstance().getTime();
+        uiSettings = new Settings();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setUpKioskMode();
+        uiSettings.goFullScreen(this);
         setupViews();
         setupLoading();
 
@@ -79,9 +114,9 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
             String rutaDirectorioAlmExternoPublico = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + "subdirectorio-gym-publico-pictures";
             File directorioAlmExternoPublico = new File(rutaDirectorioAlmExternoPublico);
 
-            Toast.makeText(this, "esta disponible la memoria", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "esta disponible la memoria", Toast.LENGTH_SHORT).show();
             if (directorioAlmExternoPublico.exists() && directorioAlmExternoPublico.isDirectory()) {
-                Toast.makeText(this, "La carpeta ya fue creada", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "La carpeta ya fue creada", Toast.LENGTH_SHORT).show();
             }
             else {//Se ejecuta si no existe el directorio
                 String nombreDirectorioPublico = "subdirectorio-gym-publico-pictures";
@@ -96,8 +131,82 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
         deviceInfo = presenter.getDeviceInfo();
 
-         setupBt();
+        setupBt();
+
+        final Handler handler = new Handler();
+
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                try {
+                    Calendar shutdownLimit = Calendar.getInstance();
+                    shutdownLimit.set(Calendar.HOUR_OF_DAY, 22);
+                    shutdownLimit.set(Calendar.MINUTE, 0);
+                    shutdownLimit.set(Calendar.SECOND, 0);
+
+                    Date timeStamp = Calendar.getInstance().getTime();
+                    Date shutdownTimer = shutdownLimit.getTime();
+
+                    if(shutdownTimer.compareTo(timeStamp) < 0){
+                        startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+                    }
+
+                    if(timeStamp.getMinutes() == 59){
+                        needsReset = true;
+                    }
+                    if(timeStamp.getTime() - bootTime.getTime() > 600000){
+                        needsReset = true;
+                    }
+
+                    if(timeStamp.getTime() - lastTouch.getTime() > 60000 && needsReset){
+                        Intent mStartActivity = new Intent(getContext(), LoginActivity.class);
+                        int mPendingIntentId = 123456;
+                        PendingIntent mPendingIntent = PendingIntent.getActivity(getContext(), mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                        AlarmManager mgr = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
+                        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+                        System.exit(0);
+                    }
+                } catch (Exception ignored){}
+                handler.postDelayed(this, 58000);
+            }
+        }, 58000);
     }
+
+    /**
+     * Block back button action
+     */
+    @Override
+    public void onBackPressed() {
+        if (!kioskMode.isLocked(this)) {
+            super.onBackPressed();
+        }
+    }
+
+    /**
+     * Return to current activity when user try to go anywhere else
+     */
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        currentFocus = hasFocus;
+        if (!hasFocus) {
+            CollapseWindow window = new CollapseWindow();
+            window.collapseNow(currentFocus, this);
+            uiSettings.goFullScreen(this);
+        }
+    }
+
+    //KioskMode Init
+    private void setUpKioskMode() {
+        if (!MySharedPreferences.isAppLaunched(this)) {
+            kioskMode.lockUnlock(this, true);
+            MySharedPreferences.saveAppLaunched(this, true);
+        } else {
+            //check if app was locked
+            if (MySharedPreferences.isAppInKioskMode(this)) {
+                kioskMode.lockUnlock(this, true);
+            }
+        }
+    }
+
     //disponibilidad memoria externa
     private boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
@@ -118,8 +227,9 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         bt = Bluetooth.getInstance(this, mHandler);
         btAdapter = bt.getBtAdapter();
         if (!btAdapter.isEnabled()) {
-            Intent turnOnIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(turnOnIntent, REQUEST_ENABLE_BT);
+            finish();
+            //Intent turnOnIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            //startActivityForResult(turnOnIntent, REQUEST_ENABLE_BT);
         } else {
             if (!deviceInfo.getMac().contains(":")) {
                 showErrorLoginDialog("No se encuentra ningun dispositivo configurado.");
@@ -152,16 +262,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     }
 
     void setupViews() {
-        btn0 = findViewById(R.id.numero_0);
-        btn1 = findViewById(R.id.numero_1);
-        btn2 = findViewById(R.id.numero_2);
-        btn3 = findViewById(R.id.numero_3);
-        btn4 = findViewById(R.id.numero_4);
-        btn5 = findViewById(R.id.numero_5);
-        btn6 = findViewById(R.id.numero_6);
-        btn7 = findViewById(R.id.numero_7);
-        btn8 = findViewById(R.id.numero_8);
-        btn9 = findViewById(R.id.numero_9);
 
         btnx = findViewById(R.id.borrar);
         btnIr = findViewById(R.id.sign_in);
@@ -169,10 +269,54 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         txtEstado = findViewById(R.id.id_txt_estado_login);
         txtSucursal = findViewById(R.id.id_txt_sucursal_login);
 
+        txtSucursal.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                switch (charSequence.toString()){
+                    case "Sucursal: 1":
+                        txtSucursal.setText("Sucursal: Entorno de pruebas");
+                        break;
+                    case "Sucursal: 11":
+                        txtSucursal.setText("Sucursal: Ciudadela");
+                        break;
+                    case "Sucursal: 12":
+                        txtSucursal.setText("Sucursal: Cañaveral");
+                        break;
+                    case "Sucursal: 13":
+                        txtSucursal.setText("Sucursal: Piedecuesta");
+                        break;
+                    case "Sucursal: 14":
+                        txtSucursal.setText("Sucursal: Provenza");
+                        break;
+                    case "Sucursal: 15":
+                        txtSucursal.setText("Sucursal: San Francisco");
+                        break;
+                    case "Sucursal: 16":
+                        txtSucursal.setText("Sucursal: Las cuestas");
+                        break;
+                    case "Sucursal: ":
+                        txtSucursal.setText("Sucursal: Sin sucursal");
+                        break;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         txtEstado.setText("Estado: Desconectado");
         txtSucursal.setText("Sucursal: " + idSucursal);
 
         edtNro = findViewById(R.id.cedula);
+
+        settingsButton = findViewById(R.id.settingsButton);
     }
 
     public void pressNumber(View v) {
@@ -180,6 +324,41 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         if (nro.length() <= 10) {
             edtNro.setText(nro + ((Button) v).getText().toString().trim());
         }
+    }
+
+    public void showOptionsMenu(View v){
+        DroppyMenuPopup.Builder droppyBuilder = new DroppyMenuPopup.Builder(this, v);
+
+        droppyBuilder.addMenuItem(new DroppyMenuItem("Registrar Usuario"))
+                .addMenuItem(new DroppyMenuItem("Actualizar huella"))
+                .addMenuItem(new DroppyMenuItem("Configuración"))
+                .addMenuItem(new DroppyMenuItem("Sincronizar base de datos"))
+                .addSeparator();
+
+        droppyBuilder.setOnClick(new DroppyClickCallbackInterface() {
+            @Override
+            public void call(View v, int id) {
+                switch (id) {
+                    case 0:
+                        Intent i = new Intent(getContext(), RegistraActivity.class);
+                        startActivity(i);
+                        break;
+                    case 1:
+                        Intent iActualizar = new Intent(getContext(), CambioHuellaActivity.class);
+                        startActivity(iActualizar);
+                        break;
+                    case 3:
+                        break;
+                    case 2:
+                        showDialogAdmin();
+                        break;
+
+                }
+            }
+        });
+
+        DroppyMenuPopup droppyMenu = droppyBuilder.build();
+        droppyMenu.show();
     }
 
     public void deleteChar(View v) {
@@ -224,8 +403,14 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         i.putExtra(EXTRA_DEVICE_MAC,deviceInfo.getMac());
         i.putExtra(EXTRA_FLAG_SIN_HUELLA, resultLogin.getErrorCode() == ConstantesRestApi.CODE_ERROR_SIN_HUELLA);
 
-        if (infoLogin.getDias() < 7) {
+        if (infoLogin.getDias() < 7 && infoLogin.getDias() != -1) {
             Toast toast = Toast.makeText(this, "Recuerda que tu plan esta proximo a vencer,aprovecha las ofertas especiales y consultalos con tu asesor", Toast.LENGTH_LONG);
+            ((TextView) ((ViewGroup) toast.getView()).getChildAt(0)).setTextSize(20);
+            toast.show();
+        }
+
+        if (infoLogin.getTickets() != -1) {
+            Toast toast = Toast.makeText(this, "Recuerda que a tu plan le quedan " + (infoLogin.getTickets() - 1) +" tickets,aprovecha las ofertas especiales y consultalos con tu asesor", Toast.LENGTH_LONG);
             ((TextView) ((ViewGroup) toast.getView()).getChildAt(0)).setTextSize(20);
             toast.show();
         }
@@ -291,9 +476,9 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
-
+        uiSettings.goFullScreen(this);
         bt = Bluetooth.getInstance(this, mHandler);
 
     }
@@ -372,7 +557,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
                 } else {
 
-                    showErrorLoginDialog("Es necesario habilitar los permisos para el funcionamiento del aplicativo.");
+                    //showErrorLoginDialog("Es necesario habilitar los permisos para el funcionamiento del aplicativo.");
                 }
                 break;
 
@@ -406,7 +591,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case Bluetooth.MESSAGE_STATE_CHANGE:
-                    if (msg.arg1 == Bluetooth.STATE_CONNECTED) {
+                    if (msg.arg1 == Bluetooth.STATE_CONNECTED ) {
                         txtEstado.setText("Estado: Conectado.");
                         bt.sendMessage("p");
                         flagEnvioPeticionSucursal = true;

@@ -18,11 +18,12 @@ import android.widget.EditText;
 import com.iglesias.c.appgym.Presenter.RegistrarPresenterImpl;
 import com.iglesias.c.appgym.R;
 import com.iglesias.c.appgym.Service.Bluetooth;
+import com.iglesias.c.appgym.Ui.BaseActivity;
 import com.iglesias.c.appgym.View.RegistrarView;
 
 import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_DEVICE_MAC;
 
-public class RegistraActivity extends AppCompatActivity implements RegistrarView {
+public class RegistraActivity extends BaseActivity implements RegistrarView {
 
     private final String TAG = getClass().getName();
     private ProgressDialog loading;
@@ -34,12 +35,10 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
     String arryId[] = {"", "", ""};
     int indexId = 0;
 
-
     String id = "", mac;
     Boolean flagHuella = false;
 
     Bluetooth bt;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,33 +130,37 @@ public class RegistraActivity extends AppCompatActivity implements RegistrarView
     @Override
     public void setId(String id) {
         this.id = id;
-        /*
+
+        //HuellaTrigger - Descomentar
+
         if (indexId < arryId.length) {
             arryId[indexId] = id;
             indexId++;
         }
         compareId();
-        */
+
+
 
     }
 
     private void compareId() {
-        String tempId = "", antId = "";
+        byte[] tempId, antId;
         for (int i = 1; i < arryId.length; i++) {
-            tempId = arryId[i];
-            antId = arryId[i - 1];
+            tempId = arryId[i].getBytes();
+            antId = arryId[i - 1].getBytes();
 
-            if(!tempId.isEmpty() && !antId.isEmpty() && tempId.equals(antId)){
+            if(tempId.length > 0 && antId.length > 0){
                 flagHuella = true;
             }else {
                 flagHuella = false;
             }
+            flagHuella = true;
         }
 
         if(indexId == arryId.length){
             showErrorLoginDialog("Número de intentos alcanzados",true);
         }else{
-            scanMode();
+            //scanMode();
         }
     }
 

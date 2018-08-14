@@ -20,7 +20,6 @@ public class RestApiAdapter {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(ConstantesRestApi.BASE_URL)
                 .build();
-
         return retrofit;
     }
 }

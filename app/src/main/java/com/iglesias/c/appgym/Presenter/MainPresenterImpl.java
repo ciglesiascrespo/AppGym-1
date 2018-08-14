@@ -18,18 +18,19 @@ public class MainPresenterImpl {
 
     public void receiveMsj(String msj) {
         if (!msj.toLowerCase().contains("o")) {
-            if (msj.toLowerCase().contains("r")) {
-                view.sendId();
-            } else if (msj.substring(0, 1).toLowerCase().equals("n")) {
-                view.compareId("-1");
-            } else if (msj.substring(0, 1).toLowerCase().equals("s")) {
-                view.goToLogin();
-            } else {
-                String msjR = iterator.getMsj(msj.substring(0, 1));
-                if (!msjR.isEmpty())
-                    view.showErrorLoginDialog(msjR);
+            if(!msj.toLowerCase().isEmpty()) {
+                if (msj.toLowerCase().contains("r")) {
+                    view.sendId();
+                } else if (msj.substring(0, 1).toLowerCase().equals("n")) {
+                    view.compareId("-1");
+                } else if (msj.substring(0, 1).toLowerCase().equals("s")) {
+                    view.goToLogin();
+                } else {
+                    String msjR = iterator.getMsj(msj.substring(0, 1));
+                    if (!msjR.isEmpty())
+                        view.showErrorLoginDialog(msjR);
+                }
             }
-
         } else {
             view.compareId("0");
         }

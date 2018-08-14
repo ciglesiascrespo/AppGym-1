@@ -116,7 +116,7 @@ public class LoginIterator {
 
                             resultLogin.getInfo().setIdHuella(response.getInfo().getIdHuella());
                             if(resultLogin.getErrorCode()==ConstantesRestApi.CODE_ERROR_SIN_HUELLA){
-                                tiquet(response.getInfo().getNroDocumento());
+                                //tiquet(response.getInfo().getNroDocumento());
                             }
 
                             presenter.onSuccesLogin(resultLogin);
@@ -126,22 +126,20 @@ public class LoginIterator {
 
     }
 
-    private void tiquet(String nro){
+    public void tiquet(String nro){
         Retrofit retrofit = RestApiAdapter.provideRetrofit();
 
-        retrofit.create(EndPoints.class).tiquet(ConstantesRestApi.r, nro, ConstantesRestApi.idSucursal, ConstantesRestApi.idLicencia)
+        retrofit.create(EndPoints.class).tiquet(ConstantesRestApi.t, nro, ConstantesRestApi.idSucursal, ConstantesRestApi.idLicencia)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .subscribe(new Observer<ResultLogin>() {
                                @Override
                                public void onCompleted() {
-
                                }
 
                                @Override
                                public void onError(Throwable e) {
-                                   e.printStackTrace();
 
                                }
 

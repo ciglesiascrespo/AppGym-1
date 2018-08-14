@@ -23,10 +23,11 @@
             android:layout_height="0dp"
             android:layout_weight="30"
             android:orientation="horizontal">
+
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="20"/>
+                android:layout_weight="10" />
             <ImageView
                 android:id="@+id/imagen"
                 android:layout_width="0dp"
@@ -43,10 +44,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:visibility="gone" />
+
             <Space
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="20"/>
+                android:layout_height="match_parent" />
+
+            <ImageButton
+                android:id="@+id/settingsButton"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_weight="1"
+                android:background="@drawable/background_btn"
+                android:onClick="showOptionsMenu"
+                android:scaleType="fitCenter"
+                android:tint="@color/colorPrimary"
+                app:srcCompat="@android:drawable/ic_dialog_dialer" />
 
         </LinearLayout>
 
@@ -124,6 +136,7 @@
                     android:id="@+id/numero_1"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
+                    android:textSize="60dp"
                     app:layout_column="0"
                     app:layout_columnWeight="1"
                     app:layout_row="0"
@@ -138,6 +151,7 @@
                     android:id="@+id/numero_2"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
+                    android:textSize="60dp"
                     app:layout_column="1"
                     app:layout_columnWeight="1"
                     app:layout_row="0"
@@ -153,6 +167,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:layout_column="2"
+                    android:textSize="60dp"
                     app:layout_columnWeight="1"
                     app:layout_row="0"
                     app:layout_rowWeight="1"
@@ -169,7 +184,7 @@
                     app:layout_column="0"
                     app:layout_columnWeight="1"
                     app:layout_row="1"
-
+                    android:textSize="60dp"
                     app:layout_rowWeight="1"
 
                     android:linksClickable="true"
@@ -182,6 +197,7 @@
 
                     android:layout_width="0dp"
                     android:layout_height="0dp"
+                    android:textSize="60dp"
                     app:layout_column="1"
                     app:layout_columnWeight="1"
                     app:layout_row="1"
@@ -195,7 +211,7 @@
 
                 <Button
                     android:id="@+id/numero_6"
-
+                    android:textSize="60dp"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:layout_column="2"
@@ -211,7 +227,7 @@
 
                 <Button
                     android:id="@+id/numero_7"
-
+                    android:textSize="60dp"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:layout_column="0"
@@ -225,7 +241,7 @@
 
                 <Button
                     android:id="@+id/numero_8"
-
+                    android:textSize="60dp"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:layout_column="1"
@@ -240,6 +256,7 @@
 
                 <Button
                     android:id="@+id/numero_9"
+                    android:textSize="60dp"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:layout_column="2"
@@ -260,7 +277,7 @@
                     app:layout_columnWeight="1"
                     app:layout_row="3"
                     app:layout_rowWeight="1"
-
+                    android:textSize="60dp"
                     android:linksClickable="true"
                     android:onClick="pressNumber"
                     android:text="@string/str_0"

@@ -19,7 +19,10 @@ public class InfoLogin {
     private String urlImage;
     @SerializedName("dias")
     @Expose
-    private Integer dias;
+    private Integer dias = -1;
+    @SerializedName("tickets")
+    @Expose
+    private Integer tickets = -1;
 
     private String idHuella;
 
@@ -53,6 +56,14 @@ public class InfoLogin {
 
     public void setDias(Integer dias) {
         this.dias = dias;
+    }
+
+    public Integer getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(Integer tickets) {
+        this.tickets = tickets;
     }
 
     public void setIdHuella(String idHuella) {

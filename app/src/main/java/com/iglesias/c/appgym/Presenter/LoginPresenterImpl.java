@@ -42,18 +42,19 @@ public class LoginPresenterImpl implements LoginPresenter {
         Log.e(getClass().getName(),"url: " + resultLogin.getInfo().getUrlImage());
         Log.e(getClass().getName(),resultLogin.getInfo().toString());
 
-        if (resultLogin.getInfo().getDias() > 0) {
-
+        if (resultLogin.getInfo().getDias() > 0 || resultLogin.getInfo().getTickets() > 0) {
             view.goToMainActivity(resultLogin);
+            if(resultLogin.getInfo().getTickets() > 0)
+                iterator.tiquet(resultLogin.getInfo().getNroDocumento());
         } else {
-            view.showErrorLoginDialog("Su membresía ha caducado, por favor contacte a su administrador.");
+            view.showErrorLoginDialog("Su membresía ha vencido.");
         }
     }
 
     @Override
     public void onErrorLogin() {
         view.hideLoading();
-        view.showErrorLoginDialog("Error validando usuario, verifique su conexión a internet");
+        view.showErrorLoginDialog("Usuario sin planes asociados.");
     }
 
     @Override
@@ -61,6 +62,5 @@ public class LoginPresenterImpl implements LoginPresenter {
         view.hideLoading();
         view.showErrorLoginDialog(msj.isEmpty() ? "Usuario no válido." : msj);
     }
-
 
 }
