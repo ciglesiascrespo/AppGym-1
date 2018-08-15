@@ -21,12 +21,12 @@ public class LoginPresenterImpl implements LoginPresenter {
         iterator = new LoginIterator(this, view.getContext());
     }
 
-    public void validateUser(String nro) {
+    public void validateUser(String nro, String sucursal) {
         if (nro.length() == 0) {
             view.showErrorLoginDialog("Digite un número de identificación");
         } else {
             view.showLoading();
-            iterator.validateUser(nro);
+            iterator.validateUser(nro, sucursal);
         }
     }
 
