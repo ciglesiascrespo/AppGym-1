@@ -376,7 +376,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
         } else {
             String nro = edtNro.getText().toString();
             edtNro.setText("");
-            presenter.validateUser(nro);
+            presenter.validateUser(nro, idSucursal);
         }
     }
 

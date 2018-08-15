@@ -32,7 +32,7 @@ public class LoginIterator {
     LoginPresenter presenter;
     DbHandler dbHandler;
     private SharedPreferences preferences;
-
+    private int idSucursal;
     public LoginIterator(LoginPresenter presenter, Context context) {
         this.presenter = presenter;
         dbHandler = DbHandler.getInstance(context);
@@ -50,11 +50,11 @@ public class LoginIterator {
         return new DeviceInfo(nombre, mac);
     }
 
-    public void validateUser(String nro) {
-
+    public void validateUser(String nro, String sucursal) {
+        idSucursal = Integer.parseInt(sucursal);
         Retrofit retrofit = RestApiAdapter.provideRetrofit();
 
-        retrofit.create(EndPoints.class).login(ConstantesRestApi.r, nro, ConstantesRestApi.idSucursal, ConstantesRestApi.idLicencia)
+        retrofit.create(EndPoints.class).login(ConstantesRestApi.r, nro, idSucursal, ConstantesRestApi.idLicencia)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -129,24 +129,17 @@ public class LoginIterator {
     public void tiquet(String nro){
         Retrofit retrofit = RestApiAdapter.provideRetrofit();
 
-        retrofit.create(EndPoints.class).tiquet(ConstantesRestApi.t, nro, ConstantesRestApi.idSucursal, ConstantesRestApi.idLicencia)
+        retrofit.create(EndPoints.class).tiquet(ConstantesRestApi.t, nro, idSucursal, ConstantesRestApi.idLicencia)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .subscribe(new Observer<ResultLogin>() {
                                @Override
-                               public void onCompleted() {
-                               }
-
+                               public void onCompleted() {}
                                @Override
-                               public void onError(Throwable e) {
-
-                               }
-
+                               public void onError(Throwable e) {}
                                @Override
-                               public void onNext(ResultLogin response) {
-
-                               }
+                               public void onNext(ResultLogin response) {}
                            }
                 );
     }
@@ -184,7 +177,6 @@ public class LoginIterator {
 
                     }
                 });
-
 
     }
 

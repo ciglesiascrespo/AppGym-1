@@ -176,8 +176,6 @@ public class MainActivity extends BaseActivity implements MainView {
 
                     }
                 });
-
-
     }
 
 
@@ -201,7 +199,6 @@ public class MainActivity extends BaseActivity implements MainView {
             }
         });
 
-
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
@@ -223,7 +220,6 @@ public class MainActivity extends BaseActivity implements MainView {
     @Override
     public void sendId() {
         String arrayId = id + "}";
-
         bt.sendMessage(arrayId);
     }
 
