@@ -80,7 +80,6 @@ public class LoginIterator {
                                        validateUserDb(response.getInfo().getNroDocumento(),response);
                                        //presenter.onSuccesLogin(response.getInfo());
                                    }
-
                                }
                            }
                 );

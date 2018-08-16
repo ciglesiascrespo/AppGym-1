@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.iglesias.c.appgym.Models.User;
 import com.iglesias.c.appgym.RestApi.ConstantesRestApi;
 import com.iglesias.c.appgym.RestApi.Model.InfoLogin;
 import com.iglesias.c.appgym.RestApi.Model.ResultLogin;
@@ -18,6 +21,7 @@ public class DbHandler {
     private DbHelper dbHelper;
     private static DbHandler instance = null;
     public String TAG = getClass().getName();
+    private DatabaseReference databaseReference;
 
     protected DbHandler(Context context) {
         Log.e("DbHandler", "creo instancia handler");
@@ -40,6 +44,11 @@ public class DbHandler {
     public int actualizaUsuario(String nro, String id) {
         ContentValues cv = new ContentValues();
         cv.put(UserDb.KEY_ID, id);
+
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        User user = new User(nro, id);
+        databaseReference.child("Users/" + user.getId()).setValue(user);
+
         return dbHelper.update(UserDb.TABLE, cv, UserDb.KEY_NRO_DOCUMENTO + " = " + nro);
 
     }
@@ -83,6 +92,10 @@ public class DbHandler {
         cv.put(UserDb.KEY_ID, id);
         cv.put(UserDb.KEY_NRO_DOCUMENTO, nro);
         cv.put(UserDb.KEY_DIAS, 1);
+
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        User user = new User(nro, id);
+        databaseReference.child("Users/" + user.getId()).setValue(user);
 
         return dbHelper.insert(UserDb.TABLE, cv);
     }
