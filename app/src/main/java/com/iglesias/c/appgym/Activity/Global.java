@@ -2,6 +2,7 @@ package com.iglesias.c.appgym.Activity;
 
 import android.app.Application;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
@@ -16,6 +17,6 @@ public class Global extends Application {
         built.setIndicatorsEnabled(true);
         built.setLoggingEnabled(true);
         Picasso.setSingletonInstance(built);
-
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 }

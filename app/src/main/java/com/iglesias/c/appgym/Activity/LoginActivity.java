@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -33,6 +34,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.iglesias.c.appgym.Models.User;
 import com.iglesias.c.appgym.Pojo.DeviceInfo;
 import com.iglesias.c.appgym.Presenter.LoginPresenterImpl;
 import com.iglesias.c.appgym.R;
@@ -73,6 +81,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     private int estadoConexionBt = Bluetooth.STATE_NONE;
     private Settings uiSettings;
     private boolean currentFocus;
+    private DatabaseReference databaseReference;
     //public static final String PASS_ADMIN = "";
 
     Button btnx, btnIr;
@@ -394,29 +403,43 @@ public class LoginActivity extends BaseActivity implements LoginView {
     public void goToMainActivity(ResultLogin resultLogin) {
         InfoLogin infoLogin = resultLogin.getInfo();
 
-        Intent i = new Intent(LoginActivity.this, MainActivity.class);
-        i.putExtra(EXTRA_NOMBRE, infoLogin.getNombre());
-        i.putExtra(EXTRA_DIAS, infoLogin.getDias());
-        i.putExtra(EXTRA_DOCUMENTO, infoLogin.getNroDocumento());
-        i.putExtra(EXTRA_URL_IMAGEN, infoLogin.getUrlImage());
-        i.putExtra(EXTRA_ID_HUELLA, infoLogin.getIdHuella());
-        i.putExtra(EXTRA_DEVICE_MAC,deviceInfo.getMac());
-        i.putExtra(EXTRA_FLAG_SIN_HUELLA, resultLogin.getErrorCode() == ConstantesRestApi.CODE_ERROR_SIN_HUELLA);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("Users/" + infoLogin.getNroDocumento()).orderByChild("id").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                dataSnapshot.getKey();
+                User user = dataSnapshot.getValue(User.class);
+                infoLogin.setIdHuella(user.getFingerprint());
 
-        if (infoLogin.getDias() < 7 && infoLogin.getDias() != -1) {
-            Toast toast = Toast.makeText(this, "Recuerda que tu plan esta proximo a vencer,aprovecha las ofertas especiales y consultalos con tu asesor", Toast.LENGTH_LONG);
-            ((TextView) ((ViewGroup) toast.getView()).getChildAt(0)).setTextSize(20);
-            toast.show();
-        }
+                Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                i.putExtra(EXTRA_NOMBRE, infoLogin.getNombre());
+                i.putExtra(EXTRA_DIAS, infoLogin.getDias());
+                i.putExtra(EXTRA_DOCUMENTO, infoLogin.getNroDocumento());
+                i.putExtra(EXTRA_URL_IMAGEN, infoLogin.getUrlImage());
+                i.putExtra(EXTRA_ID_HUELLA, infoLogin.getIdHuella());
+                i.putExtra(EXTRA_DEVICE_MAC,deviceInfo.getMac());
+                i.putExtra(EXTRA_FLAG_SIN_HUELLA, resultLogin.getErrorCode() == ConstantesRestApi.CODE_ERROR_SIN_HUELLA);
 
-        if (infoLogin.getTickets() != -1) {
-            Toast toast = Toast.makeText(this, "Recuerda que a tu plan le quedan " + (infoLogin.getTickets() - 1) +" tickets,aprovecha las ofertas especiales y consultalos con tu asesor", Toast.LENGTH_LONG);
-            ((TextView) ((ViewGroup) toast.getView()).getChildAt(0)).setTextSize(20);
-            toast.show();
-        }
+                if (infoLogin.getDias() < 7 && infoLogin.getDias() != -1) {
+                    Toast toast = Toast.makeText(getContext(), "Recuerda que tu plan esta proximo a vencer,aprovecha las ofertas especiales y consultalos con tu asesor", Toast.LENGTH_LONG);
+                    ((TextView) ((ViewGroup) toast.getView()).getChildAt(0)).setTextSize(20);
+                    toast.show();
+                }
 
-        startActivity(i);
+                if (infoLogin.getTickets() != -1) {
+                    Toast toast = Toast.makeText(getContext(), "Recuerda que a tu plan le quedan " + (infoLogin.getTickets() - 1) +" tickets,aprovecha las ofertas especiales y consultalos con tu asesor", Toast.LENGTH_LONG);
+                    ((TextView) ((ViewGroup) toast.getView()).getChildAt(0)).setTextSize(20);
+                    toast.show();
+                }
 
+                startActivity(i);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
