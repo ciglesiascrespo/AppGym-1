@@ -43,4 +43,7 @@ dependencies {
     compile 'com.android.support:gridlayout-v7:26.1.0'
     compile 'com.github.felHR85:UsbSerial:4.5.2'
     compile 'com.shehabic.droppy:Droppy:0.6.0@aar'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-database:16.0.1'
 }
+apply plugin: 'com.google.gms.google-services'
