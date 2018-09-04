@@ -47,14 +47,19 @@ public class LoginPresenterImpl implements LoginPresenter {
             if(resultLogin.getInfo().getTickets() > 0)
                 iterator.tiquet(resultLogin.getInfo().getNroDocumento());
         } else {
-            view.showErrorLoginDialog("Su membresía ha vencido.");
+            if(resultLogin.getMensaje().equals("") || resultLogin.getMensaje().isEmpty()){
+                view.showErrorLoginDialog("Su membresía ha vencido.");
+            } else {
+                view.showErrorLoginDialog(resultLogin.getMensaje());
+            }
+
         }
     }
 
     @Override
     public void onErrorLogin() {
         view.hideLoading();
-        view.showErrorLoginDialog("Usuario sin planes asociados.");
+        view.showErrorLoginDialog("Ha ocurrido un error inesperado.");
     }
 
     @Override
