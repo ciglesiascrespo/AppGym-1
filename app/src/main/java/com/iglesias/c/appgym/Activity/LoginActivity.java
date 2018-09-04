@@ -409,7 +409,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 dataSnapshot.getKey();
                 User user = dataSnapshot.getValue(User.class);
-                infoLogin.setIdHuella(user.getFingerprint());
+                infoLogin.setIdHuella(user.getFingerprint()); //Revisar
 
                 Intent i = new Intent(LoginActivity.this, MainActivity.class);
                 i.putExtra(EXTRA_NOMBRE, infoLogin.getNombre());
