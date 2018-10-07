@@ -10,6 +10,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -53,6 +54,7 @@ import com.iglesias.c.appgym.Ui.BaseActivity;
 import com.iglesias.c.appgym.Ui.CollapseWindow;
 import com.iglesias.c.appgym.Ui.MySharedPreferences;
 import com.iglesias.c.appgym.Ui.Settings;
+import com.iglesias.c.appgym.Utils.ConstantsPreferences;
 import com.iglesias.c.appgym.View.LoginView;
 import com.shehabic.droppy.DroppyClickCallbackInterface;
 import com.shehabic.droppy.DroppyMenuItem;
@@ -102,6 +104,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     private boolean needsReset = false;
     private Date lastTouch;
     private Date bootTime;
+    private SharedPreferences preferences;
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent evt) {
@@ -144,13 +147,16 @@ public class LoginActivity extends BaseActivity implements LoginView {
         setupBt();
 
         final Handler handler = new Handler();
+        preferences = getContext().getSharedPreferences(ConstantsPreferences.NAME_PREFERENCE_CONFIG, Context.MODE_PRIVATE);
+        idSucursal = preferences.getString("sucursal", "");
+        txtSucursal.setText("Sucursal: " + idSucursal);
 
         handler.postDelayed(new Runnable(){
             public void run(){
                 try {
                     Calendar shutdownLimit = Calendar.getInstance();
-                    shutdownLimit.set(Calendar.HOUR_OF_DAY, 22);
-                    shutdownLimit.set(Calendar.MINUTE, 0);
+                    shutdownLimit.set(Calendar.HOUR_OF_DAY, 23);
+                    shutdownLimit.set(Calendar.MINUTE, 59);
                     shutdownLimit.set(Calendar.SECOND, 0);
 
                     Date timeStamp = Calendar.getInstance().getTime();
@@ -505,7 +511,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
         super.onResume();
         uiSettings.goFullScreen(this);
         bt = Bluetooth.getInstance(this, mHandler);
-
+        idSucursal = preferences.getString("sucursal", "");
+        txtSucursal.setText("Sucursal: " + idSucursal);
     }
 
     @Override
@@ -619,39 +626,24 @@ public class LoginActivity extends BaseActivity implements LoginView {
                 case Bluetooth.MESSAGE_STATE_CHANGE:
                     if (msg.arg1 == Bluetooth.STATE_CONNECTED ) {
                         txtEstado.setText("Estado: Conectado.");
-                        bt.sendMessage("p");
-                        flagEnvioPeticionSucursal = true;
                         Toast.makeText(getContext(), "Dispositivo conectado con éxito.", Toast.LENGTH_SHORT).show();
                     } else {
-
-                        idSucursal = "";
                         txtEstado.setText("Estado: Conectando...");
                     }
-
                     Log.e(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                     break;
                 case Bluetooth.MESSAGE_WRITE:
                     Log.e(TAG, "MESSAGE_WRITE: " + String.valueOf(msg.arg1));
-
                     break;
                 case Bluetooth.MESSAGE_READ:
-                    Log.e(TAG, "MESSAGE_READ: " + msg.obj);
-                    String msj = String.valueOf(msg.obj);
-                    if (flagEnvioPeticionSucursal && msj.contains(":")) {
-                        flagEnvioPeticionSucursal = false;
-                        idSucursal = msj.split(":")[1];
-
-                    }
                     break;
                 case Bluetooth.MESSAGE_DEVICE_NAME:
                     Log.e(TAG, "MESSAGE_DEVICE_NAME " + msg);
                     break;
                 case Bluetooth.MESSAGE_TOAST:
                     Log.e(TAG, "MESSAGE_TOAST " + msg.arg1);
-
                     break;
             }
-            txtSucursal.setText("Sucursal: " + idSucursal);
         }
     };
 

@@ -9,9 +9,11 @@ import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +35,8 @@ public class ConfiguracionActivity extends BaseActivity implements ConfigView {
     private TextView txtNombreDispositivo, txtMacDispositivo;
     private ConfigPresenterImpl presenter;
 
+    private EditText editText;
+
     private DeviceInfo deviceInfo = new DeviceInfo("", "");
     private boolean rotated = false;
     private SharedPreferences preferences;
@@ -48,6 +52,7 @@ public class ConfiguracionActivity extends BaseActivity implements ConfigView {
         presenter.getInfoDevice();
         preferences = getContext().getSharedPreferences(ConstantsPreferences.NAME_PREFERENCE_CONFIG, Context.MODE_PRIVATE);
         rotated = preferences.getBoolean("rotated", false);
+        editText.setText(preferences.getString("sucursal", ""));
     }
 
     private void setupViews() {
@@ -59,6 +64,7 @@ public class ConfiguracionActivity extends BaseActivity implements ConfigView {
         cardViewDispositivo = findViewById(R.id.id_cardview_dispoditivo);
         cardViewSettings = findViewById(R.id.id_cardview_settings);
         cardViewRotate = findViewById(R.id.id_cardview_rotate);
+        editText = findViewById(R.id.editText);
 
         cardViewSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,7 +141,11 @@ public class ConfiguracionActivity extends BaseActivity implements ConfigView {
         return getApplicationContext();
     }
     @Override
-    public void onGuardar(){
+    public void onGuardar() {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("sucursal", editText.getText().toString());
+        editor.apply();
+
         Toast.makeText(this,"Guardado con éxito",Toast.LENGTH_SHORT).show();
         finish();
     }
