@@ -1,6 +1,7 @@
 package com.iglesias.c.appgym.Activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Application;
 import android.app.PendingIntent;
@@ -610,6 +611,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     }
 
 
+    @SuppressLint("HandlerLeak")
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
