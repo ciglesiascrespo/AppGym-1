@@ -7,6 +7,7 @@ import android.app.Application;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -62,10 +64,13 @@ import com.shehabic.droppy.DroppyMenuPopup;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import me.aflak.bluetooth.DeviceCallback;
 
 public class LoginActivity extends BaseActivity implements LoginView {
 
@@ -81,7 +86,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int MY_PERMISSIONS_REQUEST = 2;
     public static final String PASS_ADMIN = "admin123";
-    private int estadoConexionBt = Bluetooth.STATE_NONE;
     private Settings uiSettings;
     private boolean currentFocus;
     private DatabaseReference databaseReference;
@@ -94,8 +98,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
     LoginPresenterImpl presenter;
     private TextView txtEstado, txtSucursal;
 
-    Bluetooth bt;
     BluetoothAdapter btAdapter;
+    private me.aflak.bluetooth.Bluetooth bt = null;
     private boolean flagEnvioPeticionSucursal = false;
     private String idSucursal = "";
 
@@ -240,8 +244,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
     }
 
     private void setupBt() {
-        bt = Bluetooth.getInstance(this, mHandler);
-        btAdapter = bt.getBtAdapter();
+        bt = new me.aflak.bluetooth.Bluetooth(this);
+        bt.onStart();
+        btAdapter = bt.getBluetoothAdapter();
         if (!btAdapter.isEnabled()) {
             finish();
             //Intent turnOnIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -263,12 +268,40 @@ public class LoginActivity extends BaseActivity implements LoginView {
     }
 
     private void conectService() {
-        bt.start();
+        bt.enable();
     }
+    //Change thread - We need main thread
+    void changeThread(String str) {
+        class OneShotTask implements Runnable {
+            String str;
+            OneShotTask(String s) { str = s; }
+            public void run() {}
+        }
 
+        new Handler(Looper.getMainLooper()).post(new OneShotTask(str) {
+            @Override
+            public void run() {
+                txtEstado.setText("Estado: Conectado.");
+            }
+        });
+    }
     private void conectDevice() {
         deviceInfo = presenter.getDeviceInfo();
-        bt.connectDevice(deviceInfo.getMac());
+        bt.connectToAddress(deviceInfo.getMac());
+        bt.setDeviceCallback(new DeviceCallback() {
+            @Override public void onDeviceConnected(BluetoothDevice device) {
+                bt.send("start");
+                try { Thread.sleep(1000); } catch(Exception ignored) { }
+                bt.send("start");
+                try { Thread.sleep(2000); } catch(Exception ignored) { }
+                bt.send("enroll");
+                changeThread("Estado: Conectado.");
+            }
+            @Override public void onDeviceDisconnected(BluetoothDevice device, String message) {}
+            @Override public void onMessage(String message) { Log.d("Prueba", message); }
+            @Override public void onError(String message) {}
+            @Override public void onConnectError(BluetoothDevice device, String message) {}
+        });
     }
 
     private void setupLoading() {
@@ -510,7 +543,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
     public void onResume() {
         super.onResume();
         uiSettings.goFullScreen(this);
-        bt = Bluetooth.getInstance(this, mHandler);
         idSucursal = preferences.getString("sucursal", "");
         txtSucursal.setText("Sucursal: " + idSucursal);
     }
@@ -616,36 +648,4 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
         }
     }
-
-
-    @SuppressLint("HandlerLeak")
-    private final Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case Bluetooth.MESSAGE_STATE_CHANGE:
-                    if (msg.arg1 == Bluetooth.STATE_CONNECTED ) {
-                        txtEstado.setText("Estado: Conectado.");
-                        Toast.makeText(getContext(), "Dispositivo conectado con éxito.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        txtEstado.setText("Estado: Conectando...");
-                    }
-                    Log.e(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
-                    break;
-                case Bluetooth.MESSAGE_WRITE:
-                    Log.e(TAG, "MESSAGE_WRITE: " + String.valueOf(msg.arg1));
-                    break;
-                case Bluetooth.MESSAGE_READ:
-                    break;
-                case Bluetooth.MESSAGE_DEVICE_NAME:
-                    Log.e(TAG, "MESSAGE_DEVICE_NAME " + msg);
-                    break;
-                case Bluetooth.MESSAGE_TOAST:
-                    Log.e(TAG, "MESSAGE_TOAST " + msg.arg1);
-                    break;
-            }
-        }
-    };
-
-
 }

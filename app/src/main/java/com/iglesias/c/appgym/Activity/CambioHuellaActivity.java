@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.iglesias.c.appgym.Presenter.ActualizaPresenterImpl;
 import com.iglesias.c.appgym.R;
@@ -70,7 +71,7 @@ public class CambioHuellaActivity extends BaseActivity implements RegistrarView{
         imgBtnHuella.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String dato = "1";
+                String dato = "enroll";
                 bt.sendMessage(dato);
 
             }
@@ -136,11 +137,15 @@ public class CambioHuellaActivity extends BaseActivity implements RegistrarView{
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case Bluetooth.MESSAGE_STATE_CHANGE:
-
+                    if (msg.arg1 == Bluetooth.STATE_CONNECTED ) {
+                        bt.sendMessage("start");
+                        try{Thread.sleep(1000);} catch (Exception ignored){}
+                        bt.sendMessage("start");
+                    }
                     Log.e(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                     break;
                 case Bluetooth.MESSAGE_WRITE:
-                    Log.e(TAG, "MESSAGE_WRITE: " + String.valueOf(msg.arg1));
+                    //Log.e(TAG, "MESSAGE_WRITE: " + String.valueOf(msg.arg1));
 
                     break;
                 case Bluetooth.MESSAGE_READ:

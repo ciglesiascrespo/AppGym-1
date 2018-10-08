@@ -84,7 +84,7 @@ public class RegistraActivity extends BaseActivity implements RegistrarView {
     }
 
     private void scanMode() {
-        String dato = "1";
+        String dato = "enroll";
         bt.sendMessage(dato);
     }
 
@@ -132,13 +132,13 @@ public class RegistraActivity extends BaseActivity implements RegistrarView {
         this.id = id;
 
         //HuellaTrigger - Descomentar
-        /*
+
         if (indexId < arryId.length) {
             arryId[indexId] = id;
             indexId++;
         }
         compareId();
-        */
+
     }
 
     private void compareId() {
