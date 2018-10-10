@@ -1,7 +1,6 @@
 package com.iglesias.c.appgym.Activity;
 
 import android.app.ProgressDialog;
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -17,13 +16,9 @@ import android.widget.Toast;
 
 import com.iglesias.c.appgym.Presenter.ActualizaPresenterImpl;
 import com.iglesias.c.appgym.R;
+import com.iglesias.c.appgym.Service.Bluetooth;
 import com.iglesias.c.appgym.Ui.BaseActivity;
 import com.iglesias.c.appgym.View.RegistrarView;
-
-import me.aflak.bluetooth.Bluetooth;
-import me.aflak.bluetooth.DeviceCallback;
-
-import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_DEVICE_MAC;
 
 public class CambioHuellaActivity extends BaseActivity implements RegistrarView{
     private final String TAG = getClass().getName();
@@ -34,7 +29,7 @@ public class CambioHuellaActivity extends BaseActivity implements RegistrarView{
     ActualizaPresenterImpl presenter;
 
 
-    String id = "", mac;
+    String id = "";
     Boolean flagHuella = false;
 
     Bluetooth bt;
@@ -46,29 +41,12 @@ public class CambioHuellaActivity extends BaseActivity implements RegistrarView{
         setupViews();
         setupLoading();
         presenter = new ActualizaPresenterImpl(this);
-        mac = getIntent().getStringExtra(EXTRA_DEVICE_MAC);
+
         setupBt();
     }
 
     private void setupBt() {
-        bt = new Bluetooth(this);
-        bt.onStart();
-        bt.enable();
-        bt.connectToAddress(mac);
-        bt.setDeviceCallback(new DeviceCallback() {
-            @Override public void onDeviceConnected(BluetoothDevice device) {
-                bt.send("start");
-                try { Thread.sleep(1000); } catch(Exception ignored) { }
-                bt.send("start");
-            }
-            @Override public void onDeviceDisconnected(BluetoothDevice device, String message) {}
-            @Override public void onMessage(String message) {
-                Log.d("Prueba", message);
-                presenter.receiveMsj(message);
-            }
-            @Override public void onError(String message) {}
-            @Override public void onConnectError(BluetoothDevice device, String message) {}
-        });
+        bt = Bluetooth.getInstance(this, mHandler);
     }
 
     private void setupLoading() {
@@ -94,7 +72,8 @@ public class CambioHuellaActivity extends BaseActivity implements RegistrarView{
             @Override
             public void onClick(View v) {
                 String dato = "enroll";
-                bt.send(dato);
+                bt.sendMessage(dato);
+
             }
         });
     }
@@ -152,4 +131,39 @@ public class CambioHuellaActivity extends BaseActivity implements RegistrarView{
     public void activarModoScaner() {
 
     }
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Bluetooth.MESSAGE_STATE_CHANGE:
+                    if (msg.arg1 == Bluetooth.STATE_CONNECTED ) {
+                        bt.sendMessage("start");
+                        try{Thread.sleep(1000);} catch (Exception ignored){}
+                        bt.sendMessage("start");
+                    }
+                    Log.e(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    break;
+                case Bluetooth.MESSAGE_WRITE:
+                    //Log.e(TAG, "MESSAGE_WRITE: " + String.valueOf(msg.arg1));
+
+                    break;
+                case Bluetooth.MESSAGE_READ:
+
+                    Log.e(TAG, "MESSAGE_READ: " + msg.obj);
+                    String msj = String.valueOf(msg.obj);
+                    presenter.receiveMsj(msj);
+                    break;
+                case Bluetooth.MESSAGE_DEVICE_NAME:
+                    Log.d(TAG, "MESSAGE_DEVICE_NAME " + msg);
+                    break;
+                case Bluetooth.MESSAGE_TOAST:
+
+
+                    Log.d(TAG, "MESSAGE_TOAST " + msg);
+                    break;
+            }
+
+        }
+    };
 }

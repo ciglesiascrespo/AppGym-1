@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
@@ -25,14 +24,13 @@ import android.widget.Toast;
 import com.iglesias.c.appgym.Adapter.RecyclerDevicesAdapter;
 import com.iglesias.c.appgym.Pojo.DeviceInfo;
 import com.iglesias.c.appgym.R;
+import com.iglesias.c.appgym.Service.Bluetooth;
 import com.iglesias.c.appgym.Ui.BaseActivity;
 import com.iglesias.c.appgym.View.SelectBtView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import me.aflak.bluetooth.Bluetooth;
 
 public class SelectBtDActivity extends BaseActivity implements SelectBtView{
     Bluetooth bt;
@@ -82,9 +80,8 @@ public class SelectBtDActivity extends BaseActivity implements SelectBtView{
     }
 
     private void setupBt() {
-        bt = new me.aflak.bluetooth.Bluetooth(this);
-        bt.onStart();
-        btAdapter = bt.getBluetoothAdapter();
+        bt = Bluetooth.getInstance(this, mHandler);
+        btAdapter = bt.getBtAdapter();
         if (!btAdapter.isEnabled()) {
             Intent turnOnIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(turnOnIntent, REQUEST_ENABLE_BT);
@@ -210,6 +207,28 @@ public class SelectBtDActivity extends BaseActivity implements SelectBtView{
         recyclerViewDisponibles.setVisibility(View.GONE);
     }
 
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Bluetooth.MESSAGE_STATE_CHANGE:
+                    Log.d(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    break;
+                case Bluetooth.MESSAGE_WRITE:
+                    Log.d(TAG, "MESSAGE_WRITE ");
+                    break;
+                case Bluetooth.MESSAGE_READ:
+                    Log.d(TAG, "MESSAGE_READ ");
+                    break;
+                case Bluetooth.MESSAGE_DEVICE_NAME:
+                    Log.d(TAG, "MESSAGE_DEVICE_NAME " + msg);
+                    break;
+                case Bluetooth.MESSAGE_TOAST:
+                    Log.d(TAG, "MESSAGE_TOAST " + msg);
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onItemClick(DeviceInfo deviceInfo) {

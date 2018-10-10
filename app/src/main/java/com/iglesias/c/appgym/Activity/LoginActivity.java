@@ -51,6 +51,7 @@ import com.iglesias.c.appgym.R;
 import com.iglesias.c.appgym.RestApi.ConstantesRestApi;
 import com.iglesias.c.appgym.RestApi.Model.InfoLogin;
 import com.iglesias.c.appgym.RestApi.Model.ResultLogin;
+import com.iglesias.c.appgym.Service.Bluetooth;
 import com.iglesias.c.appgym.Ui.BaseActivity;
 import com.iglesias.c.appgym.Ui.CollapseWindow;
 import com.iglesias.c.appgym.Ui.MySharedPreferences;
@@ -259,9 +260,11 @@ public class LoginActivity extends BaseActivity implements LoginView {
                     checkPermission();
                 } else {
                     conectService();
+                    conectDevice();
                 }
             }
         }
+
     }
 
     private void conectService() {
@@ -282,6 +285,25 @@ public class LoginActivity extends BaseActivity implements LoginView {
             }
         });
     }
+    private void conectDevice() {
+        deviceInfo = presenter.getDeviceInfo();
+        bt.connectToAddress(deviceInfo.getMac());
+        bt.setDeviceCallback(new DeviceCallback() {
+            @Override public void onDeviceConnected(BluetoothDevice device) {
+                bt.send("start");
+                try { Thread.sleep(1000); } catch(Exception ignored) { }
+                bt.send("start");
+                try { Thread.sleep(2000); } catch(Exception ignored) { }
+                bt.send("enroll");
+                changeThread("Estado: Conectado.");
+            }
+            @Override public void onDeviceDisconnected(BluetoothDevice device, String message) {}
+            @Override public void onMessage(String message) { Log.d("Prueba", message); }
+            @Override public void onError(String message) {}
+            @Override public void onConnectError(BluetoothDevice device, String message) {}
+        });
+    }
+
     private void setupLoading() {
         loading = new ProgressDialog(this);
         loading.setCancelable(false);
@@ -368,12 +390,10 @@ public class LoginActivity extends BaseActivity implements LoginView {
                 switch (id) {
                     case 0:
                         Intent i = new Intent(getContext(), RegistraActivity.class);
-                        i.putExtra(EXTRA_DEVICE_MAC,deviceInfo.getMac());
                         startActivity(i);
                         break;
                     case 1:
                         Intent iActualizar = new Intent(getContext(), CambioHuellaActivity.class);
-                        iActualizar.putExtra(EXTRA_DEVICE_MAC,deviceInfo.getMac());
                         startActivity(iActualizar);
                         break;
                     case 3:
@@ -530,15 +550,16 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @Override
     protected void onPause() {
         super.onPause();
-        bt.onStop();
+        //  bt.stop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        bt.onStop();
+        //bt.stop();
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -553,12 +574,10 @@ public class LoginActivity extends BaseActivity implements LoginView {
         switch (item.getItemId()) {
             case R.id.id_menu_registrar:
                 Intent i = new Intent(this, RegistraActivity.class);
-                i.putExtra(EXTRA_DEVICE_MAC,deviceInfo.getMac());
                 startActivity(i);
                 break;
             case R.id.id_menu_actualizar:
                 Intent iActualizar = new Intent(this, CambioHuellaActivity.class);
-                iActualizar.putExtra(EXTRA_DEVICE_MAC,deviceInfo.getMac());
                 startActivity(iActualizar);
                 break;
             case R.id.id_menu_sincronizar:
@@ -581,6 +600,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                     showErrorLoginDialog("No se encuentra ningun dispositivo configurado.");
                 } else {
                     conectService();
+                    conectDevice();
                 }
             } else {
                 Toast.makeText(this, "Se requiere encender el bluetooth", Toast.LENGTH_SHORT).show();
@@ -597,6 +617,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                 if (grantResults.length > 0
                         && (grantResults[0] == PackageManager.PERMISSION_GRANTED || grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
                     conectService();
+                    conectDevice();
 
                 } else {
 
@@ -623,6 +644,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
         } else {
             conectService();
+            conectDevice();
 
         }
     }

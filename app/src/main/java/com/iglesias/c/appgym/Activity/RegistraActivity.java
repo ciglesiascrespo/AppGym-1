@@ -1,7 +1,6 @@
 package com.iglesias.c.appgym.Activity;
 
 import android.app.ProgressDialog;
-import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,14 +15,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.iglesias.c.appgym.Pojo.DeviceInfo;
 import com.iglesias.c.appgym.Presenter.RegistrarPresenterImpl;
 import com.iglesias.c.appgym.R;
+import com.iglesias.c.appgym.Service.Bluetooth;
 import com.iglesias.c.appgym.Ui.BaseActivity;
 import com.iglesias.c.appgym.View.RegistrarView;
 
-import me.aflak.bluetooth.Bluetooth;
-import me.aflak.bluetooth.DeviceCallback;
 import static com.iglesias.c.appgym.Activity.LoginActivity.EXTRA_DEVICE_MAC;
 
 public class RegistraActivity extends BaseActivity implements RegistrarView {
@@ -42,7 +39,6 @@ public class RegistraActivity extends BaseActivity implements RegistrarView {
     Boolean flagHuella = false;
 
     Bluetooth bt;
-    private DeviceInfo deviceInfo = new DeviceInfo("", "");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,24 +52,7 @@ public class RegistraActivity extends BaseActivity implements RegistrarView {
     }
 
     private void setupBt() {
-        bt = new Bluetooth(this);
-        bt.onStart();
-        bt.enable();
-        bt.connectToAddress(mac);
-        bt.setDeviceCallback(new DeviceCallback() {
-            @Override public void onDeviceConnected(BluetoothDevice device) {
-                bt.send("start");
-                try { Thread.sleep(1000); } catch(Exception ignored) { }
-                bt.send("start");
-            }
-            @Override public void onDeviceDisconnected(BluetoothDevice device, String message) {}
-            @Override public void onMessage(String message) {
-                Log.d("Prueba", message);
-                presenter.receiveMsj(message);
-            }
-            @Override public void onError(String message) {}
-            @Override public void onConnectError(BluetoothDevice device, String message) {}
-        });
+        bt = Bluetooth.getInstance(this, mHandler);
     }
 
     private void setupLoading() {
@@ -106,7 +85,7 @@ public class RegistraActivity extends BaseActivity implements RegistrarView {
 
     private void scanMode() {
         String dato = "enroll";
-        bt.send(dato);
+        bt.sendMessage(dato);
     }
 
     @Override
@@ -191,6 +170,40 @@ public class RegistraActivity extends BaseActivity implements RegistrarView {
     @Override
     public void activarModoScaner() {
         String dato = "2";
-        //bt.sendMessage(dato);
+        bt.sendMessage(dato);
+
     }
+
+
+    private final Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case Bluetooth.MESSAGE_STATE_CHANGE:
+
+                    Log.e(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    break;
+                case Bluetooth.MESSAGE_WRITE:
+                    Log.e(TAG, "MESSAGE_WRITE: " + String.valueOf(msg.arg1));
+
+                    break;
+                case Bluetooth.MESSAGE_READ:
+
+                    Log.e(TAG, "MESSAGE_READ: " + msg.obj);
+                    String msj = String.valueOf(msg.obj);
+                    presenter.receiveMsj(msj);
+                    break;
+                case Bluetooth.MESSAGE_DEVICE_NAME:
+                    Log.d(TAG, "MESSAGE_DEVICE_NAME " + msg);
+                    break;
+                case Bluetooth.MESSAGE_TOAST:
+                    if (msg.arg1 == -1) {
+                        //  bt.connectDevice(mac);
+                    }
+                    Log.d(TAG, "MESSAGE_TOAST " + msg);
+                    break;
+            }
+
+        }
+    };
 }
