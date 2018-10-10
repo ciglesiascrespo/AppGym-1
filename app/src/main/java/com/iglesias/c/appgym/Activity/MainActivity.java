@@ -1,6 +1,7 @@
 package com.iglesias.c.appgym.Activity;
 
 import android.app.Service;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,11 +21,12 @@ import android.widget.Toast;
 
 import com.iglesias.c.appgym.Presenter.MainPresenterImpl;
 import com.iglesias.c.appgym.R;
-import com.iglesias.c.appgym.Service.Bluetooth;
 import com.iglesias.c.appgym.Ui.BaseActivity;
 import com.iglesias.c.appgym.View.MainView;
 import com.squareup.picasso.Picasso;
 
+import me.aflak.bluetooth.Bluetooth;
+import me.aflak.bluetooth.DeviceCallback;
 import rx.Single;
 import rx.SingleSubscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -94,12 +96,29 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     private void setupBt() {
-        bt = Bluetooth.getInstance(this, mHandler);
+        bt = new Bluetooth(this);
+        bt.onStart();
+        bt.enable();
+        bt.connectToAddress(mac);
+        bt.setDeviceCallback(new DeviceCallback() {
+            @Override public void onDeviceConnected(BluetoothDevice device) {
+                bt.send("start");
+                try { Thread.sleep(1000); } catch(Exception ignored) { }
+                bt.send("start");
+            }
+            @Override public void onDeviceDisconnected(BluetoothDevice device, String message) {}
+            @Override public void onMessage(String message) {
+                Log.d("Prueba", message);
+                presenter.receiveMsj(message);
+            }
+            @Override public void onError(String message) {}
+            @Override public void onConnectError(BluetoothDevice device, String message) {}
+        });
     }
 
     public void activarSensor() {
-        String dato = "2";
-        bt.sendMessage(dato);
+        String dato = "enroll";
+        bt.send(dato);
 
     }
 
@@ -148,7 +167,7 @@ public class MainActivity extends BaseActivity implements MainView {
                     @Override
                     public void call(Boolean aBoolean) {
                         String dato = "3";
-                        bt.sendMessage(dato);
+                        //bt.sendMessage(dato);
                         Single.create(new Single.OnSubscribe<Boolean>() {
                             @Override
                             public void call(SingleSubscriber<? super Boolean> singleSubscriber) {
@@ -160,7 +179,7 @@ public class MainActivity extends BaseActivity implements MainView {
                                     @Override
                                     public void call(Boolean aBoolean) {
                                         String dato = "0";
-                                        bt.sendMessage(dato);
+                                        //bt.sendMessage(dato);
                                         finish();
                                     }
                                 }, new Action1<Throwable>() {
@@ -219,43 +238,8 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     public void sendId() {
-        String arrayId = id + "}";
-        bt.sendMessage(arrayId);
+        String arrayId = id;
+        bt.send(arrayId);
     }
-
-    private final Handler mHandler = new Handler() {
-
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case Bluetooth.MESSAGE_STATE_CHANGE:
-
-                    Log.e(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
-                    break;
-                case Bluetooth.MESSAGE_WRITE:
-                    Log.e(TAG, "MESSAGE_WRITE: " + String.valueOf(msg.arg1));
-
-                    break;
-                case Bluetooth.MESSAGE_READ:
-
-                    Log.e(TAG, "MESSAGE_READ: " + msg.obj);
-                    String msj = String.valueOf(msg.obj);
-
-                    presenter.receiveMsj(msj);
-
-                    break;
-                case Bluetooth.MESSAGE_DEVICE_NAME:
-                    Log.d(TAG, "MESSAGE_DEVICE_NAME " + msg);
-                    break;
-                case Bluetooth.MESSAGE_TOAST:
-                    if (msg.arg1 == -1) {
-                        // bt.connectDevice(mac);
-                    }
-                    Log.d(TAG, "MESSAGE_TOAST " + msg);
-                    break;
-            }
-
-        }
-    };
 
 }
