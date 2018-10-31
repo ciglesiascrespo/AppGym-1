@@ -629,7 +629,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                     if (msg.arg1 == Bluetooth.STATE_CONNECTED ) {
                         txtEstado.setText("Estado: Conectado.");
                         Toast.makeText(getContext(), "Dispositivo conectado con éxito.", Toast.LENGTH_SHORT).show();
-                        bt.sendMessage("start\n");
+                        bt.sendMessage("start");
                     } else {
                         txtEstado.setText("Estado: Conectando...");
                     }
@@ -642,13 +642,13 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
                     String writeMessage = String.valueOf(msg.obj);
                     System.out.println(writeMessage);
-                    if(writeMessage.contains("start")){
-                        bt.sendMessage("serial\n");
+                    if(writeMessage.contains("Start")){
+                        bt.sendMessage("serial");
                         try { Thread.sleep(1000); } catch (Exception ignored) {}
-                        bt.sendMessage("enroll\n");
+                        bt.sendMessage("enroll");
                     }
                     if(writeMessage.contains("error") || writeMessage.contains("M3BLOR")){
-                        bt.sendMessage("start\n");
+                        bt.sendMessage("start");
                     }
                     break;
                 case Bluetooth.MESSAGE_DEVICE_NAME:
