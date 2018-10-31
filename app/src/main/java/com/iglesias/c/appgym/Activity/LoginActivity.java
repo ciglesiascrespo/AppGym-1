@@ -61,6 +61,8 @@ import com.shehabic.droppy.DroppyMenuItem;
 import com.shehabic.droppy.DroppyMenuPopup;
 
 import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -627,6 +629,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                     if (msg.arg1 == Bluetooth.STATE_CONNECTED ) {
                         txtEstado.setText("Estado: Conectado.");
                         Toast.makeText(getContext(), "Dispositivo conectado con éxito.", Toast.LENGTH_SHORT).show();
+                        bt.sendMessage("start\n");
                     } else {
                         txtEstado.setText("Estado: Conectando...");
                     }
@@ -636,6 +639,17 @@ public class LoginActivity extends BaseActivity implements LoginView {
                     Log.e(TAG, "MESSAGE_WRITE: " + String.valueOf(msg.arg1));
                     break;
                 case Bluetooth.MESSAGE_READ:
+
+                    String writeMessage = String.valueOf(msg.obj);
+                    System.out.println(writeMessage);
+                    if(writeMessage.contains("start")){
+                        bt.sendMessage("serial\n");
+                        try { Thread.sleep(1000); } catch (Exception ignored) {}
+                        bt.sendMessage("enroll\n");
+                    }
+                    if(writeMessage.contains("error") || writeMessage.contains("M3BLOR")){
+                        bt.sendMessage("start\n");
+                    }
                     break;
                 case Bluetooth.MESSAGE_DEVICE_NAME:
                     Log.e(TAG, "MESSAGE_DEVICE_NAME " + msg);

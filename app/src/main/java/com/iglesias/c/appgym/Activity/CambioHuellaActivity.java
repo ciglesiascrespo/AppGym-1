@@ -1,5 +1,6 @@
 package com.iglesias.c.appgym.Activity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -70,7 +71,7 @@ public class CambioHuellaActivity extends BaseActivity implements RegistrarView{
         imgBtnHuella.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String dato = "1";
+                String dato = "start";
                 bt.sendMessage(dato);
 
             }
@@ -131,6 +132,7 @@ public class CambioHuellaActivity extends BaseActivity implements RegistrarView{
 
     }
 
+    @SuppressLint("HandlerLeak")
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -147,6 +149,13 @@ public class CambioHuellaActivity extends BaseActivity implements RegistrarView{
 
                     Log.e(TAG, "MESSAGE_READ: " + msg.obj);
                     String msj = String.valueOf(msg.obj);
+                    if(msj.contains("start")){
+                        bt.sendMessage("serial");
+                    }
+                    if(msj.contains("error") || msj.contains("M3BLOR")){
+                        bt.sendMessage("start");
+                    }
+
                     presenter.receiveMsj(msj);
                     break;
                 case Bluetooth.MESSAGE_DEVICE_NAME:
