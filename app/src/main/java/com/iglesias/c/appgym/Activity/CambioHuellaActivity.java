@@ -31,7 +31,7 @@ public class CambioHuellaActivity extends BaseActivity implements RegistrarView{
 
     String id = "";
     Boolean flagHuella = false;
-
+    Boolean fingerprintReady = false;
     Bluetooth bt;
 
     @Override
@@ -47,6 +47,7 @@ public class CambioHuellaActivity extends BaseActivity implements RegistrarView{
 
     private void setupBt() {
         bt = Bluetooth.getInstance(this, mHandler);
+        bt.sendMessage("start");
     }
 
     private void setupLoading() {
@@ -71,9 +72,9 @@ public class CambioHuellaActivity extends BaseActivity implements RegistrarView{
         imgBtnHuella.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String dato = "start";
+                String dato = "enroll";
                 bt.sendMessage(dato);
-
+                showLoading();
             }
         });
     }
@@ -147,16 +148,31 @@ public class CambioHuellaActivity extends BaseActivity implements RegistrarView{
                     break;
                 case Bluetooth.MESSAGE_READ:
 
-                    Log.e(TAG, "MESSAGE_READ: " + msg.obj);
-                    String msj = String.valueOf(msg.obj);
-                    if(msj.contains("start")){
-                        bt.sendMessage("serial");
+                    String writeMessage = String.valueOf(msg.obj);
+                    Log.d("BT", writeMessage);
+
+                    if(writeMessage.contains("ady")){
+                        fingerprintReady = true;
                     }
-                    if(msj.contains("error") || msj.contains("M3BLOR")){
+
+                    if(writeMessage.contains("nsor") || writeMessage.contains("tart")){
+                        try { Thread.sleep(2000); } catch (Exception ignored) {}
+                        bt.sendMessage("serial");
+                        if(fingerprintReady){
+                            bt.sendMessage("read");
+                            try { Thread.sleep(1000); } catch (Exception ignored) {}
+                            bt.sendMessage("read2");
+                            try { Thread.sleep(1000); } catch (Exception ignored) {}
+                            bt.sendMessage("read3");
+                            fingerprintReady = false;
+                        }
+                    }
+                    if(writeMessage.contains("ror") || writeMessage.contains("BLOR")){
+                        try { Thread.sleep(1000); } catch (Exception ignored) {}
                         bt.sendMessage("start");
                     }
 
-                    presenter.receiveMsj(msj);
+                    //presenter.receiveMsj(msj);
                     break;
                 case Bluetooth.MESSAGE_DEVICE_NAME:
                     Log.d(TAG, "MESSAGE_DEVICE_NAME " + msg);
