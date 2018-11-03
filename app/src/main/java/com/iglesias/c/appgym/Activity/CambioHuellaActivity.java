@@ -20,6 +20,9 @@ import com.iglesias.c.appgym.Service.Bluetooth;
 import com.iglesias.c.appgym.Ui.BaseActivity;
 import com.iglesias.c.appgym.View.RegistrarView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
+
 public class CambioHuellaActivity extends BaseActivity implements RegistrarView{
     private final String TAG = getClass().getName();
     private ProgressDialog loading;
@@ -32,6 +35,7 @@ public class CambioHuellaActivity extends BaseActivity implements RegistrarView{
     String id = "";
     Boolean flagHuella = false;
     Boolean fingerprintReady = false;
+    Boolean reading = false;
     Bluetooth bt;
 
     @Override
@@ -151,28 +155,44 @@ public class CambioHuellaActivity extends BaseActivity implements RegistrarView{
                     String writeMessage = String.valueOf(msg.obj);
                     Log.d("BT", writeMessage);
 
-                    if(writeMessage.contains("ady")){
+                    if(writeMessage.contains("aptured")){
                         fingerprintReady = true;
                     }
-
+                    try { Thread.sleep(300); } catch (Exception ignored) {}
                     if(writeMessage.contains("nsor") || writeMessage.contains("tart")){
-                        try { Thread.sleep(2000); } catch (Exception ignored) {}
+                        try { Thread.sleep(700); } catch (Exception ignored) {}
                         bt.sendMessage("serial");
-                        if(fingerprintReady){
+                    }
+                    if(fingerprintReady) {
+                        if (writeMessage.contains("cted"))
+                        {
+                            try { Thread.sleep(300); } catch (Exception ignored) {}
                             bt.sendMessage("read");
-                            try { Thread.sleep(1000); } catch (Exception ignored) {}
+                        }
+                        try { Thread.sleep(300); } catch (Exception ignored) {}
+                        if (writeMessage.contains("1"))
+                        {
                             bt.sendMessage("read2");
-                            try { Thread.sleep(1000); } catch (Exception ignored) {}
+                        }
+                        try { Thread.sleep(300); } catch (Exception ignored) {}
+                        if (writeMessage.contains("roll 2"))
+                        {
                             bt.sendMessage("read3");
-                            fingerprintReady = false;
+                            fingerprintReady=false;
+                            reading = true;
                         }
                     }
+                    try { Thread.sleep(300); } catch (Exception ignored) {}
                     if(writeMessage.contains("ror") || writeMessage.contains("BLOR")){
-                        try { Thread.sleep(1000); } catch (Exception ignored) {}
                         bt.sendMessage("start");
+                        if(reading) {
+                            String j = writeMessage.split("M3B")[0];
+                            byte[] bytes = writeMessage.getBytes();
+                            reading = false;
+                            presenter.receiveMsj(bytes);
+                            hideLoading();
+                        }
                     }
-
-                    //presenter.receiveMsj(msj);
                     break;
                 case Bluetooth.MESSAGE_DEVICE_NAME:
                     Log.d(TAG, "MESSAGE_DEVICE_NAME " + msg);

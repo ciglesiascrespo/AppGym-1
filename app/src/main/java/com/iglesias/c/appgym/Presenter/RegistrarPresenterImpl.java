@@ -50,26 +50,14 @@ public class RegistrarPresenterImpl implements RegistrarPresenter {
 
     }
 
-    public void receiveMsj(String msj) {
-
-        if (msj != null && !msj.isEmpty()) {
-            if (!msj.toLowerCase().contains("id:")) {
-
-                    String msjResult = iterator.getMsj(msj.substring(0, 1));
-                    if (!msjResult.isEmpty())
-                        view.showErrorLoginDialog(msjResult, false);
-
-            }
-
-
-
-            if (msj.toLowerCase().contains("}")) {
-                matHuella += msj;
-                view.setId(matHuella.replace("Q", "").replace("}", "").replace("{", ""));
-                view.setFlagHuella(true);
-                //view.showErrorLoginDialog(matHuella.replace("Q", "").replace("}", "").replace("{",""),false);
-                matHuella = "";
-            }
+    public void receiveMsj(byte[] msj) {
+        view.setFlagHuella(true);
+        String template = "";
+        for(byte b : msj) {
+            template += b;
         }
+        view.setId(template);
+        //view.showErrorLoginDialog(matHuella.replace("Q", "").replace("}", "").replace("{",""),false);
+        matHuella = "";
     }
 }

@@ -1,5 +1,6 @@
 package com.iglesias.c.appgym.Activity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -37,7 +38,8 @@ public class RegistraActivity extends BaseActivity implements RegistrarView {
 
     String id = "", mac;
     Boolean flagHuella = false;
-
+    Boolean fingerprintReady = false;
+    Boolean reading = false;
     Bluetooth bt;
 
     @Override
@@ -53,6 +55,7 @@ public class RegistraActivity extends BaseActivity implements RegistrarView {
 
     private void setupBt() {
         bt = Bluetooth.getInstance(this, mHandler);
+        bt.sendMessage("start");
     }
 
     private void setupLoading() {
@@ -84,8 +87,9 @@ public class RegistraActivity extends BaseActivity implements RegistrarView {
     }
 
     private void scanMode() {
-        String dato = "1";
+        String dato = "enroll";
         bt.sendMessage(dato);
+        showLoading();
     }
 
     @Override
@@ -132,13 +136,12 @@ public class RegistraActivity extends BaseActivity implements RegistrarView {
         this.id = id;
 
         //HuellaTrigger - Descomentar
-        /*
+
         if (indexId < arryId.length) {
             arryId[indexId] = id;
             indexId++;
         }
         compareId();
-        */
     }
 
     private void compareId() {
@@ -175,6 +178,7 @@ public class RegistraActivity extends BaseActivity implements RegistrarView {
     }
 
 
+    @SuppressLint("HandlerLeak")
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -189,9 +193,47 @@ public class RegistraActivity extends BaseActivity implements RegistrarView {
                     break;
                 case Bluetooth.MESSAGE_READ:
 
-                    Log.e(TAG, "MESSAGE_READ: " + msg.obj);
-                    String msj = String.valueOf(msg.obj);
-                    presenter.receiveMsj(msj);
+                    String writeMessage = String.valueOf(msg.obj);
+                    Log.d("BT", writeMessage);
+
+                    if(writeMessage.contains("aptured")){
+                        fingerprintReady = true;
+                    }
+                    try { Thread.sleep(300); } catch (Exception ignored) {}
+                    if(writeMessage.contains("nsor") || writeMessage.contains("tart")){
+                        try { Thread.sleep(700); } catch (Exception ignored) {}
+                        bt.sendMessage("serial");
+                    }
+                    if(fingerprintReady) {
+                        if (writeMessage.contains("cted"))
+                        {
+                            try { Thread.sleep(300); } catch (Exception ignored) {}
+                            bt.sendMessage("read");
+                        }
+                        try { Thread.sleep(300); } catch (Exception ignored) {}
+                        if (writeMessage.contains("1"))
+                        {
+                            bt.sendMessage("read2");
+                        }
+                        try { Thread.sleep(300); } catch (Exception ignored) {}
+                        if (writeMessage.contains("roll 2"))
+                        {
+                            bt.sendMessage("read3");
+                            fingerprintReady=false;
+                            reading = true;
+                        }
+                    }
+                    try { Thread.sleep(300); } catch (Exception ignored) {}
+                    if(writeMessage.contains("ror") || writeMessage.contains("BLOR")){
+                        bt.sendMessage("start");
+                        if(reading) {
+                            String j = writeMessage.split("M3B")[0];
+                            byte[] bytes = writeMessage.getBytes();
+                            reading = false;
+                            presenter.receiveMsj(bytes);
+                            hideLoading();
+                        }
+                    }
                     break;
                 case Bluetooth.MESSAGE_DEVICE_NAME:
                     Log.d(TAG, "MESSAGE_DEVICE_NAME " + msg);
